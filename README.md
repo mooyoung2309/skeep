@@ -5,6 +5,30 @@ Copynote iOS repository
 
 Tuist와 ReactorKit을 사용하였습니다.
 
+### Tuist workspace summary
+- Projects (single target)
+  - Copynote
+```swift
+// Workspace.swift
+import ProjectDescription
+
+let appName = "Copynote"
+let workspace = Workspace(name: appName, projects: ["Projects/*"])
+```
+
+### Project directory summary
+- Source
+  - Base (base files)
+  - Config (xxconfig files)
+  - Extension (extension files)
+  - Model (model files)
+  - Presenter (screen files)
+  - Provider (singleton layers)
+  - Service (business layers)
+- AppDelegate.swift
+- SceneDelegate.swift
+- CompositionRoot.swift
+
 ## Convention
 
 ## 

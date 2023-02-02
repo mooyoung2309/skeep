@@ -41,7 +41,7 @@ let workspace = Workspace(name: appName, projects: ["Projects/*"])
 |RxSwift|upToNextMinor(6.5.0)|[github](https://github.com/ReactiveX/RxSwift)||
 |Moya|upToNextMinor(15.0.0)|[github](https://github.com/Moya/Moya)||
 |SnapKit|upToNextMinor(5.0.0)|[github](https://github.com/SnapKit/SnapKit)||
-|RealmSwift|10.31.0|[github](https://github.com/realm/realm-swift)|Version Error For Use Carthage|
+|RealmSwift|10.31.0|[github](https://github.com/realm/realm-swift)|Version Error For Using Carthage|
 |KeychainAccess|4.2.2|[github](https://github.com/kishikawakatsumi/KeychainAccess)||
 |RxGesture|upToNextMinor(4.0.0)|[github](https://github.com/RxSwiftCommunity/RxGesture)||
 |RxDataSources|upToNextMinor(5.0.0)|[github](https://github.com/RxSwiftCommunity/RxDataSources)||

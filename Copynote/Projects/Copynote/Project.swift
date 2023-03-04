@@ -40,15 +40,7 @@ class BaseProjectFactory: ProjectFactory {
 
     let dependencies: [TargetDependency] = [
         .external(name: "Moya"),
-        .external(name: "Alamofire"),
-        .external(name: "RxMoya"),
-        .external(name: "SnapKit"),
-        .external(name: "RxSwift"),
-        .external(name: "RxCocoa"),
-        .external(name: "RxGesture"),
-        .external(name: "RxDataSources"),
-        .external(name: "ReactorKit"),
-        .external(name: "KeychainAccess"),
+        .external(name: "ComposableArchitecture"),
         .external(name: "RealmSwift"),
         .external(name: "Realm"),
     ]
@@ -74,15 +66,7 @@ class BaseProjectFactory: ProjectFactory {
                 entitlements: "Copynote/\(projectName).entitlements",
                 dependencies: [
                     .external(name: "Moya"),
-                    .external(name: "Alamofire"),
-                    .external(name: "RxMoya"),
-                    .external(name: "SnapKit"),
-                    .external(name: "RxSwift"),
-                    .external(name: "RxCocoa"),
-                    .external(name: "RxGesture"),
-                    .external(name: "RxDataSources"),
-                    .external(name: "ReactorKit"),
-                    .external(name: "KeychainAccess"),
+                    .external(name: "ComposableArchitecture"),
                     .external(name: "RealmSwift"),
                     .external(name: "Realm"),
                     .target(name: "KeyboardExtension")

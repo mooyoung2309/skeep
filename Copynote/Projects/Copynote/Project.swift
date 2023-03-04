@@ -55,8 +55,8 @@ class BaseProjectFactory: ProjectFactory {
 
     func generateConfigurations() -> Settings {
         Settings.settings(configurations: [
-            .debug(name: "Debug", xcconfig: .relativeToCurrentFile("Sources/Config/Debug.xcconfig")),
-            .release(name: "Release", xcconfig: .relativeToCurrentFile("Sources/Config/Release.xcconfig"))
+            .debug(name: "Debug", xcconfig: .relativeToCurrentFile("Copynote/Sources/Config/Debug.xcconfig")),
+            .release(name: "Release", xcconfig: .relativeToCurrentFile("Copynote/Sources/Config/Release.xcconfig"))
         ])
     }
 
@@ -66,25 +66,52 @@ class BaseProjectFactory: ProjectFactory {
                 name: projectName,
                 platform: .iOS,
                 product: .app,
-                bundleId: "com.TAMSADAN.\(projectName)",
+                bundleId: "com.annapo.\(projectName)",
                 deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
                 infoPlist: .extendingDefault(with: infoPlist),
-                sources: ["Sources/**"],
-                resources: "Resources/**",
-                entitlements: "\(projectName).entitlements",
-//                scripts: [.pre(path: "Scripts/SwiftLintRunScript.sh", arguments: [], name: "SwiftLint")],
+                sources: ["Copynote/Sources/**"],
+                resources: "Copynote/Resources/**",
+                entitlements: "Copynote/\(projectName).entitlements",
+                dependencies: [
+                    .external(name: "Moya"),
+                    .external(name: "Alamofire"),
+                    .external(name: "RxMoya"),
+                    .external(name: "SnapKit"),
+                    .external(name: "RxSwift"),
+                    .external(name: "RxCocoa"),
+                    .external(name: "RxGesture"),
+                    .external(name: "RxDataSources"),
+                    .external(name: "ReactorKit"),
+                    .external(name: "KeychainAccess"),
+                    .external(name: "RealmSwift"),
+                    .external(name: "Realm"),
+                    .target(name: "KeyboardExtension")
+                ]
+            ),
+            
+            Target(
+                name: "KeyboardExtension",
+                platform: .iOS,
+                product: .appExtension,
+                bundleId: "com.annapo.Copynote.KeyboardExtension",
+                deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+                infoPlist: .extendingDefault(with: [
+                    "NSExtension": [
+                        "NSExtensionAttributes": [
+                            "IsASCIICapable": false,
+                            "PrefersRightToLeft": false,
+                            "PrimaryLanguage": "en-US",
+                            "RequestsOpenAccess": false
+                        ],
+                        "NSExtensionPointIdentifier": "com.apple.keyboard-service",
+                        "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).KeyboardViewController"
+                    ],
+                    "CFBundleDisplayName": "KeyboardExtension"
+                ]),
+                sources: ["KeyboardExtension/Sources/**"],
+                resources: "KeyboardExtension/Resources/**",
                 dependencies: dependencies
             ),
-
-            Target(
-                name: "\(projectName)Tests",
-                platform: .iOS,
-                product: .unitTests,
-                bundleId: "com.TAMSADAN.\(projectName).Tests",
-                infoPlist: .default,
-                sources: ["Tests/**"],
-                dependencies: [.target(name: projectName)]
-            )
         ]
     }
 }

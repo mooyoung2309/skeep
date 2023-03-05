@@ -1,8 +1,8 @@
 //
 //  Dependencies.swift
-//  ProjectDescriptionHelpers
+//  CopynoteManifests
 //
-//  Created by 송영모 on 2022/12/29.
+//  Created by 송영모 on 2023/03/04.
 //
 
 import ProjectDescription

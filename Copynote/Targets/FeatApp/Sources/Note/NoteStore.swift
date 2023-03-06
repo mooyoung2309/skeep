@@ -17,16 +17,13 @@ struct NoteStore: ReducerProtocol {
         @BindingState var notes: [Note] = []
     }
 
-    enum Action: BindingAction, Equatable {
-        case binding(BindingAction<State>)
+    enum Action: Equatable {
         case onAppear
     }
 
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .onLaunchFinish:
-                return .none
             case .onAppear:
                 return .none
             }

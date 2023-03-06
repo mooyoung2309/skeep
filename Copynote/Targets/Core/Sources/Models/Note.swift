@@ -20,46 +20,6 @@ public struct Note: Equatable {
         return .init(id: id, tag: tag, title: title, content: content)
     }
     
-    static func fetch() -> [Note] {
-        if let objs = try? Realm().objects(NoteRealm.self).map({ $0.toDomain() }) {
-            return Array(objs)
-        } else {
-            return []
-        }
-    }
-    
-    static func fetch(id: String) -> Note? {
-        return self.fetch().first(where: { $0.id == id })
-    }
-    
-    static func createOrUpdate(note: Note) {
-        do {
-            let realm = try? Realm()
-            
-            try realm?.write {
-                realm?.add(note.toRealm(), update: .modified)
-            }
-        } catch {
-            print(error)
-        }
-    }
-    
-    static func delete(id: String) {
-        let realm = try? Realm()
-        
-        guard let obj = fetch(id: id)?.toRealm() else { return }
-        
-        do {
-            let realm = try? Realm()
-            
-            try realm?.write {
-                realm?.delete(obj)
-            }
-        } catch {
-            print(error)
-        }
-    }
-    
     public static func == (lhs: Note, rhs: Note) -> Bool {
         return lhs.id == rhs.id
     }

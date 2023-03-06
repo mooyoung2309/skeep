@@ -8,10 +8,7 @@
 
 import SwiftUI
 
-import ComposableArchitecture
-
 struct NoteView: View {
-    let store: StoreOf<NoteStore>
     
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
@@ -21,6 +18,6 @@ struct NoteView: View {
 
 struct NoteView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteView(store: .init(initialState: .init(), reducer: NoteStore()._printChanges()))
+        NoteView()
     }
 }

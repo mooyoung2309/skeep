@@ -10,7 +10,7 @@ import Foundation
 
 import RealmSwift
 
-struct Tag {
+public struct Tag {
     var id: String = UUID().uuidString
     var title: String = ""
     var colorHex: String = ""
@@ -20,7 +20,7 @@ struct Tag {
     }
 }
 
-class TagRealm: Object {
+public class TagRealm: Object {
     @Persisted(primaryKey: true) var id: String = UUID().uuidString
     @Persisted var title: String = ""
     @Persisted var colorHex: String = ""

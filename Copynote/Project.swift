@@ -76,6 +76,7 @@ let project: Project = .init(
             deploymentTarget: deploymentTarget,
             dependencies: [
                 .external(name: "ComposableArchitecture"),
+                .external(name: "Realm"),
                 .external(name: "RealmSwift"),
             ]),
     ].flatMap { $0 }

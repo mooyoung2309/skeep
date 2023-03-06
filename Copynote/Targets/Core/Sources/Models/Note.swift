@@ -10,7 +10,7 @@ import Foundation
 
 import RealmSwift
 
-struct Note {
+public struct Note: Equatable {
     var id: String = UUID().uuidString
     var tag: Tag = .init()
     var title: String = ""
@@ -59,9 +59,13 @@ struct Note {
             print(error)
         }
     }
+    
+    public static func == (lhs: Note, rhs: Note) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
-class NoteRealm: Object {
+public class NoteRealm: Object {
     @Persisted(primaryKey: true) var id: String = UUID().uuidString
     @Persisted var tag: TagRealm = .init()
     @Persisted var title: String = ""

@@ -10,10 +10,16 @@ import Foundation
 
 import RealmSwift
 
-public struct TagItem {
-    var id: String
-    var title: String
-    var colorHex: String
+public struct TagItem: Equatable, Identifiable {
+    public var id: String
+    public var title: String
+    public var colorHex: String
+    
+    public init(id: String, title: String, colorHex: String) {
+        self.id = id
+        self.title = title
+        self.colorHex = colorHex
+    }
     
     func toRealm() -> TagRealm {
         return .init(id: id, title: title, colorHex: colorHex)
@@ -50,22 +56,22 @@ extension TagItem {
     static let mocks = [
         Self(
             id: UUID().uuidString,
-            title: "",
-            colorHex: ""
+            title: "🎉",
+            colorHex: "#FF0000"
         ),
         Self(
             id: UUID().uuidString,
-            title: "",
-            colorHex: ""
+            title: "🥺",
+            colorHex: "#00FF00"
         ),
         Self(
             id: UUID().uuidString,
-            title: "",
-            colorHex: ""
+            title: "🚀",
+            colorHex: "#0000FF"
         ),
         Self(
             id: UUID().uuidString,
-            title: "",
+            title: "⛏️",
             colorHex: ""
         ),
     ]

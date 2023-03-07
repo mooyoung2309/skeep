@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UI
 
 import ComposableArchitecture
 
@@ -16,14 +17,25 @@ struct HomeView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                List {
-                    ForEach(viewStore.noteItems) { noteItem in
-                        Text(noteItem.title)
+                ScrollView (.horizontal, showsIndicators: false) {
+                     HStack {
+                         ForEach(viewStore.tagItems) { tagItem in
+                             TagListItemView(tagItem: tagItem)
+                         }
+                     }
+                }.frame(height: 100)
+                
+                VStack {
+                    List {
+                        ForEach(viewStore.noteItems) { noteItem in
+                            NoteListItemView(noteItem: noteItem)
+                        }
                     }
                 }
             }
             .task {
                 viewStore.send(.fetchNoteItemsRequest)
+                viewStore.send(.fetchTagItemsRequest)
             }
         }
     }

@@ -6,8 +6,6 @@
 //  Copyright © 2023 Copynote. All rights reserved.
 //
 
-import Foundation
-
 import ComposableArchitecture
 
 public struct NoteClient {

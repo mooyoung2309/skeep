@@ -16,6 +16,13 @@ public struct NoteItem: Equatable, Identifiable {
     public var title: String
     public var content: String
     
+    public init(id: String, tag: TagItem? = nil, title: String, content: String) {
+        self.id = id
+        self.tag = tag
+        self.title = title
+        self.content = content
+    }
+    
     public func toRealm() -> NoteRealm {
         return .init(id: id, tag: tag, title: title, content: content)
     }

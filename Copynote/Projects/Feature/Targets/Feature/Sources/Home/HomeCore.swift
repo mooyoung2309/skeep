@@ -14,15 +14,19 @@ import ComposableArchitecture
 struct Home: ReducerProtocol {
     struct State: Equatable {
         var noteItems: [NoteItem] = []
+        var tagItems: [TagItem] = []
         var filteredNoteItems: [NoteItem] = []
     }
     
     enum Action: Equatable {
         case fetchNoteItemsRequest
         case fetchNoteItemsResponse([NoteItem])
+        case fetchTagItemsRequest
+        case fetchTagItemsResponse([TagItem])
     }
     
     @Dependency(\.noteClient) var noteClient
+    @Dependency(\.tagClient) var tagClient
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
@@ -31,6 +35,13 @@ struct Home: ReducerProtocol {
 
         case let .fetchNoteItemsResponse(noteItems):
             state.noteItems = noteItems
+            return .none
+            
+        case .fetchTagItemsRequest:
+            return .send(.fetchTagItemsResponse(self.tagClient.fetchTagItems()))
+            
+        case let .fetchTagItemsResponse(tagItems):
+            state.tagItems = tagItems
             return .none
         }
     }

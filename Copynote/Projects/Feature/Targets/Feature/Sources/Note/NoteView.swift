@@ -8,16 +8,27 @@
 
 import SwiftUI
 
+import ComposableArchitecture
+
 struct NoteView: View {
+    let store: StoreOf<NoteStore>
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .tint(.white)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            VStack {
+                ForEachStore(self.store.scope(state: \.notes)) { _ in 
+                    
+                }
+            }
+            
+            Text("ddd")
+                .onAppear(perform: { viewStore.send(.onAppear) })
+        }
     }
 }
 
-struct NoteView_Previews: PreviewProvider {
-    static var previews: some View {
-        NoteView()
-    }
-}
+//struct NoteView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NoteView()
+//    }
+//}

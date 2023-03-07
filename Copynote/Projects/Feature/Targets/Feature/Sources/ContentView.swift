@@ -10,7 +10,8 @@ import SwiftUI
 
 public struct ContentView: View {
     public var body: some View {
-        NoteView()
+        NoteView(store: .init(initialState: .init(),
+                              reducer: NoteStore()._printChanges()))
     }
     
     public init() { }

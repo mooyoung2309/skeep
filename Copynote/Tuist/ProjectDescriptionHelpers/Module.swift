@@ -154,26 +154,41 @@ private enum SubModule: String, CaseIterable {
                 .project(target: SubModule.feature.rawValue, path: SubModule.feature.module.path),
                 .project(target: SubModule.core.rawValue, path: SubModule.core.module.path),
                 .project(target: SubModule.ui.rawValue, path: SubModule.ui.module.path),
-                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path)
+                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path),
+                .external(name: "RealmSwift"),
+                .external(name: "Realm"),
+                .external(name: "ComposableArchitecture"),
             ]
         case .keyboard:
             return [
                 .project(target: SubModule.feature.rawValue, path: SubModule.feature.module.path),
                 .project(target: SubModule.core.rawValue, path: SubModule.core.module.path),
                 .project(target: SubModule.ui.rawValue, path: SubModule.ui.module.path),
-                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path)
+                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path),
+                .external(name: "RealmSwift"),
+                .external(name: "Realm"),
+                .external(name: "ComposableArchitecture"),
             ]
         case .feature:
             return [
-                .project(target: SubModule.core.rawValue, path: SubModule.core.module.path)
+                .project(target: SubModule.core.rawValue, path: SubModule.core.module.path),
+                .external(name: "RealmSwift"),
+                .external(name: "Realm"),
+                .external(name: "ComposableArchitecture"),
             ]
         case .core:
             return [
-                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path)
+                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path),
+                .external(name: "RealmSwift"),
+                .external(name: "Realm"),
+                .external(name: "ComposableArchitecture"),
             ]
         case .ui:
             return [
-                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path)
+                .project(target: SubModule.utils.rawValue, path: SubModule.utils.module.path),
+                .external(name: "RealmSwift"),
+                .external(name: "Realm"),
+                .external(name: "ComposableArchitecture"),
             ]
         case .utils:
             return [

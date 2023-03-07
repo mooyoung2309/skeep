@@ -23,6 +23,7 @@ struct Home: ReducerProtocol {
         case fetchNoteItemsResponse([NoteItem])
         case fetchTagItemsRequest
         case fetchTagItemsResponse([TagItem])
+        case tagItemTapped(TagItem)
     }
     
     @Dependency(\.noteClient) var noteClient
@@ -42,6 +43,10 @@ struct Home: ReducerProtocol {
             
         case let .fetchTagItemsResponse(tagItems):
             state.tagItems = tagItems
+            return .none
+            
+        case let .tagItemTapped(tagItem):
+            state.noteItems.shuffle()
             return .none
         }
     }

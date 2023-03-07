@@ -18,6 +18,8 @@ public struct NoteListItemView: View {
     
     public var body: some View {
         HStack {
+            Spacer()
+            
             VStack(alignment: .leading) {
                 Text(noteItem.title)
                     .font(.headline)
@@ -29,7 +31,10 @@ public struct NoteListItemView: View {
                     .fontWeight(.regular)
                     .foregroundColor(.gray)
             }
+            
+            Spacer()
         }
+        .background(.gray)
     }
 }
 

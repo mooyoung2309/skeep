@@ -18,17 +18,21 @@ struct HomeView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
                 ScrollView (.horizontal, showsIndicators: false) {
-                     HStack {
+                    HStack(spacing: .zero) {
                          ForEach(viewStore.tagItems) { tagItem in
                              TagListItemView(tagItem: tagItem)
+                                 .onTapGesture {
+                                     viewStore.send(.tagItemTapped(tagItem))
+                                 }
                          }
                      }
                 }.frame(height: 100)
                 
-                VStack {
-                    List {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
                         ForEach(viewStore.noteItems) { noteItem in
                             NoteListItemView(noteItem: noteItem)
+                                .padding()
                         }
                     }
                 }

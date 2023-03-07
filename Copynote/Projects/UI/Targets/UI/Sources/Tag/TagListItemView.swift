@@ -18,23 +18,11 @@ public struct TagListItemView: View {
     }
     
     public var body: some View {
-        HStack {
-            Spacer()
-            
-            VStack(alignment: .leading) {
-                Spacer()
-                
-                Text(tagItem.title)
-                    .font(.title)
-                    .padding()
-                    .background(Color(hex: tagItem.colorHex))
-                    .clipShape(RoundedRectangle(cornerSize: .init(width: 10, height: 10)))
-                
-                Spacer()
-            }
-            
-            Spacer()
-        }
+        Text(tagItem.title)
+            .font(.body)
+            .padding(.init(top: 10, leading: 10, bottom: 10, trailing: 10))
+            .background(Color(hex: tagItem.colorHex))
+            .clipShape(RoundedRectangle(cornerSize:  .init(width: 10, height: 10)))
     }
 }
 

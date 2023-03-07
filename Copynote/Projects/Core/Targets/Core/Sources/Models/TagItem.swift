@@ -56,8 +56,8 @@ extension TagItem {
     static let mocks = [
         Self(
             id: UUID().uuidString,
-            title: "🎉",
-            colorHex: "#FF0000"
+            title: "🌎",
+            colorHex: "#5FD8FF"
         ),
         Self(
             id: UUID().uuidString,

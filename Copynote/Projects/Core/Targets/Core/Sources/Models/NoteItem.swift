@@ -10,13 +10,13 @@ import Foundation
 
 import RealmSwift
 
-public struct NoteItem: Equatable {
-    var id: String
-    var tag: TagItem?
-    var title: String
-    var content: String
+public struct NoteItem: Equatable, Identifiable {
+    public var id: String
+    public var tag: TagItem?
+    public var title: String
+    public var content: String
     
-    func toRealm() -> NoteRealm {
+    public func toRealm() -> NoteRealm {
         return .init(id: id, tag: tag, title: title, content: content)
     }
     

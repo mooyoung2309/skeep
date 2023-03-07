@@ -11,22 +11,30 @@ import Foundation
 import ComposableArchitecture
 
 public struct NoteClient {
-    var fetch: @Sendable () async throws -> [NoteItem]
+    public var fetchNoteItems: () -> [NoteItem]
 }
 
 extension NoteClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetch: { NoteItem.mocks }
+        fetchNoteItems: { NoteItem.mocks }
     )
     
     public static let testValue = Self(
-        fetch: unimplemented("\(Self.self).fetch")
+        fetchNoteItems: unimplemented("\(Self.self).fetchNoteItems")
     )
 }
 
 extension DependencyValues {
-    var noteClient: NoteClient {
+    public var noteClient: NoteClient {
         get { self[NoteClient.self] }
         set { self[NoteClient.self] = newValue }
     }
+}
+
+extension NoteClient: DependencyKey {
+    public static let liveValue = NoteClient(
+        fetchNoteItems: {
+            return NoteItem.mocks
+        }     
+    )
 }

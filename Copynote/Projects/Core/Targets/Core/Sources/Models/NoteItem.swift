@@ -57,6 +57,7 @@ public class NoteRealm: Object {
 extension NoteItem {
     static let mock = Self(
         id: UUID().uuidString,
+        tag: TagItem.mock,
         title: "테스트1",
         content: "컨텐츠1"
     )
@@ -64,16 +65,19 @@ extension NoteItem {
     static let mocks = [
         Self(
             id: UUID().uuidString,
+            tag: TagItem.mock,
             title: "테스트2",
             content: "컨텐츠2"
         ),
         Self(
             id: UUID().uuidString,
+            tag: TagItem.mock,
             title: "테스트3",
             content: "컨텐츠3"
         ),
         Self(
             id: UUID().uuidString,
+            tag: TagItem.mock,
             title: "테스트4",
             content: "컨텐츠4"
         ),

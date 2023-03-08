@@ -49,8 +49,8 @@ public class TagRealm: Object {
 extension TagItem {
     static let mock = Self(
         id: UUID().uuidString,
-        title: "",
-        colorHex: ""
+        title: "🌎",
+        colorHex: "#5FD8FF"
     )
     
     static let mocks = [

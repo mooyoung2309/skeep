@@ -17,26 +17,46 @@ struct HomeView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
+                Spacer()
+                
+                TextField(
+                    "Search",
+                    text: viewStore.binding(
+                        get: \.searchQuery,
+                        send: Home.Action.searchQueryChanged
+                    )
+                )
+                .padding(.init(top: 10, leading: 10, bottom: 10, trailing: 10))
+                .background(.white)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .cornerRadius(10)
+                .padding()
+                
                 ScrollView (.horizontal, showsIndicators: false) {
-                    HStack(spacing: .zero) {
-                         ForEach(viewStore.tagItems) { tagItem in
-                             TagListItemView(tagItem: tagItem)
-                                 .onTapGesture {
-                                     viewStore.send(.tagItemTapped(tagItem))
-                                 }
-                         }
-                     }
-                }.frame(height: 100)
+                    HStack(spacing: 5) {
+                        ForEach(viewStore.tagItems) { tagItem in
+                            TagListItemView(tagItem: tagItem)
+                                .onTapGesture {
+                                    viewStore.send(.tagItemTapped(tagItem))
+                                }
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
                         ForEach(viewStore.noteItems) { noteItem in
                             NoteListItemView(noteItem: noteItem)
-                                .padding()
+                                .cornerRadius(15)
+                                .padding(.horizontal)
                         }
                     }
                 }
             }
+            .background(Color(hex: "0AA788"))
             .task {
                 viewStore.send(.fetchNoteItemsRequest)
                 viewStore.send(.fetchTagItemsRequest)

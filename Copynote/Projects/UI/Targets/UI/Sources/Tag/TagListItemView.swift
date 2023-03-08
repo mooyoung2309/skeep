@@ -19,10 +19,10 @@ public struct TagListItemView: View {
     
     public var body: some View {
         Text(tagItem.title)
-            .font(.body)
-            .padding(.init(top: 10, leading: 10, bottom: 10, trailing: 10))
+            .font(.title2)
+            .padding(.init(top: 12, leading: 12, bottom: 12, trailing: 12))
             .background(Color(hex: tagItem.colorHex))
-            .clipShape(RoundedRectangle(cornerSize:  .init(width: 10, height: 10)))
+            .clipShape(RoundedRectangle(cornerSize:  .init(width: 15, height: 16)))
     }
 }
 

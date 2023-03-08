@@ -16,6 +16,7 @@ struct Home: ReducerProtocol {
         var noteItems: [NoteItem] = []
         var tagItems: [TagItem] = []
         var filteredNoteItems: [NoteItem] = []
+        var searchQuery: String = ""
     }
     
     enum Action: Equatable {
@@ -24,6 +25,7 @@ struct Home: ReducerProtocol {
         case fetchTagItemsRequest
         case fetchTagItemsResponse([TagItem])
         case tagItemTapped(TagItem)
+        case searchQueryChanged(String)
     }
     
     @Dependency(\.noteClient) var noteClient
@@ -47,6 +49,10 @@ struct Home: ReducerProtocol {
             
         case let .tagItemTapped(tagItem):
             state.noteItems.shuffle()
+            return .none
+            
+        case let .searchQueryChanged(query):
+            state.searchQuery = query
             return .none
         }
     }

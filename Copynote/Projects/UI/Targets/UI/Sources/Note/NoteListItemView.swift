@@ -18,13 +18,17 @@ public struct NoteListItemView: View {
     
     public var body: some View {
         HStack {
-            Spacer()
+            if let tagItem = self.noteItem.tag {
+                TagListItemView(tagItem: tagItem)
+                    .padding()
+                    .padding(.vertical)
+            }
             
             VStack(alignment: .leading) {
                 Text(noteItem.title)
                     .font(.headline)
                     .fontWeight(.bold)
-                    .padding(.init(top: .zero, leading: .zero, bottom: 5, trailing: .zero))
+                    .padding(.init(top: .zero, leading: .zero, bottom: 1, trailing: .zero))
                 
                 Text(noteItem.content)
                     .font(.footnote)
@@ -34,7 +38,7 @@ public struct NoteListItemView: View {
             
             Spacer()
         }
-        .background(.gray)
+        .background(.white)
     }
 }
 

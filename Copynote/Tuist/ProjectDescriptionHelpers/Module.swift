@@ -26,6 +26,7 @@ public enum Module: String, CaseIterable {
     public var path: Path {
         return .relativeToRoot("Projects/\(self.rawValue)")
     }
+
     
     private var name: String {
         return "Copynote"
@@ -70,7 +71,7 @@ private enum SubModule: String, CaseIterable {
     case core = "Core"
     case ui = "UI"
     case utils = "Utils"
-    
+
     public var target: Target {
         Target.make(
             appName: self.appName,
@@ -78,10 +79,11 @@ private enum SubModule: String, CaseIterable {
             platform: .iOS,
             product: self.product,
             deploymentTarget: self.deploymentTarget,
+            havResource: false,
             infoPlist: self.infoPlist,
             dependencies: self.dependencies)
     }
-    
+
     private var module: Module {
         switch self {
         case .app, .keyboard: return .application
@@ -91,15 +93,15 @@ private enum SubModule: String, CaseIterable {
         case .utils: return .utils
         }
     }
-    
+
     private var appName: String {
         return "Copynote"
     }
-    
+
     private var deploymentTarget: DeploymentTarget {
         return .iOS(targetVersion: "16.0", devices: [.iphone])
     }
-    
+
     private var product: Product {
         switch self {
         case .app: return .app
@@ -107,7 +109,7 @@ private enum SubModule: String, CaseIterable {
         case .feature, .core, .ui, .utils: return .framework
         }
     }
-    
+
     private var infoPlist: InfoPlist {
         switch self {
         case .app:
@@ -146,7 +148,7 @@ private enum SubModule: String, CaseIterable {
         case .feature, .core, .ui, .utils: return .default
         }
     }
-    
+
     private var dependencies: [TargetDependency] {
         switch self {
         case .app:

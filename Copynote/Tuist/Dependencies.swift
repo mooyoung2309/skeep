@@ -9,7 +9,8 @@ import ProjectDescription
 
 let spm = SwiftPackageManagerDependencies([
     .remote(url: "https://github.com/Moya/Moya.git", requirement: .upToNextMinor(from: "15.0.0")),
-    .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "0.51.0"))
+    .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "0.51.0")),
+    .remote(url: "https://github.com/realm/realm-swift", requirement: .upToNextMinor(from: "10.36.0"))
 ])
 
 let crt = CarthageDependencies([

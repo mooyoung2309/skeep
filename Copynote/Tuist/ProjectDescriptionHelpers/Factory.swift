@@ -7,15 +7,16 @@
 
 import ProjectDescription
 
-public protocol ProjectFactory {
-    var project: ProjectItem { get }
-    var targets: [TargetItem] { get }
+public struct ProjectFactory {
+    var project: ProjectItem
+    var targets: [TargetItem]
     
-    func make() -> Project
-}
-
-extension ProjectFactory {
-    func make() -> Project {
+    public init(project: ProjectItem, targets: [TargetItem]) {
+        self.project = project
+        self.targets = targets
+    }
+    
+    public func makeProject() -> Project {
         return .init(
             name: project.name,
             organizationName: project.organizationName,
@@ -27,6 +28,7 @@ extension ProjectFactory {
                     platform: item.platform,
                     product: item.product,
                     deploymentTarget: item.deploymentTarget,
+                    havResource: item.havResource,
                     infoPlist: item.infoPlist,
                     dependencies: item.dependencies
                 )
@@ -43,7 +45,11 @@ public struct ProjectItem {
     var organizationName: String
     var settings: Settings
     
-    public init(name: String, organizationName: String, settings: Settings) {
+    public init(
+        name: String,
+        organizationName: String = "Copynote",
+        settings: Settings = .settings()
+    ) {
         self.name = name
         self.organizationName = organizationName
         self.settings = settings
@@ -59,5 +65,24 @@ public struct TargetItem {
     var product: Product
     var deploymentTarget: DeploymentTarget
     var infoPlist: InfoPlist
+    var havResource: Bool
     var dependencies: [TargetDependency]
+    
+    public init(
+        name: String,
+        platform: Platform = .iOS,
+        product: Product = .framework,
+        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "16.0", devices: [.iphone]),
+        infoPlist: InfoPlist = .default,
+        havResource: Bool = false,
+        dependencies: [TargetDependency] = []
+    ) {
+        self.name = name
+        self.platform = platform
+        self.product = product
+        self.deploymentTarget = deploymentTarget
+        self.infoPlist = infoPlist
+        self.havResource = havResource
+        self.dependencies = dependencies
+    }
 }

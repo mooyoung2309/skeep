@@ -14,6 +14,7 @@ extension Target {
         platform: Platform,
         product: Product,
         deploymentTarget: DeploymentTarget,
+        havResource: Bool,
         infoPlist: InfoPlist,
         dependencies: [TargetDependency]) -> Target {
             return Target(
@@ -23,8 +24,8 @@ extension Target {
                 bundleId: "com.annapo.\(appName).\(targetName)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: infoPlist,
-                sources: ["Targets/\(targetName)/Sources/**"],
-                resources: ["Targets/\(targetName)/Resources/**"],
+                sources: havResource ? ["Targets/\(targetName)/Sources/**"] : ["Targets/\(targetName)/**"],
+                resources: havResource ? ["Targets/\(targetName)/Resources/**"] : [],
                 dependencies: dependencies,
                 settings: .settings(base: .init())
             )

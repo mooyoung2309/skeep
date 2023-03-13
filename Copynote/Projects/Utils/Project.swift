@@ -7,4 +7,23 @@
 
 import ProjectDescriptionHelpers
 
-let project = Module.utils.project
+let factory: ProjectFactory = .init(
+    project: .init(name: Module.utils.rawValue),
+    targets: [
+        .init(
+            name: Module.utils.rawValue,
+            dependencies: [
+                .target(name: "Extension"),
+            ]
+        ),
+        .init(
+            name: "Extension",
+            dependencies: [
+//                .package(product: "RealmSwift"),
+                .package(product: "ComposableArchitecture")
+              ]
+        ),
+    ]
+)
+
+let project = factory.makeProject()

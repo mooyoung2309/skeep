@@ -11,12 +11,12 @@ import Core
 import ComposableArchitecture
 
 public struct TagClient {
-    public var fetchTagItems: () -> [TagItem]
+    public var fetchTagItems: () -> [Tag]
 }
 
 extension TagClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchTagItems: { TagItem.mocks }
+        fetchTagItems: { Tag.mocks }
     )
     
     public static let testValue = Self(
@@ -34,7 +34,7 @@ extension DependencyValues {
 extension TagClient: DependencyKey {
     public static let liveValue = TagClient(
         fetchTagItems: {
-            return TagItem.mocks
+            return Tag.mocks
         }
     )
 }

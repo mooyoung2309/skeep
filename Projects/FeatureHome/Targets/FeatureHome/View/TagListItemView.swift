@@ -8,20 +8,21 @@
 
 import SwiftUI
 
+import Core
 import Utils
 
 public struct TagListItemView: View {
-    let tagItem: TagItem
+    let tag: Tag
     
-    public init(tagItem: TagItem) {
-        self.tagItem = tagItem
+    public init(tag: Tag) {
+        self.tag = tag
     }
     
     public var body: some View {
-        Text(tagItem.title)
+        Text(tag.title)
             .font(.title2)
             .padding(.init(top: 12, leading: 12, bottom: 12, trailing: 12))
-            .background(Color(hex: tagItem.colorHex))
+            .background(Color(hex: tag.colorHex))
             .clipShape(RoundedRectangle(cornerSize:  .init(width: 15, height: 16)))
     }
 }
@@ -29,6 +30,6 @@ public struct TagListItemView: View {
 
 struct TagListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        TagListItemView(tagItem: .init(id: "1", title: "🥲", colorHex: "#00FF00"))
+        TagListItemView(tag: .init(id: "1", title: "🥲", colorHex: "#00FF00"))
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Core
 
 import ComposableArchitecture
 
@@ -14,18 +15,20 @@ public struct Home: ReducerProtocol {
     public init() {}
     
     public struct State: Equatable {
-        var noteItems: [NoteItem] = []
-        var tagItems: [TagItem] = []
-        var filteredNoteItems: [NoteItem] = []
+        var noteItems: [Note] = []
+        var tagItems: [Tag] = []
+        var filteredNoteItems: [Note] = []
         var searchQuery: String = ""
+        
+        public init() {}
     }
     
     public enum Action: Equatable {
         case fetchNoteItemsRequest
-        case fetchNoteItemsResponse([NoteItem])
+        case fetchNoteItemsResponse([Note])
         case fetchTagItemsRequest
-        case fetchTagItemsResponse([TagItem])
-        case tagItemTapped(TagItem)
+        case fetchTagItemsResponse([Tag])
+        case tagItemTapped(Tag)
         case searchQueryChanged(String)
     }
     

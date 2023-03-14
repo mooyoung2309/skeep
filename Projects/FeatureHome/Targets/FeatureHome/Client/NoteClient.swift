@@ -6,15 +6,17 @@
 //  Copyright © 2023 Copynote. All rights reserved.
 //
 
+import Core
+
 import ComposableArchitecture
 
 public struct NoteClient {
-    public var fetchNoteItems: () -> [NoteItem]
+    public var fetchNoteItems: () -> [Note]
 }
 
 extension NoteClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchNoteItems: { NoteItem.mocks }
+        fetchNoteItems: { Note.mocks }
     )
     
     public static let testValue = Self(
@@ -32,7 +34,7 @@ extension DependencyValues {
 extension NoteClient: DependencyKey {
     public static let liveValue = NoteClient(
         fetchNoteItems: {
-            return NoteItem.mocks
+            return Note.mocks
         }     
     )
 }

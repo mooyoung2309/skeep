@@ -39,7 +39,7 @@ public struct HomeView: View {
                 ScrollView (.horizontal, showsIndicators: false) {
                     HStack(spacing: 5) {
                         ForEach(viewStore.tagItems) { tagItem in
-                            TagListItemView(tagItem: tagItem)
+                            TagListItemView(tag: tagItem)
                                 .onTapGesture {
                                     viewStore.send(.tagItemTapped(tagItem))
                                 }
@@ -52,7 +52,7 @@ public struct HomeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
                         ForEach(viewStore.noteItems) { noteItem in
-                            NoteListItemView(noteItem: noteItem)
+                            NoteListItemView(note: noteItem)
                                 .cornerRadius(15)
                                 .padding(.horizontal)
                         }

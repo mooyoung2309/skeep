@@ -8,28 +8,30 @@
 
 import SwiftUI
 
+import Core
+
 public struct NoteListItemView: View {
-    let noteItem: NoteItem
+    let note: Note
     
-    public init(noteItem: NoteItem) {
-        self.noteItem = noteItem
+    public init(note: Note) {
+        self.note = note
     }
     
     public var body: some View {
         HStack {
-            if let tagItem = self.noteItem.tag {
-                TagListItemView(tagItem: tagItem)
+            if let tag = self.note.tag {
+                TagListItemView(tag: tag)
                     .padding()
                     .padding(.vertical)
             }
             
             VStack(alignment: .leading) {
-                Text(noteItem.title)
+                Text(note.title)
                     .font(.headline)
                     .fontWeight(.bold)
                     .padding(.init(top: .zero, leading: .zero, bottom: 1, trailing: .zero))
                 
-                Text(noteItem.content)
+                Text(note.content)
                     .font(.footnote)
                     .fontWeight(.regular)
                     .foregroundColor(.gray)
@@ -44,6 +46,6 @@ public struct NoteListItemView: View {
 
 struct NoteListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteListItemView(noteItem: .init(id: "dd", title: "타이틀", content: "컨텐츠"))
+        NoteListItemView(note: .init(id: "dd", title: "타이틀", content: "컨텐츠"))
     }
 }

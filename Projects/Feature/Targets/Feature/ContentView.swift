@@ -8,13 +8,11 @@
 
 import SwiftUI
 
-//import FeatureHome
+import FeatureHome
 
 public struct ContentView: View {
     public var body: some View {
-        EmptyView()
-//        HomeView(store: .init(initialState: .init(),
-//                              reducer: Home()._printChanges()))
+        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
     }
     
     public init() { }

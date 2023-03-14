@@ -13,15 +13,8 @@ let factory: ProjectFactory = .init(
         .init(
             name: Module.core.rawValue,
             dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path),
-                .target(name: "HomeCore"),
+                .project(target: Module.network.rawValue, path: Module.network.path),
             ]
-        ),
-        .init(
-            name: "HomeCore",
-            dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path)
-              ]
         )
     ]
 )

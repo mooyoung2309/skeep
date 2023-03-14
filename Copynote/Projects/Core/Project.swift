@@ -14,28 +14,14 @@ let factory: ProjectFactory = .init(
             name: Module.core.rawValue,
             dependencies: [
                 .project(target: Module.utils.rawValue, path: Module.utils.path),
-                .target(name: "Extension"),
-                .target(name: "Client"),
-                .target(name: "Model")
+                .target(name: "HomeCore"),
             ]
         ),
         .init(
-            name: "Extension",
+            name: "HomeCore",
             dependencies: [
                 .project(target: Module.utils.rawValue, path: Module.utils.path)
               ]
-        ),
-        .init(
-            name: "Client",
-            dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path)
-              ]
-        ),
-        .init(
-            name: "Model",
-            dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path)
-            ]
         )
     ]
 )

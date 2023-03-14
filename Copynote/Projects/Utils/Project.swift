@@ -13,16 +13,11 @@ let factory: ProjectFactory = .init(
         .init(
             name: Module.utils.rawValue,
             dependencies: [
-                .target(name: "Extension"),
+                .external(name: "Realm"),
+                .external(name: "RealmSwift"),
+                .external(name: "ComposableArchitecture")
             ]
-        ),
-        .init(
-            name: "Extension",
-            dependencies: [
-//                .package(product: "RealmSwift"),
-                .package(product: "ComposableArchitecture")
-              ]
-        ),
+        )
     ]
 )
 

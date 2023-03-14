@@ -14,18 +14,18 @@ let factory: ProjectFactory = .init(
             name: Module.ui.rawValue,
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path),
-                .target(name: "Extension"),
-                .target(name: "View")
+                .target(name: "ReusableUI"),
+                .target(name: "HomeUI")
             ]
         ),
         .init(
-            name: "Extension",
+            name: "ReusableUI",
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path)
               ]
         ),
         .init(
-            name: "View",
+            name: "HomeUI",
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path)
               ]

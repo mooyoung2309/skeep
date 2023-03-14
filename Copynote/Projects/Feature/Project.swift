@@ -15,19 +15,11 @@ let factory: ProjectFactory = .init(
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path),
                 .project(target: Module.ui.rawValue, path: Module.ui.path),
-                .target(name: "Extension"),
-                .target(name: "Home")
+                .target(name: "HomeFeature")
             ]
         ),
         .init(
-            name: "Extension",
-            dependencies: [
-                .project(target: Module.core.rawValue, path: Module.core.path),
-                .project(target: Module.ui.rawValue, path: Module.ui.path)
-              ]
-        ),
-        .init(
-            name: "Home",
+            name: "HomeFeature",
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path),
                 .project(target: Module.ui.rawValue, path: Module.ui.path)

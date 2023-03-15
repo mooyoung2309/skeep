@@ -12,7 +12,21 @@ import FeatureHome
 
 public struct ContentView: View {
     public var body: some View {
-        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
+        TabView {
+            Text("The 1 Tab")
+              .tabItem {
+                Image(systemName: "folder")
+              }
+            Text("The 2 Tab")
+              .tabItem {
+                Image(systemName: "calendar")
+              }
+            Text("The 3 Tab")
+                .tabItem {
+                    Image(systemName: "menucard")
+                }
+        }
+//        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
     }
     
     public init() { }

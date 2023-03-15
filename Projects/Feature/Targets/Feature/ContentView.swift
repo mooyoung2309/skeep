@@ -7,21 +7,22 @@
 //
 
 import SwiftUI
-
-import FeatureHome
+import FeatureFolder
+import FeatureCalendar
+import FeatureList
 
 public struct ContentView: View {
     public var body: some View {
         TabView {
-            Text("The 1 Tab")
+            FolderView()
               .tabItem {
                 Image(systemName: "folder")
               }
-            Text("The 2 Tab")
+            CalendarView()
               .tabItem {
                 Image(systemName: "calendar")
               }
-            Text("The 3 Tab")
+            ListView()
                 .tabItem {
                     Image(systemName: "menucard")
                 }

@@ -9,7 +9,6 @@
 import SwiftUI
 
 public struct FolderView: View {
-    
     public init() {}
     
     public var body: some View {

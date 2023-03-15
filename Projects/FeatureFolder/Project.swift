@@ -14,7 +14,8 @@ let factory: ProjectFactory = .init(
             name: Module.featureFolder.rawValue,
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path),
-                .project(target: Module.ui.rawValue, path: Module.ui.path)
+                .project(target: Module.ui.rawValue, path: Module.ui.path),
+                .project(target: Module.utils.rawValue, path: Module.utils.path)
             ]
         )
     ]

@@ -1,47 +1,55 @@
 # Copynote
 Copynote iOS repository
 
-## Config
+SwiftUI + TCA 를 사용합니다.
 
-Tuist와 ReactorKit을 사용하였습니다.
+## Tuist
+<p align="center">
+<img src="https://user-images.githubusercontent.com/77970826/225245091-c86d269f-72a0-4a24-b7f1-848168d2a34a.png">
+</p>
 
-### Tuist workspace summary
-- Projects (single target)
-  - Copynote
+Tuist 모듈화는 다음과 같이 진행했습니다. 많이 참고한 영상은 [if(kakao)dev](https://www.youtube.com/watch?v=9HywMpgf8Mk)입니다.
+
+### Tuist + ProjectFactory
+
+Project의 생성을 돕는 구조체를 선언하여 사용합니다. 
+자세한 파일들은 ProjectDescriptionHelpers 안에서 확인 가능합니다.
+
 ```swift
-// Workspace.swift
-import ProjectDescription
+public struct ProjectFactory {
+    var project: ProjectItem
+    var targets: [TargetItem]
+    
+    public init(project: ProjectItem, targets: [TargetItem]) {
+        self.project = project
+        self.targets = targets
+    }
+    
+    public func makeProject() -> Project {
+        return .init(
+            name: project.name,
+            organizationName: project.organizationName,
+            packages: project.packages,
+            settings: project.settings,
+            targets: targets.map { item in
+                return Target.make(
+                    appName: project.organizationName,
+                    targetName: item.name,
+                    platform: item.platform,
+                    product: item.product,
+                    deploymentTarget: item.deploymentTarget,
+                    havResource: item.havResource,
+                    infoPlist: item.infoPlist,
+                    dependencies: item.dependencies
+                )
+            }
+        )
+    }
+}
 
-let appName = "Copynote"
-let workspace = Workspace(name: appName, projects: ["Projects/*"])
 ```
-
-### Project directory summary
-- Source
-  - Base (base files)
-  - Config (xxconfig files)
-  - Extension (extension files)
-  - Model (model files)
-  - Presenter (screen files)
-  - Provider (singleton layers)
-  - Service (business layers)
-- AppDelegate.swift
-- SceneDelegate.swift
-- CompositionRoot.swift
-
-## Convention
-
-## 
 
 ## Library
 |라이브러리명|버전|링크|비고|
 |---|---|---|---|
 |Tuist|3.15.0|[site](https://tuist.io)||
-|ReactorKit|upToNextMinor(3.2.0)|[github](https://github.com/ReactorKit/ReactorKit)||
-|RxSwift|upToNextMinor(6.5.0)|[github](https://github.com/ReactiveX/RxSwift)||
-|Moya|upToNextMinor(15.0.0)|[github](https://github.com/Moya/Moya)||
-|SnapKit|upToNextMinor(5.0.0)|[github](https://github.com/SnapKit/SnapKit)||
-|RealmSwift|10.31.0|[github](https://github.com/realm/realm-swift)|Version Error For Using Carthage|
-|KeychainAccess|4.2.2|[github](https://github.com/kishikawakatsumi/KeychainAccess)||
-|RxGesture|upToNextMinor(4.0.0)|[github](https://github.com/RxSwiftCommunity/RxGesture)||
-|RxDataSources|upToNextMinor(5.0.0)|[github](https://github.com/RxSwiftCommunity/RxDataSources)||

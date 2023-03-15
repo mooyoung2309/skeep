@@ -9,10 +9,33 @@
 import SwiftUI
 
 public struct FolderView: View {
+    
     public init() {}
     
     public var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            List {
+                HStack {
+                    Image(systemName: "folder")
+                    Text("test")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                HStack {
+                    Image(systemName: "folder")
+                    Text("test")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                HStack {
+                    Image(systemName: "folder")
+                    Text("test")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+            }
+            .navigationTitle("Folder")
+        }
     }
 }
 

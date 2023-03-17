@@ -16,23 +16,25 @@ public struct File {
     public var colorPalette: ColorPalette
     public var title: String
     public var content: String
-    public var created: Date
-    public var edited: Date
-    public var calendared: Date?
-    
-    public init(id: String, colorPalette: ColorPalette, directory: Directory? = nil, title: String, content: String, created: Date, edited: Date, calendared: Date?) {
-        self.id = id
-        self.directory = directory
-        self.colorPalette = colorPalette
-        self.title = title
-        self.content = content
-        self.created = created
-        self.edited = edited
-        self.calendared = calendared
-    }
+    public var createDate: Date
+    public var editDate: Date
+    public var startDate: Date?
+    public var endDate: Date?
+    public var isAllDay: Bool
     
     public func toRealm() -> FileRealm {
-        return .init(id: self.id, directory: self.directory, title: self.title, content: self.content, created: self.created, edited: self.edited)
+        return .init(
+            id: id,
+            directory: directory?.toRealm(),
+            colorPalette: colorPalette,
+            title: title,
+            content: content,
+            createDate: createDate,
+            editDate: editDate,
+            startDate: startDate,
+            endDate: endDate,
+            isAllDay: isAllDay
+        )
     }
 }
 
@@ -42,65 +44,56 @@ public class FileRealm: Object {
     @Persisted var colorPalette: ColorPalette
     @Persisted var title: String
     @Persisted var content: String
-    @Persisted var created: Date
-    @Persisted var edited: Date
-    @Persisted var calendared: Date
+    @Persisted var createDate: Date
+    @Persisted var editDate: Date
+    @Persisted var startDate: Date?
+    @Persisted var endDate: Date?
+    @Persisted var isAllDay: Bool
     
-    convenience init(id: String, directory: Directory?, title: String, content: String, created: Date, edited: Date) {
+    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool) {
         self.init()
         
         self.id = id
-        self.directory = directory?.toRealm()
+        self.directory = directory
+        self.colorPalette = colorPalette
         self.title = title
         self.content = content
-        self.created = created
-        self.edited = edited
+        self.createDate = createDate
+        self.editDate = editDate
+        self.startDate = startDate
+        self.endDate = endDate
+        self.isAllDay = isAllDay
     }
     
     public func toDomain() -> File {
-        return .init(id: self.id, colorPalette: self.colorPalette, title: self.title, content: self.content, created: self.created, edited: self.edited, calendared: self.calendared)
+        return .init(
+            id: id,
+            directory: directory?.toDomain(),
+            colorPalette: colorPalette,
+            title: title,
+            content: content,
+            createDate: createDate,
+            editDate: editDate,
+            startDate: startDate,
+            endDate: endDate,
+            isAllDay: isAllDay
+        )
     }
 }
 // MARK: - Mock data
 
 extension File {
-    public static let mock = Self(
+    public static let mock = File(
         id: UUID().uuidString,
         colorPalette: .indigo,
         title: "테스트 1",
-        content: "테스트 1",
-        created: Date(),
-        edited: Date(),
-        calendared: Date()
+        content: "컨텐츠 1",
+        createDate: Date(),
+        editDate: Date(),
+        isAllDay: false
     )
     
     public static let mocks = [
-        Self(
-            id: UUID().uuidString,
-            colorPalette: .clear,
-            title: "테스트 2",
-            content: "테스트 2",
-            created: Date(),
-            edited: Date(),
-            calendared: nil
-        ),
-        Self(
-            id: UUID().uuidString,
-            colorPalette: .pink,
-            title: "테스트 2",
-            content: "테스트 2",
-            created: Date(),
-            edited: Date(),
-            calendared: nil
-        ),
-        Self(
-            id: UUID().uuidString,
-            colorPalette: .purple,
-            title: "테스트 2",
-            content: "테스트 2",
-            created: Date(),
-            edited: Date(),
-            calendared: nil
-        )
+        mock, mock, mock
     ]
 }

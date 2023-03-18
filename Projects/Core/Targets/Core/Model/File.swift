@@ -10,7 +10,7 @@ import Foundation
 
 import RealmSwift
 
-public struct File: Equatable {
+public struct File: Equatable, Identifiable, Hashable {
     public var id: String
     public var directory: Directory?
     public var colorPalette: ColorPalette
@@ -100,6 +100,35 @@ extension File {
     )
     
     public static let mocks = [
-        mock, mock, mock
+        File(
+            id: UUID().uuidString,
+            colorPalette: .indigo,
+            title: "파일 1",
+            content: "컨텐츠 1",
+            createDate: Date(),
+            editDate: Date(),
+            isAllDay: false,
+            isDone: false
+        ),
+        File(
+            id: UUID().uuidString,
+            colorPalette: .indigo,
+            title: "파일 2",
+            content: "컨텐츠 1",
+            createDate: Date(),
+            editDate: Date(),
+            isAllDay: false,
+            isDone: false
+        ),
+        File(
+            id: UUID().uuidString,
+            colorPalette: .indigo,
+            title: "파일 3",
+            content: "컨텐츠 1",
+            createDate: Date(),
+            editDate: Date(),
+            isAllDay: false,
+            isDone: false
+        )
     ]
 }

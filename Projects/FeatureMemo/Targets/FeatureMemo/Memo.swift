@@ -16,6 +16,7 @@ public struct Memo: ReducerProtocol {
     
     public struct State: Equatable {
         var directoryList: [Directory] = []
+        var fileList: [File] = []
         var searchQuery: String = ""
         
         public init() {}
@@ -23,18 +24,28 @@ public struct Memo: ReducerProtocol {
     
     public enum Action: Equatable {
         case fetchDirectoryListRequest
+        case fetchFileListReqeust
         case fetchDirectoryListResponse([Directory])
+        case fetchFileListResponse([File])
     }
     
     @Dependency(\.directoryClient) var directoryClient
+    @Dependency(\.fileClient) var fileClient
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .fetchDirectoryListRequest:
             return .send(.fetchDirectoryListResponse(self.directoryClient.fetchDirectoryList()))
             
+        case .fetchFileListReqeust:
+            return .send(.fetchFileListResponse(self.fileClient.fetchClientList()))
+            
         case let .fetchDirectoryListResponse(directoryList):
             state.directoryList = directoryList
+            return .none
+            
+        case let .fetchFileListResponse(fileList):
+            state.fileList = fileList
             return .none
         }
     }

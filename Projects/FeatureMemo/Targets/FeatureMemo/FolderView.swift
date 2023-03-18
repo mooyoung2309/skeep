@@ -27,9 +27,7 @@ public struct FolderView: View {
     public var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: MemoView()) {
-                    FolderItemView(directory: Directory.mock)
-                }
+
             }
         }
     }

@@ -14,7 +14,7 @@ import FeatureList
 public struct ContentView: View {
     public var body: some View {
         TabView {
-            FolderView()
+            MemoHomeView()
               .tabItem {
                 Image(systemName: "folder")
               }

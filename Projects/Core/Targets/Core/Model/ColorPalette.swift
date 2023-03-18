@@ -11,7 +11,7 @@ import SwiftUI
 import RealmSwift
 
 public enum ColorPalette: String, PersistableEnum {    
-    case clear
+    case `default`
     case red
     case orange
     case yellow
@@ -22,7 +22,7 @@ public enum ColorPalette: String, PersistableEnum {
     
     public var color: Color {
         switch self {
-        case .clear: return .clear
+        case .default: return Color(UIColor.systemGray6)
         case .red: return .red
         case .orange: return .orange
         case .yellow: return .yellow
@@ -30,13 +30,6 @@ public enum ColorPalette: String, PersistableEnum {
         case .blue: return .blue
         case .purple: return .purple
         case .gray: return .gray
-        }
-    }
-    
-    public var pickerColor: Color {
-        switch self {
-        case .clear: return Color(UIColor.systemGray6)
-        default: return self.color
         }
     }
 }

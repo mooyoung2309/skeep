@@ -31,6 +31,7 @@ private struct FileItemView: View {
 
 struct MemoListView: View {
     let store: StoreOf<MemoList>
+    @State private var searchText = ""
     
     init(directory: Directory) {
         self.store = .init(

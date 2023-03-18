@@ -13,6 +13,7 @@ import ComposableArchitecture
 
 struct MemoEditView: View {
     @State private var someBinding = true
+    @State var animate = false
     let store: StoreOf<MemoEdit>
     
     init(file: File) {
@@ -22,33 +23,38 @@ struct MemoEditView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                TextField(
-                    "Title",
-                    text: viewStore.binding(get: \.file.title, send: MemoEdit.Action.textFieldChanged)
-                )
-                .font(.title)
-                .bold()
+                HStack {
+                    Divider()
+                        .frame(width: 5)
+                        .overlay(viewStore.file.colorPalette.color)
+                    
+                    TextField(
+                        "Title",
+                        text: viewStore.binding(get: \.file.title, send: MemoEdit.Action.titleChanged)
+                    )
+                    .font(.title)
+                    .bold()
+                }
                 
                 TextEditor(
-                    text: viewStore.binding(get: \.file.content, send: MemoEdit.Action.textEditorChanged)
+                    text: viewStore.binding(get: \.file.content, send: MemoEdit.Action.contentChanged)
                 )
                 .frame(minHeight: 100)
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: MemoEdit.Action.setSheet(isPresented:))) {
-                VStack(alignment: .leading) {
+                ScrollView {
                     HStack {
                         Label("", systemImage: "paintpalette")
                         
                         ScrollView(.horizontal) {
                             HStack(alignment: .center) {
-                                Spacer()
                                 ForEach(ColorPalette.allCases, id: \.rawValue) { colorPalette in
                                     Button {
-                                        
+                                        viewStore.send(.selectColorPalette(colorPalette))
                                     } label: {
                                         Image(systemName: "circle.fill")
                                             .resizable()
-                                            .foregroundColor(colorPalette.pickerColor)
+                                            .foregroundColor(colorPalette.color)
                                             .frame(width: 25, height: 25)
                                     }
                                 }
@@ -70,6 +76,9 @@ struct MemoEditView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                         }
+                        .onTapGesture {
+                            viewStore.send(.selectStartDate)
+                        }
                         
                         Image(systemName: "chevron.right")
                         
@@ -82,6 +91,12 @@ struct MemoEditView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                         }
+                        .onTapGesture {
+                            withAnimation {
+                                self.animate.toggle()
+                            }
+                            viewStore.send(.selectEndDate)
+                        }
                         
                         Spacer()
                         
@@ -91,14 +106,56 @@ struct MemoEditView: View {
                     .padding()
                     
                     HStack {
-                        Label("", systemImage: "face.dashed")
+                        Spacer()
                         
-                        Toggle("Add To-Do List", isOn: $someBinding)
+                        DatePicker("", selection: viewStore.binding(get: \.date, send: MemoEdit.Action.selectDate))
+                            .datePickerStyle(.wheel)
+                        
+                        Spacer()
+                    }
+                    .frame(height: self.animate ? 0 : 200)
+                    .opacity(self.animate ? 0 : 1)
+
+                    HStack {
+                        Label("", systemImage: "bell")
+                        
+                        Text("Notification")
+                        
+                        Spacer()
+                        
+                        Menu {
+                            Button("None", action: {})
+                            
+                            Button("10m", action: {})
+                            
+                            Button("30m", action: {})
+                            
+                            Button("1h", action: {})
+                            
+                            Button("12h", action: {})
+                            
+                            Button("24h", action: {})
+                        } label: {
+                            Label("None", systemImage: "hourglass.badge.plus")
+                        }
+                    }
+                    .padding()
+                    
+                    HStack {
+                        Label("", systemImage: "calendar")
+                        
+                        Toggle("Calendar", isOn: $someBinding)
                             .toggleStyle(.switch)
                     }
                     .padding()
                     
-                    Spacer()
+                    HStack {
+                        Label("", systemImage: "face.dashed")
+                        
+                        Toggle("To-Do", isOn: $someBinding)
+                            .toggleStyle(.switch)
+                    }
+                    .padding()
                 }
                 .presentationDetents([.medium])
             }

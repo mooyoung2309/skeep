@@ -12,14 +12,26 @@ import Core
 import ComposableArchitecture
 
 struct MemoEdit: ReducerProtocol {
+    enum EditDateMode {
+        case none
+        case start
+        case end
+    }
+    
     struct State: Equatable {
         var file: File
         var isSheetPresented: Bool = false
+        var editDateMode: EditDateMode = .none
+        var date: Date = Date()
     }
     
     enum Action: Equatable {
-        case textFieldChanged(String)
-        case textEditorChanged(String)
+        case titleChanged(String)
+        case contentChanged(String)
+        case selectColorPalette(ColorPalette)
+        case selectStartDate
+        case selectEndDate
+        case selectDate(Date)
         case setSheet(isPresented: Bool)
     }
     
@@ -27,12 +39,34 @@ struct MemoEdit: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case let .textFieldChanged(title):
+        case let .titleChanged(title):
             state.file.title = title
             return .none
             
-        case let .textEditorChanged(content):
+        case let .contentChanged(content):
             state.file.content = content
+            return .none
+            
+        case let .selectColorPalette(colorPalette):
+            state.file.colorPalette = colorPalette
+            return .none
+            
+        case .selectStartDate:
+            state.editDateMode = .start
+            return .none
+            
+        case .selectEndDate:
+            state.editDateMode = .end
+            return .none
+            
+        case let .selectDate(date):
+            switch state.editDateMode {
+            case .start: state.file.startDate = date
+            case .end: state.file.endDate = date
+            case .none: break
+            }
+            state.editDateMode = .none
+            
             return .none
             
         case let .setSheet(isPresented):

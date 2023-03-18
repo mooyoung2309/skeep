@@ -21,6 +21,8 @@ public struct File: Equatable, Identifiable, Hashable {
     public var startDate: Date?
     public var endDate: Date?
     public var isAllDay: Bool
+    public var isShowCalendar: Bool
+    public var isShowToDo: Bool
     public var isDone: Bool
     
     public func toRealm() -> FileRealm {
@@ -35,6 +37,8 @@ public struct File: Equatable, Identifiable, Hashable {
             startDate: startDate,
             endDate: endDate,
             isAllDay: isAllDay,
+            isShowCalendar: isShowCalendar,
+            isShowToDo: isShowToDo,
             isDone: isDone
         )
     }
@@ -51,9 +55,11 @@ public class FileRealm: Object {
     @Persisted var startDate: Date?
     @Persisted var endDate: Date?
     @Persisted var isAllDay: Bool
+    @Persisted var isShowCalendar: Bool
+    @Persisted var isShowToDo: Bool
     @Persisted var isDone: Bool
     
-    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool, isDone: Bool) {
+    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool, isShowCalendar: Bool, isShowToDo: Bool, isDone: Bool) {
         self.init()
         
         self.id = id
@@ -66,6 +72,8 @@ public class FileRealm: Object {
         self.startDate = startDate
         self.endDate = endDate
         self.isAllDay = isAllDay
+        self.isShowCalendar = isShowCalendar
+        self.isShowToDo = isShowToDo
         self.isDone = isDone
     }
     
@@ -81,6 +89,8 @@ public class FileRealm: Object {
             startDate: startDate,
             endDate: endDate,
             isAllDay: isAllDay,
+            isShowCalendar: isShowCalendar,
+            isShowToDo: isShowToDo,
             isDone: isDone
         )
     }
@@ -96,6 +106,8 @@ extension File {
         createDate: Date(),
         editDate: Date(),
         isAllDay: false,
+        isShowCalendar: false,
+        isShowToDo: false,
         isDone: false
     )
     
@@ -108,6 +120,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             isAllDay: false,
+            isShowCalendar: false,
+            isShowToDo: false,
             isDone: false
         ),
         File(
@@ -118,6 +132,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             isAllDay: false,
+            isShowCalendar: false,
+            isShowToDo: false,
             isDone: false
         ),
         File(
@@ -128,6 +144,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             isAllDay: false,
+            isShowCalendar: false,
+            isShowToDo: false,
             isDone: false
         )
     ]

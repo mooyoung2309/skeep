@@ -11,7 +11,7 @@ import Core
 
 import ComposableArchitecture
 
-public struct MemoHome: ReducerProtocol {
+public struct Memo: ReducerProtocol {
     public init() {}
     
     public struct State: Equatable {

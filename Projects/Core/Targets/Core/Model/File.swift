@@ -10,7 +10,7 @@ import Foundation
 
 import RealmSwift
 
-public struct File {
+public struct File: Equatable {
     public var id: String
     public var directory: Directory?
     public var colorPalette: ColorPalette

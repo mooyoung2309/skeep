@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import FeatureFolder
+import FeatureMemo
 import FeatureCalendar
 import FeatureList
 

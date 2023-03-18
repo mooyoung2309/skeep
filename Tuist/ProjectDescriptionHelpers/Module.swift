@@ -10,7 +10,7 @@ import ProjectDescription
 public enum Module: String, CaseIterable {
     case application = "Application"
     case feature = "Feature"
-    case featureFolder = "FeatureFolder"
+    case featureMemo = "FeatureMemo"
     case featureCalendar = "FeatureCalendar"
     case featureList = "FeatureList"
     case core = "Core"

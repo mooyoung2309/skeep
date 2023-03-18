@@ -21,6 +21,7 @@ public struct File {
     public var startDate: Date?
     public var endDate: Date?
     public var isAllDay: Bool
+    public var isDone: Bool
     
     public func toRealm() -> FileRealm {
         return .init(
@@ -33,7 +34,8 @@ public struct File {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
-            isAllDay: isAllDay
+            isAllDay: isAllDay,
+            isDone: isDone
         )
     }
 }
@@ -49,8 +51,9 @@ public class FileRealm: Object {
     @Persisted var startDate: Date?
     @Persisted var endDate: Date?
     @Persisted var isAllDay: Bool
+    @Persisted var isDone: Bool
     
-    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool) {
+    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool, isDone: Bool) {
         self.init()
         
         self.id = id
@@ -63,6 +66,7 @@ public class FileRealm: Object {
         self.startDate = startDate
         self.endDate = endDate
         self.isAllDay = isAllDay
+        self.isDone = isDone
     }
     
     public func toDomain() -> File {
@@ -76,7 +80,8 @@ public class FileRealm: Object {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
-            isAllDay: isAllDay
+            isAllDay: isAllDay,
+            isDone: isDone
         )
     }
 }
@@ -90,7 +95,8 @@ extension File {
         content: "컨텐츠 1",
         createDate: Date(),
         editDate: Date(),
-        isAllDay: false
+        isAllDay: false,
+        isDone: false
     )
     
     public static let mocks = [

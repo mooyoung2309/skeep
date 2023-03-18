@@ -90,7 +90,7 @@ public class FileRealm: Object {
 extension File {
     public static let mock = File(
         id: UUID().uuidString,
-        colorPalette: .indigo,
+        colorPalette: .purple,
         title: "테스트 1",
         content: "컨텐츠 1",
         createDate: Date(),
@@ -102,7 +102,7 @@ extension File {
     public static let mocks = [
         File(
             id: UUID().uuidString,
-            colorPalette: .indigo,
+            colorPalette: .yellow,
             title: "파일 1",
             content: "컨텐츠 1",
             createDate: Date(),
@@ -112,7 +112,7 @@ extension File {
         ),
         File(
             id: UUID().uuidString,
-            colorPalette: .indigo,
+            colorPalette: .red,
             title: "파일 2",
             content: "컨텐츠 1",
             createDate: Date(),
@@ -122,7 +122,7 @@ extension File {
         ),
         File(
             id: UUID().uuidString,
-            colorPalette: .indigo,
+            colorPalette: .blue,
             title: "파일 3",
             content: "컨텐츠 1",
             createDate: Date(),

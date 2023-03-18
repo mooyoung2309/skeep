@@ -14,11 +14,13 @@ import ComposableArchitecture
 struct MemoEdit: ReducerProtocol {
     struct State: Equatable {
         var file: File
+        var isSheetPresented: Bool = false
     }
     
     enum Action: Equatable {
         case textFieldChanged(String)
         case textEditorChanged(String)
+        case setSheet(isPresented: Bool)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -31,6 +33,10 @@ struct MemoEdit: ReducerProtocol {
             
         case let .textEditorChanged(content):
             state.file.content = content
+            return .none
+            
+        case let .setSheet(isPresented):
+            state.isSheetPresented = isPresented
             return .none
         }
     }

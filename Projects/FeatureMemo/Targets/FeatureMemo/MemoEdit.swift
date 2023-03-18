@@ -32,6 +32,7 @@ struct MemoEdit: ReducerProtocol {
         case selectStartDate
         case selectEndDate
         case selectDate(Date)
+        case setEditDateMode(EditDateMode)
         case setSheet(isPresented: Bool)
     }
     
@@ -65,8 +66,12 @@ struct MemoEdit: ReducerProtocol {
             case .end: state.file.endDate = date
             case .none: break
             }
-            state.editDateMode = .none
+            state.date = date
             
+            return .send(.setEditDateMode(.none), animation: .default)
+            
+        case let .setEditDateMode(mode):
+            state.editDateMode = mode
             return .none
             
         case let .setSheet(isPresented):

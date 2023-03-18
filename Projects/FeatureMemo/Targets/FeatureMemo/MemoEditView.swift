@@ -77,7 +77,7 @@ struct MemoEditView: View {
                                 .fontWeight(.bold)
                         }
                         .onTapGesture {
-                            viewStore.send(.selectStartDate)
+                            viewStore.send(.selectStartDate, animation: .default)
                         }
                         
                         Image(systemName: "chevron.right")
@@ -95,7 +95,7 @@ struct MemoEditView: View {
                             withAnimation {
                                 self.animate.toggle()
                             }
-                            viewStore.send(.selectEndDate)
+                            viewStore.send(.selectEndDate, animation: .default)
                         }
                         
                         Spacer()
@@ -113,8 +113,8 @@ struct MemoEditView: View {
                         
                         Spacer()
                     }
-                    .frame(height: self.animate ? 0 : 200)
-                    .opacity(self.animate ? 0 : 1)
+                    .frame(height: viewStore.editDateMode == .none ? 0 : 200)
+                    .opacity(viewStore.editDateMode == .none ? 0 : 1)
 
                     HStack {
                         Label("", systemImage: "bell")

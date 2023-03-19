@@ -27,7 +27,7 @@ struct MemoList: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .fetchFileListRequest:
-            return .send(.fetchFileListResponse(self.fileClient.fetchFileList()))
+            return .send(.fetchFileListResponse(self.fileClient.fetchFiles()))
             
         case let .fetchFileListResponse(fileList):
             state.fileList = fileList

@@ -38,7 +38,7 @@ public struct Memo: ReducerProtocol {
             return .send(.fetchDirectoryListResponse(self.directoryClient.fetchDirectoryList()))
             
         case .fetchFileListReqeust:
-            return .send(.fetchFileListResponse(self.fileClient.fetchFileList()))
+            return .send(.fetchFileListResponse(self.fileClient.fetchFiles()))
             
         case let .fetchDirectoryListResponse(directoryList):
             state.directoryList = directoryList

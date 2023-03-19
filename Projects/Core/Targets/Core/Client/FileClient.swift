@@ -7,20 +7,24 @@
 //
 
 import Foundation
+import Utils
 
 import ComposableArchitecture
 
 public struct FileClient {
-    public var fetchFileList: () -> [File]
+    public var fetchFiles: () -> [File]
+    public var fetchCalendarFiles: (Date) -> [CalendarFile]
 }
 
 extension FileClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchFileList: { File.mocks }
+        fetchFiles: { File.mocks },
+        fetchCalendarFiles: { _ in return CalendarFile.mocks }
     )
     
     public static let testValue = Self(
-        fetchFileList: unimplemented("\(Self.self).fetchClientList")
+        fetchFiles: unimplemented("\(Self.self).fetchFiles"),
+        fetchCalendarFiles: unimplemented("\(Self.self).fetchCalendarFiles")
     )
 }
 
@@ -33,8 +37,26 @@ extension DependencyValues {
 
 extension FileClient: DependencyKey {
     public static let liveValue = FileClient(
-        fetchFileList: {
-            return File.mocks
+        fetchFiles: {
+            return File.fetch()
+        },
+        fetchCalendarFiles: { date in
+            let calendar = Calendar.current
+            
+            let dates = date.calendarDates()
+            let files = File.fetch().filter({ $0.isShowCalendar })
+            let calendarFiles = dates.map({ date in
+                let filterdFiles = files.filter({ file in
+                    if let startDate = file.startDate, calendar.isDate(date, inSameDayAs: startDate) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                return CalendarFile(id: UUID().uuidString, date: date, files: filterdFiles)
+            })
+            
+            return calendarFiles
         }
     )
 }

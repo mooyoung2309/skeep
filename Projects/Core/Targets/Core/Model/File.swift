@@ -25,7 +25,15 @@ public struct File: Equatable, Identifiable, Hashable {
     public var isShowToDo: Bool
     public var isDone: Bool
     
-    public func toRealm() -> FileRealm {
+    public static func fetch() -> [File] {
+        let realm = try! Realm()
+        let files = realm.objects(FileRealm.self).map({ $0.toDomain() })
+        
+        return File.mocks
+        return Array(files)
+    }
+    
+    private func toRealm() -> FileRealm {
         return .init(
             id: id,
             directory: directory?.toRealm(),
@@ -77,7 +85,7 @@ public class FileRealm: Object {
         self.isDone = isDone
     }
     
-    public func toDomain() -> File {
+    func toDomain() -> File {
         return .init(
             id: id,
             directory: directory?.toDomain(),

@@ -7,13 +7,44 @@
 //
 
 import SwiftUI
+import Utils
+
+import ComposableArchitecture
 
 public struct CalendarView: View {
+    let store: StoreOf<Calendar>
     
-    public init() {}
+    public init() {
+        self.store = .init(initialState: .init(), reducer: Calendar()._printChanges())
+    }
     
     public var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            ScrollView {
+                ScrollView(.horizontal) {
+                    LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 7)) {
+                        ForEach(viewStore.calendarFiles) { calendarFile in
+                            Text("Row \(calendarFile.date)")
+                        }
+                    }
+                    .frame(width: UIScreen.screenWidth)
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Text("2023")
+                }
+                
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {}, label: {
+                        Image(systemName: "dial.min")
+                    })
+                }
+            }
+            .task {
+                viewStore.send(.refresh)
+            }
+        }
     }
 }
 

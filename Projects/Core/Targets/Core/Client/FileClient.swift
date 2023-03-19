@@ -11,16 +11,16 @@ import Foundation
 import ComposableArchitecture
 
 public struct FileClient {
-    public var fetchClientList: () -> [File]
+    public var fetchFileList: () -> [File]
 }
 
 extension FileClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchClientList: { File.mocks }
+        fetchFileList: { File.mocks }
     )
     
     public static let testValue = Self(
-        fetchClientList: unimplemented("\(Self.self).fetchClientList")
+        fetchFileList: unimplemented("\(Self.self).fetchClientList")
     )
 }
 
@@ -33,7 +33,7 @@ extension DependencyValues {
 
 extension FileClient: DependencyKey {
     public static let liveValue = FileClient(
-        fetchClientList: {
+        fetchFileList: {
             return File.mocks
         }
     )

@@ -14,20 +14,27 @@ import FeatureList
 public struct ContentView: View {
     public var body: some View {
         TabView {
-            MemoView()
-              .tabItem {
+            NavigationStack {
+                MemoView()
+                    .navigationTitle("Memo")
+            }
+            .tabItem {
                 Image(systemName: "folder")
-              }
-            CalendarView()
-              .tabItem {
+            }
+            
+            NavigationStack {
+                CalendarView()
+                    .navigationTitle("Calendar")
+            }
+            .tabItem {
                 Image(systemName: "calendar")
-              }
+            }
             ListView()
                 .tabItem {
                     Image(systemName: "menucard")
                 }
         }
-//        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
+        //        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
     }
     
     public init() { }

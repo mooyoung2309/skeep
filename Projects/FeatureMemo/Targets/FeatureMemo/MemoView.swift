@@ -25,7 +25,6 @@ struct DirectoryItemView: View {
 }
 
 public struct MemoView: View {
-    @State var stack = NavigationPath()
     let store: StoreOf<Memo>
     
     public init() {
@@ -34,20 +33,17 @@ public struct MemoView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            NavigationStack(path: $stack) {
-                List {
-                    Section(header: Text("Folder")) {
-                        ForEach(viewStore.directoryList) { directory in
-                            NavigationLink(destination: MemoListView(directory: directory)) {
-                                DirectoryItemView(directory: directory)
-                            }
+            List {
+                Section(header: Text("Folder")) {
+                    ForEach(viewStore.directoryList) { directory in
+                        NavigationLink(destination: MemoListView(directory: directory)) {
+                            DirectoryItemView(directory: directory)
                         }
                     }
                 }
-                .task {
-                    viewStore.send(.fetchDirectoryListRequest)
-                }
-                .navigationTitle("Memo")
+            }
+            .task {
+                viewStore.send(.fetchDirectoryListRequest)
             }
         }
     }

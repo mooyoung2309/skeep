@@ -22,13 +22,40 @@ public struct CalendarView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 ScrollView(.horizontal) {
-                    LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 7)) {
+                    LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7)) {
                         ForEach(viewStore.calendarFiles) { calendarFile in
-                            Text("Row \(calendarFile.date)")
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("\(calendarFile.date.day)")
+                                    
+                                    Spacer()
+                                }
+                                Spacer()
+                            }
+                            .background(Color.purple)
                         }
+                        .frame(height: UIScreen.screenHeight * 0.09)
                     }
                     .frame(width: UIScreen.screenWidth)
                 }
+                VStack {
+                    HStack {
+                        Text("2023-03-19 (Tue)")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text("ddd")
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {

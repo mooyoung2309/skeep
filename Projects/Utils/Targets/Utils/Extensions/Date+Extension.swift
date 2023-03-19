@@ -9,6 +9,18 @@
 import Foundation
 
 extension Date {
+    public var year: Int {
+        return Calendar.current.component(.year, from: self)
+    }
+    
+    public var month: Int {
+        return Calendar.current.component(.month, from: self)
+    }
+    
+    public var day: Int {
+        return Calendar.current.component(.day, from: self)
+    }
+    
     public func calendarDates() -> [Date] {
         let calendar = Calendar.current
         
@@ -26,7 +38,7 @@ extension Date {
             
             prevMonthDates.append(date)
             
-            if weekDay == 2 {
+            if weekDay == 1 {
                 break
             }
         }
@@ -37,7 +49,7 @@ extension Date {
             
             nextMonthDates.append(date)
             
-            if weekDay == 1 {
+            if weekDay == 7 {
                 break
             }
         }

@@ -12,7 +12,7 @@ public enum Module: String, CaseIterable {
     case feature = "Feature"
     case featureMemo = "FeatureMemo"
     case featureCalendar = "FeatureCalendar"
-    case featureList = "FeatureList"
+    case featureToDo = "FeatureToDo"
     case core = "Core"
     case ui = "UI"
     case utils = "Utils"

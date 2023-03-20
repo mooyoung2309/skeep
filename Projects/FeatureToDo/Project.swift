@@ -8,10 +8,10 @@
 import ProjectDescriptionHelpers
 
 let factory: ProjectFactory = .init(
-    project: .init(name: Module.featureList.rawValue),
+    project: .init(name: Module.featureToDo.rawValue),
     targets: [
         .init(
-            name: Module.featureList.rawValue,
+            name: Module.featureToDo.rawValue,
             dependencies: [
                 .project(target: Module.core.rawValue, path: Module.core.path),
                 .project(target: Module.ui.rawValue, path: Module.ui.path)

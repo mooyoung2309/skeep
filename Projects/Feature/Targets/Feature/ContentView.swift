@@ -20,6 +20,7 @@ public struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "folder")
+                Text("Memo")
             }
             
             NavigationStack {
@@ -28,13 +29,16 @@ public struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "calendar")
+                Text("Calendar")
             }
-            ToDoView()
-                .tabItem {
-                    Image(systemName: "menucard")
-                }
+            NavigationStack {
+                ToDoView()
+            }
+            .tabItem {
+                Image(systemName: "face.dashed")
+                Text("To-Do")
+            }
         }
-        //        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
     }
     
     public init() { }

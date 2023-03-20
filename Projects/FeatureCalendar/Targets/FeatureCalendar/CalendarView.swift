@@ -43,14 +43,43 @@ public struct CalendarView: View {
                 VStack {
                     HStack {
                         Text("2023-03-19 (Tue)")
-                            .font(.headline)
+                            .font(.title3)
                             .fontWeight(.bold)
                         
                         Spacer()
+                        
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .font(.title3)
+                        }
                     }
                     
-                    HStack {
-                        Text("ddd")
+                    ForEach(1..<3) { _ in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("12:00 PM")
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                                
+                                Text("1:00 PM")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Divider()
+                                .frame(width: 5)
+                                .overlay(.green)
+                                .cornerRadius(2, corners: .allCorners)
+                            
+                            Text("나의 할일")
+                            
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10, corners: .allCorners)
                     }
                     
                     Spacer()

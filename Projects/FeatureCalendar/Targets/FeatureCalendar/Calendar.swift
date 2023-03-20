@@ -17,6 +17,7 @@ public struct Calendar: ReducerProtocol {
     public struct State: Equatable {
         var date: Date = Date()
         var calendarFiles: [CalendarFile] = []
+        var tmpFiles: [File] = []
         
         public init() {}
     }
@@ -33,7 +34,6 @@ public struct Calendar: ReducerProtocol {
         switch action {
         case .refresh:
             return .concatenate([.send(.fetchCalendarFilesRequest)])
-            
         case .fetchCalendarFilesRequest:
             return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
         case let .fetchCalendarFilesResponse(calendarFiles):

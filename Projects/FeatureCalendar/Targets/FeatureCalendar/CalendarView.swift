@@ -49,7 +49,7 @@ public struct CalendarView: View {
                         Spacer()
                         
                         Button {
-                            
+                            viewStore.send(.setSheet(isPresented: true))
                         } label: {
                             Image(systemName: "plus.circle")
                                 .font(.title3)
@@ -96,6 +96,10 @@ public struct CalendarView: View {
                         Image(systemName: "dial.min")
                     })
                 }
+            }
+            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
+                CalendarEditView()
+                    .presentationDetents([.medium])
             }
             .task {
                 viewStore.send(.refresh)

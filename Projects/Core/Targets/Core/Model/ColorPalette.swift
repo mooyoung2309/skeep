@@ -10,7 +10,7 @@ import SwiftUI
 
 import RealmSwift
 
-public enum ColorPalette: String, PersistableEnum {    
+public enum ColorPalette: Int, PersistableEnum {
     case `default`
     case red
     case orange

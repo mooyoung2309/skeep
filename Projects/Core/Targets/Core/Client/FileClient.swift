@@ -44,7 +44,7 @@ extension FileClient: DependencyKey {
             let calendar = Calendar.current
             
             let dates = date.calendarDates()
-            let files = File.fetch().filter({ $0.isShowCalendar })
+            let files = File.fetch().filter({ $0.calendarStyle != .hidden })
             let calendarFiles = dates.map({ date in
                 let filterdFiles = files.filter({ file in
                     if let startDate = file.startDate, calendar.isDate(date, inSameDayAs: startDate) {

@@ -20,10 +20,8 @@ public struct File: Equatable, Identifiable, Hashable {
     public var editDate: Date
     public var startDate: Date?
     public var endDate: Date?
-    public var isAllDay: Bool
-    public var isShowCalendar: Bool
-    public var isShowToDo: Bool
-    public var isDone: Bool
+    public var calendarStyle: CalendarStyle
+    public var toDoStyle: ToDoStyle
     
     public static func fetch() -> [File] {
         let realm = try! Realm()
@@ -44,10 +42,8 @@ public struct File: Equatable, Identifiable, Hashable {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
-            isAllDay: isAllDay,
-            isShowCalendar: isShowCalendar,
-            isShowToDo: isShowToDo,
-            isDone: isDone
+            calendarStyle: calendarStyle,
+            toDoStyle: toDoStyle
         )
     }
 }
@@ -62,12 +58,10 @@ public class FileRealm: Object {
     @Persisted var editDate: Date
     @Persisted var startDate: Date?
     @Persisted var endDate: Date?
-    @Persisted var isAllDay: Bool
-    @Persisted var isShowCalendar: Bool
-    @Persisted var isShowToDo: Bool
-    @Persisted var isDone: Bool
+    @Persisted var calendarStyle: CalendarStyle
+    @Persisted var toDoStyle: ToDoStyle
     
-    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, isAllDay: Bool, isShowCalendar: Bool, isShowToDo: Bool, isDone: Bool) {
+    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
         self.init()
         
         self.id = id
@@ -79,10 +73,8 @@ public class FileRealm: Object {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
-        self.isAllDay = isAllDay
-        self.isShowCalendar = isShowCalendar
-        self.isShowToDo = isShowToDo
-        self.isDone = isDone
+        self.calendarStyle = calendarStyle
+        self.toDoStyle = toDoStyle
     }
     
     func toDomain() -> File {
@@ -96,10 +88,8 @@ public class FileRealm: Object {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
-            isAllDay: isAllDay,
-            isShowCalendar: isShowCalendar,
-            isShowToDo: isShowToDo,
-            isDone: isDone
+            calendarStyle: calendarStyle,
+            toDoStyle: toDoStyle
         )
     }
 }
@@ -113,10 +103,8 @@ extension File {
         content: "컨텐츠 1",
         createDate: Date(),
         editDate: Date(),
-        isAllDay: false,
-        isShowCalendar: false,
-        isShowToDo: false,
-        isDone: false
+        calendarStyle: .default,
+        toDoStyle: .default
     )
     
     public static let mocks = [
@@ -127,10 +115,8 @@ extension File {
             content: "컨텐츠 1",
             createDate: Date(),
             editDate: Date(),
-            isAllDay: false,
-            isShowCalendar: false,
-            isShowToDo: false,
-            isDone: false
+            calendarStyle: .default,
+            toDoStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -139,10 +125,8 @@ extension File {
             content: "컨텐츠 1",
             createDate: Date(),
             editDate: Date(),
-            isAllDay: false,
-            isShowCalendar: false,
-            isShowToDo: false,
-            isDone: false
+            calendarStyle: .default,
+            toDoStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -151,10 +135,8 @@ extension File {
             content: "컨텐츠 1",
             createDate: Date(),
             editDate: Date(),
-            isAllDay: false,
-            isShowCalendar: false,
-            isShowToDo: false,
-            isDone: false
+            calendarStyle: .default,
+            toDoStyle: .default
         )
     ]
 }

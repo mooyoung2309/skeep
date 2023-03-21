@@ -12,13 +12,13 @@ import Utils
 
 import ComposableArchitecture
 
-public struct CalendarEditView: View {
+public struct EditCalendarView: View {
     @State private var someBinding = true
     @State var animate = false
-    let store: StoreOf<CalendarEdit>
+    let store: StoreOf<EditCalendar>
     
     public init() {
-        self.store = .init(initialState: .init(), reducer: CalendarEdit()._printChanges())
+        self.store = .init(initialState: .init(), reducer: EditCalendar()._printChanges())
     }
     
     public var body: some View {
@@ -89,7 +89,7 @@ public struct CalendarEditView: View {
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.date, send: CalendarEdit.Action.selectDate))
+                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditCalendar.Action.selectDate))
                         .datePickerStyle(.wheel)
                     
                     Spacer()

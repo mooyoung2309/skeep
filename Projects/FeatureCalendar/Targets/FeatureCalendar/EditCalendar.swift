@@ -11,7 +11,7 @@ import Core
 
 import ComposableArchitecture
 
-struct CalendarEdit: ReducerProtocol {
+struct EditCalendar: ReducerProtocol {
     enum EditDateMode {
         case none
         case start

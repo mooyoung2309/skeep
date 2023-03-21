@@ -98,7 +98,7 @@ public struct CalendarView: View {
                 }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
-                CalendarEditView()
+                EditCalendarView()
                     .presentationDetents([.medium])
             }
             .task {

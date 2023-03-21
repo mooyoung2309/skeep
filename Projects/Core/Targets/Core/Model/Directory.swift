@@ -10,7 +10,7 @@ import Foundation
 
 import RealmSwift
 
-public struct Directory: Equatable, Identifiable {
+public struct Directory: Equatable, Identifiable, Hashable {
     public var id: String
     public var title: String
     

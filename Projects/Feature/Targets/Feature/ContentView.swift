@@ -7,27 +7,38 @@
 //
 
 import SwiftUI
-import FeatureFolder
+import FeatureMemo
 import FeatureCalendar
-import FeatureList
+import FeatureToDo
 
 public struct ContentView: View {
     public var body: some View {
         TabView {
-            FolderView()
-              .tabItem {
+            NavigationStack {
+                MemoView()
+                    .navigationTitle("Memo")
+            }
+            .tabItem {
                 Image(systemName: "folder")
-              }
-            CalendarView()
-              .tabItem {
+                Text("Memo")
+            }
+            
+            NavigationStack {
+                CalendarView()
+                    .navigationTitle("Calendar")
+            }
+            .tabItem {
                 Image(systemName: "calendar")
-              }
-            ListView()
-                .tabItem {
-                    Image(systemName: "menucard")
-                }
+                Text("Calendar")
+            }
+            NavigationStack {
+                ToDoView()
+            }
+            .tabItem {
+                Image(systemName: "face.dashed")
+                Text("To-Do")
+            }
         }
-//        HomeView(store: .init(initialState: .init(), reducer: Home()._printChanges()))
     }
     
     public init() { }

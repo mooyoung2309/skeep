@@ -23,6 +23,7 @@ struct ToDo: ReducerProtocol {
         case refresh
         case fetchCalendarFilesRequest
         case fetchCalendarFilesResponse([CalendarFile])
+        case selectDate(Date)
         case setSheet(isPresented: Bool)
     }
     
@@ -36,6 +37,9 @@ struct ToDo: ReducerProtocol {
             return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
         case let .fetchCalendarFilesResponse(calendarFiles):
             state.calendarFiles = calendarFiles
+            return .none
+        case let .selectDate(date):
+            state.date = date
             return .none
         case let .setSheet(isPresented):
             state.isSheetPresented = isPresented

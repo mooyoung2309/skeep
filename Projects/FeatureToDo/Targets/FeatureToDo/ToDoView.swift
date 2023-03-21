@@ -12,21 +12,71 @@ import ComposableArchitecture
 
 public struct ToDoView: View {
     let store: StoreOf<ToDo>
+    private let weeks: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
     public init() {
         self.store = .init(initialState: .init(), reducer: ToDo()._printChanges())
     }
     
     public var body: some View {
-        TabView {
-            Text("11")
-            Text("22")
-            Text("33")
+        ScrollView {
+            TabView {
+                LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
+                    ForEach(0..<7, id: \.self) { value in
+                        VStack(spacing: 15) {
+                            Text(weeks[value])
+                            Text(String(format: "%x", value))
+                        }
+                    }
+                }
+                
+                LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
+                    ForEach(0..<7, id: \.self) { value in
+                        HStack {
+                            Spacer()
+                            Text(String(format: "%x", value))
+                            Spacer()
+                        }
+                    }
+                }
+                
+                LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
+                    ForEach(0..<7, id: \.self) { value in
+                        HStack {
+                            Spacer()
+                            Text(String(format: "%x", value))
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            .frame(minWidth: 100, minHeight: 100)
+            
+            ForEach(0..<10) { i in
+                HStack {
+                    Button(action: {
+                        
+                    }, label: {
+                        Image(systemName: "face.dashed")
+                            .font(.title3)
+                    })
+                    
+                    Divider()
+                        .frame(width: 5)
+                        .overlay(.green)
+                        .cornerRadius(2, corners: .allCorners)
+                    
+                    Text("나의 할일")
+                    
+                    Spacer()
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10, corners: .allCorners)
+            }
+            .padding(.horizontal)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-//        ScrollView {
-//
-//        }
         .navigationTitle("To-Do")
     }
 }

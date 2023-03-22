@@ -39,6 +39,14 @@ public struct CalendarView: View {
                                 Text("\(calendarFile.date.day)")
                                     .font(.callout)
                                     .fontWeight(.semibold)
+                                    .opacity(
+                                        calendarFile.date.month == viewStore.date.month
+                                        ? 1 : 0.5
+                                    )
+                                    .opacity(
+                                        calendarFile.date.weekday == 1 || calendarFile.date.weekday == 7
+                                        ? 0.4 : 1
+                                    )
                                 Spacer()
                             }
                             
@@ -55,6 +63,9 @@ public struct CalendarView: View {
                                 
                                 Spacer()
                             }
+                        }
+                        .onTapGesture {
+                            viewStore.send(.selectCalendarCell(calendarFile.date), animation: .default)
                         }
                         .frame(height: UIScreen.screenHeight * 0.08)
                     }

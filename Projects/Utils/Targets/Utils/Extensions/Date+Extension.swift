@@ -21,6 +21,10 @@ extension Date {
         return Calendar.current.component(.day, from: self)
     }
     
+    public var weekday: Int {
+        return Calendar.current.component(.weekday, from: self)
+    }
+    
     public func calendarDates() -> [Date] {
         let calendar = Calendar.current
         

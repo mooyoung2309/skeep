@@ -61,6 +61,27 @@ extension Date {
         return calendarDates
     }
     
+    public func addMonth(value: Int) -> Date {
+        let cal = Calendar.current
+        let date = cal.date(byAdding: .month, value: value, to: self)!
+        
+        return date
+    }
+    
+    public func addDay(value: Int) -> Date {
+        let cal = Calendar.current
+        let date = cal.date(byAdding: .day, value: value, to: self)!
+        
+        return date
+    }
+    
+    public static func toString(format: String = "yyyy.MM.dd (E)", date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: date)
+    }
+    
     func startOfMonth() -> Date {
         let cal = Calendar.current
         let comps = cal.dateComponents([.year, .month], from: self)

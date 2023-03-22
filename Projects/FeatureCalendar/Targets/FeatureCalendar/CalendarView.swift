@@ -63,7 +63,7 @@ public struct CalendarView: View {
                 
                 VStack {
                     HStack {
-                        Text("2023.03.19 (Tue)")
+                        Text(Date.toString(date: viewStore.date))
                             .font(.title3)
                             .fontWeight(.bold)
                         
@@ -108,8 +108,14 @@ public struct CalendarView: View {
                 .padding(.horizontal)
             }
             .toolbar {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Text(Date.toString(format: "yyyy.MM", date: viewStore.date))
+                }
+                
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: {}, label: {
+                    Button(action: {
+                        viewStore.send(.tapLeftButton, animation: .default)
+                    }, label: {
                         Image(systemName: "chevron.left")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -117,7 +123,9 @@ public struct CalendarView: View {
                 }
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: {}, label: {
+                    Button(action: {
+                        viewStore.send(.tapRightButton, animation: .default)
+                    }, label: {
                         Image(systemName: "chevron.right")
                             .font(.caption)
                             .fontWeight(.bold)

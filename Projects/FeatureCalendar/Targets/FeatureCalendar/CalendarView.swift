@@ -14,6 +14,8 @@ import ComposableArchitecture
 public struct CalendarView: View {
     let store: StoreOf<Calendar>
     
+    private let weeks: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    
     public init() {
         self.store = .init(initialState: .init(), reducer: Calendar()._printChanges())
     }
@@ -21,28 +23,47 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                ScrollView(.horizontal) {
-                    LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7)) {
-                        ForEach(viewStore.calendarFiles) { calendarFile in
-                            VStack {
-                                HStack {
-                                    Spacer()
-                                    
-                                    Text("\(calendarFile.date.day)")
-                                    
-                                    Spacer()
-                                }
+                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 7)) {
+                    ForEach(weeks, id: \.self) { week in
+                        VStack {
+                            Text(week)
+                                .font(.caption2)
+                                .fontWeight(.light)
+                        }
+                    }
+                    
+                    ForEach(viewStore.calendarFiles) { calendarFile in
+                        VStack {
+                            HStack(spacing: .zero) {
+                                Spacer()
+                                Text("\(calendarFile.date.day)")
+                                    .font(.callout)
+                                    .fontWeight(.semibold)
                                 Spacer()
                             }
-                            .background(Color.purple)
+                            
+                            HStack(spacing: .zero) {
+                                Divider()
+                                    .frame(width: 2, height: 10)
+                                    .overlay(.green)
+                                    .cornerRadius(2, corners: .allCorners)
+                                    .padding(.trailing, 3)
+                                
+                                Text("dd")
+                                    .font(.caption2)
+                                    .fontWeight(.light)
+                                
+                                Spacer()
+                            }
                         }
-                        .frame(height: UIScreen.screenHeight * 0.09)
+                        .frame(height: UIScreen.screenHeight * 0.08)
                     }
-                    .frame(width: UIScreen.screenWidth)
                 }
+                .padding(.horizontal)
+                
                 VStack {
                     HStack {
-                        Text("2023-03-19 (Tue)")
+                        Text("2023.03.19 (Tue)")
                             .font(.title3)
                             .fontWeight(.bold)
                         
@@ -87,13 +108,19 @@ public struct CalendarView: View {
                 .padding(.horizontal)
             }
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Text("2023")
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {}, label: {
+                        Image(systemName: "chevron.left")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                    })
                 }
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {}, label: {
-                        Image(systemName: "dial.min")
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .fontWeight(.bold)
                     })
                 }
             }

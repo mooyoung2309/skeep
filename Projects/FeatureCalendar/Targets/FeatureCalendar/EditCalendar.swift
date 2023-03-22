@@ -31,8 +31,6 @@ struct EditCalendar: ReducerProtocol {
         case selectStartDate
         case selectEndDate
         case selectDate(Date)
-        case fetchCalendarFilesRequest
-        case fetchCalendarFilesResponse([CalendarFile])
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -40,17 +38,12 @@ struct EditCalendar: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .refresh:
-            return .concatenate([.send(.fetchCalendarFilesRequest)])
+            return .none
         case let .selectColorPalette(colorPalette):
             return .none
         case .selectStartDate, .selectEndDate:
             return .none
         case let .selectDate(date):
-            return .none
-        case .fetchCalendarFilesRequest:
-            return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
-        case let .fetchCalendarFilesResponse(calendarFiles):
-            state.calendarFiles = calendarFiles
             return .none
         }
     }

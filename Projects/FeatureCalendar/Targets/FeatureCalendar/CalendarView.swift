@@ -41,11 +41,7 @@ public struct CalendarView: View {
                                     .fontWeight(.semibold)
                                     .opacity(
                                         calendarFile.date.month == viewStore.date.month
-                                        ? 1 : 0.5
-                                    )
-                                    .opacity(
-                                        calendarFile.date.weekday == 1 || calendarFile.date.weekday == 7
-                                        ? 0.4 : 1
+                                        ? 1 : 0.4
                                     )
                                 Spacer()
                             }

@@ -14,7 +14,7 @@ import ComposableArchitecture
 struct ToDo: ReducerProtocol {
     struct State: Equatable {
         var date: Date = Date()
-        var calendarFiles: [CalendarFile] = []
+        var calendarFilesList: [[CalendarFile]] = []
         var tmpFiles: [File] = []
         var isSheetPresented: Bool = false
     }
@@ -22,7 +22,7 @@ struct ToDo: ReducerProtocol {
     enum Action: Equatable {
         case refresh
         case fetchCalendarFilesRequest
-        case fetchCalendarFilesResponse([CalendarFile])
+        case fetchCalendarFilesResponse([[CalendarFile]])
         case selectDate(Date)
         case setSheet(isPresented: Bool)
     }
@@ -34,9 +34,10 @@ struct ToDo: ReducerProtocol {
         case .refresh:
             return .concatenate([.send(.fetchCalendarFilesRequest)])
         case .fetchCalendarFilesRequest:
-            return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
-        case let .fetchCalendarFilesResponse(calendarFiles):
-            state.calendarFiles = calendarFiles
+//            return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
+            return .none
+        case let .fetchCalendarFilesResponse(calendarFilesList):
+            state.calendarFilesList = calendarFilesList
             return .none
         case let .selectDate(date):
             state.date = date

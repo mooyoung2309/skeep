@@ -51,6 +51,13 @@ struct MemoListView: View {
                 viewStore.send(.fetchFileListRequest)
             }
             .navigationTitle(viewStore.directory.title)
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: MemoEditView(file: .init()), label: {
+                        Label("", systemImage: "square.and.pencil")
+                    })
+                }
+            }
         }
     }
 }

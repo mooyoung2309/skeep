@@ -23,6 +23,31 @@ public struct File: Equatable, Identifiable, Hashable {
     public var calendarStyle: CalendarStyle
     public var toDoStyle: ToDoStyle
     
+    public init(id: String = UUID().uuidString, directory: Directory? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
+        self.id = id
+        self.directory = directory
+        self.colorPalette = colorPalette
+        self.title = title
+        self.content = content
+        self.createDate = createDate
+        self.editDate = editDate
+        self.startDate = startDate
+        self.endDate = endDate
+        self.calendarStyle = calendarStyle
+        self.toDoStyle = toDoStyle
+    }
+    
+    public init() {
+        self.id = UUID().uuidString
+        self.colorPalette = .default
+        self.title = ""
+        self.content = ""
+        self.createDate = Date()
+        self.editDate = Date()
+        self.calendarStyle = .hidden
+        self.toDoStyle = .hidden
+    }
+    
     public static func fetch() -> [File] {
         let realm = try! Realm()
         let files = realm.objects(FileRealm.self).map({ $0.toDomain() })

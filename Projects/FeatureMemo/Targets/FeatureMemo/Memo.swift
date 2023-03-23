@@ -18,15 +18,21 @@ public struct Memo: ReducerProtocol {
         var directoryList: [Directory] = []
         var fileList: [File] = []
         var searchQuery: String = ""
+        var isAlertPresented: Bool = false
+        var directoryName: String = ""
         
         public init() {}
     }
     
     public enum Action: Equatable {
+        case refresh
         case fetchDirectoryListRequest
         case fetchFileListReqeust
         case fetchDirectoryListResponse([Directory])
         case fetchFileListResponse([File])
+        case directoryNameChanged(String)
+        case tapAddButton
+        case setAlert(isPresented: Bool)
     }
     
     @Dependency(\.directoryClient) var directoryClient
@@ -34,8 +40,13 @@ public struct Memo: ReducerProtocol {
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case .refresh:
+            return .concatenate([
+                .send(.fetchDirectoryListRequest),
+            ])
+            
         case .fetchDirectoryListRequest:
-            return .send(.fetchDirectoryListResponse(self.directoryClient.fetchDirectoryList()))
+            return .send(.fetchDirectoryListResponse(self.directoryClient.fetchDirectories()))
             
         case .fetchFileListReqeust:
             return .send(.fetchFileListResponse(self.fileClient.fetchFiles()))
@@ -46,6 +57,21 @@ public struct Memo: ReducerProtocol {
             
         case let .fetchFileListResponse(fileList):
             state.fileList = fileList
+            return .none
+            
+        case let .directoryNameChanged(directoryName):
+            state.directoryName = directoryName
+            return .none
+            
+        case .tapAddButton:
+            if !state.directoryName.isEmpty {
+                let dirctory = Directory(title: state.directoryName)
+                directoryClient.createOrUpdateDirectory(dirctory)
+            }
+            return .send(.refresh)
+            
+        case let .setAlert(isPresented):
+            state.isAlertPresented = isPresented
             return .none
         }
     }

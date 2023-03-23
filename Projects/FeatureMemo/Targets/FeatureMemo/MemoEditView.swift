@@ -40,6 +40,8 @@ struct MemoEditView: View {
                     text: viewStore.binding(get: \.file.content, send: MemoEdit.Action.contentChanged)
                 )
                 .frame(minHeight: 100)
+                
+                Spacer()
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: MemoEdit.Action.setSheet(isPresented:))) {
                 ScrollView {
@@ -161,6 +163,7 @@ struct MemoEditView: View {
             }
             .padding()
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("")
             .toolbar(.hidden, for: .tabBar)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {

@@ -14,13 +14,29 @@ public struct Directory: Equatable, Identifiable, Hashable {
     public var id: String
     public var title: String
     
-    public init(id: String, title: String) {
+    public init(id: String = UUID().uuidString, title: String) {
         self.id = id
         self.title = title
     }
     
     public func toRealm() -> DirectoryRealm {
         return .init(id: self.id, title: self.title)
+    }
+    
+    public static func fetch() -> [Directory] {
+        let realm = try! Realm()
+        let directories = realm.objects(DirectoryRealm.self).map({ $0.toDomain() })
+        
+        return Array(directories)
+    }
+    
+    public static func createOrUpdate(directory: Directory) {
+        let realm = try! Realm()
+        let directoryRealm = directory.toRealm()
+        
+        try! realm.write {
+            realm.add(directoryRealm, update: .modified)
+        }
     }
 }
 

@@ -11,16 +11,19 @@ import Foundation
 import ComposableArchitecture
 
 public struct DirectoryClient {
-    public var fetchDirectoryList: () -> [Directory]
+    public var fetchDirectories: () -> [Directory]
+    public var createOrUpdateDirectory: (Directory) -> ()
 }
 
 extension DirectoryClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchDirectoryList: { Directory.mocks }
+        fetchDirectories: { Directory.mocks },
+        createOrUpdateDirectory: { _ in () }
     )
     
     public static let testValue = Self(
-        fetchDirectoryList: unimplemented("\(Self.self).fetchDirectoryList")
+        fetchDirectories: unimplemented("\(Self.self).fetchDirectories"),
+        createOrUpdateDirectory: unimplemented("\(Self.self).createDirectory")
     )
 }
 
@@ -33,8 +36,11 @@ extension DependencyValues {
 
 extension DirectoryClient: DependencyKey {
     public static let liveValue = DirectoryClient(
-        fetchDirectoryList: {
-            return Directory.mocks
+        fetchDirectories: {
+            return Directory.fetch()
+        },
+        createOrUpdateDirectory: { directory in
+            Directory.createOrUpdate(directory: directory)
         }
     )
 }

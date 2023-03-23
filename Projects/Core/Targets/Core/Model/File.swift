@@ -23,12 +23,49 @@ public struct File: Equatable, Identifiable, Hashable {
     public var calendarStyle: CalendarStyle
     public var toDoStyle: ToDoStyle
     
-    public static func fetch() -> [File] {
+    public init(
+        id: String = UUID().uuidString,
+        directory: Directory? = nil,
+        colorPalette: ColorPalette = .default,
+        title: String = "",
+        content: String = "",
+        createDate: Date = Date(),
+        editDate: Date = Date(),
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        calendarStyle: CalendarStyle = .hidden,
+        toDoStyle: ToDoStyle = .hidden
+    ) {
+        self.id = id
+        self.directory = directory
+        self.colorPalette = colorPalette
+        self.title = title
+        self.content = content
+        self.createDate = createDate
+        self.editDate = editDate
+        self.startDate = startDate
+        self.endDate = endDate
+        self.calendarStyle = calendarStyle
+        self.toDoStyle = toDoStyle
+    }
+    
+    public static func fetch(directoryID: String? = nil) -> [File] {
         let realm = try! Realm()
-        let files = realm.objects(FileRealm.self).map({ $0.toDomain() })
         
-        return File.mocks
-        return Array(files)
+        if let id = directoryID {
+            return Array(realm.objects(FileRealm.self).map({ $0.toDomain() }).filter({ $0.directory?.id == id }))
+        } else {
+            return Array(realm.objects(FileRealm.self).map({ $0.toDomain() }))
+        }
+    }
+    
+    public static func createOrUpdate(file: File) {
+        let realm = try! Realm()
+        let fileRealm = file.toRealm()
+        
+        try! realm.write {
+            realm.add(fileRealm, update: .modified)
+        }
     }
     
     private func toRealm() -> FileRealm {

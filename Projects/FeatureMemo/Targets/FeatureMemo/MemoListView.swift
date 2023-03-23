@@ -11,24 +11,6 @@ import Core
 
 import ComposableArchitecture
 
-private struct FileItemView: View {
-    let file: File
-    
-    init(file: File) {
-        self.file = file
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(file.title)
-                .font(.headline)
-            Text(file.content)
-                .foregroundColor(.gray)
-                .font(.callout)
-        }
-    }
-}
-
 struct MemoListView: View {
     let store: StoreOf<MemoList>
     @State private var searchText = ""
@@ -43,7 +25,7 @@ struct MemoListView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             List(viewStore.fileList) { file in
-                NavigationLink(destination: MemoEditView(file: file)) {
+                NavigationLink(destination: EditMemoView(file: file)) {
                     FileItemView(file: file)
                 }
             }
@@ -51,6 +33,13 @@ struct MemoListView: View {
                 viewStore.send(.fetchFileListRequest)
             }
             .navigationTitle(viewStore.directory.title)
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: EditMemoView(file: .init(directory: viewStore.directory)), label: {
+                        Label("", systemImage: "square.and.pencil")
+                    })
+                }
+            }
         }
     }
 }

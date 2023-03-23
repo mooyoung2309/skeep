@@ -34,16 +34,52 @@ public struct MemoView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             List {
-                Section(header: Text("Folder")) {
-                    ForEach(viewStore.directoryList) { directory in
-                        NavigationLink(destination: MemoListView(directory: directory)) {
-                            DirectoryItemView(directory: directory)
+                Section(
+                    header: HStack {
+                        Text("Folder")
+                        Spacer()
+                        Button(action: {
+                            viewStore.send(.setAlert(isPresented: true))
+                        }, label: {
+                            Image(systemName: "plus.circle")
+                        })
+                        .alert("folder", isPresented: viewStore.binding(get: \.isAlertPresented, send: Memo.Action.setAlert(isPresented:)), actions: {
+                            TextField("name", text: viewStore.binding(get: \.directoryName, send: Memo.Action.directoryNameChanged))
+
+                            Button("ADD", action: {
+                                viewStore.send(.tapAddButton)
+                            })
+                            Button("Cancel", role: .cancel, action: {})
+                        }, message: {
+                            
+                        })
+                    },
+                    content: {
+                        ForEach(viewStore.directoryList) { directory in
+                            NavigationLink(destination: MemoListView(directory: directory)) {
+                                DirectoryItemView(directory: directory)
+                            }
                         }
-                    }
-                }
+                    })
+                Section(
+                    header: HStack {
+                        Text("Memo")
+                        Spacer()
+                        
+                        NavigationLink(destination: EditMemoView(file: .init()), label: {
+                            Image(systemName: "square.and.pencil")
+                        })
+                    },
+                    content: {
+                        ForEach(viewStore.fileList) { file in
+                            NavigationLink(destination: EditMemoView(file: file)) {
+                                FileItemView(file: file)
+                            }
+                        }
+                    })
             }
             .task {
-                viewStore.send(.fetchDirectoryListRequest)
+                viewStore.send(.refresh)
             }
         }
     }

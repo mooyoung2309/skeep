@@ -11,13 +11,13 @@ import Core
 
 import ComposableArchitecture
 
-struct MemoEditView: View {
+struct EditMemoView: View {
     @State private var someBinding = true
     @State var animate = false
-    let store: StoreOf<MemoEdit>
+    let store: StoreOf<EditMemo>
     
     init(file: File) {
-        self.store = .init(initialState: .init(file: file), reducer: MemoEdit()._printChanges())
+        self.store = .init(initialState: .init(file: file), reducer: EditMemo()._printChanges())
     }
     
     var body: some View {
@@ -30,20 +30,20 @@ struct MemoEditView: View {
                     
                     TextField(
                         "Title",
-                        text: viewStore.binding(get: \.file.title, send: MemoEdit.Action.titleChanged)
+                        text: viewStore.binding(get: \.file.title, send: EditMemo.Action.titleChanged)
                     )
                     .font(.title)
                     .bold()
                 }
                 
                 TextEditor(
-                    text: viewStore.binding(get: \.file.content, send: MemoEdit.Action.contentChanged)
+                    text: viewStore.binding(get: \.file.content, send: EditMemo.Action.contentChanged)
                 )
                 .frame(minHeight: 100)
                 
                 Spacer()
             }
-            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: MemoEdit.Action.setSheet(isPresented:))) {
+            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: EditMemo.Action.setSheet(isPresented:))) {
                 ScrollView {
                     HStack {
                         Label("", systemImage: "paintpalette")
@@ -110,7 +110,7 @@ struct MemoEditView: View {
                     HStack {
                         Spacer()
                         
-                        DatePicker("", selection: viewStore.binding(get: \.date, send: MemoEdit.Action.selectDate))
+                        DatePicker("", selection: viewStore.binding(get: \.date, send: EditMemo.Action.selectDate))
                             .datePickerStyle(.wheel)
                         
                         Spacer()

@@ -11,7 +11,7 @@ import Core
 
 import ComposableArchitecture
 
-struct MemoEdit: ReducerProtocol {
+struct EditMemo: ReducerProtocol {
     enum EditDateMode {
         case none
         case start
@@ -32,6 +32,7 @@ struct MemoEdit: ReducerProtocol {
         case selectStartDate
         case selectEndDate
         case selectDate(Date)
+        case createOrUpdateRequest
         case setEditDateMode(EditDateMode)
         case setSheet(isPresented: Bool)
     }
@@ -42,15 +43,15 @@ struct MemoEdit: ReducerProtocol {
         switch action {
         case let .titleChanged(title):
             state.file.title = title
-            return .none
+            return .send(.createOrUpdateRequest)
             
         case let .contentChanged(content):
             state.file.content = content
-            return .none
+            return .send(.createOrUpdateRequest)
             
         case let .selectColorPalette(colorPalette):
             state.file.colorPalette = colorPalette
-            return .none
+            return .send(.createOrUpdateRequest)
             
         case .selectStartDate:
             state.editDateMode = .start
@@ -68,7 +69,14 @@ struct MemoEdit: ReducerProtocol {
             }
             state.date = date
             
-            return .send(.setEditDateMode(.none), animation: .default)
+            return .concatenate([
+                .send(.setEditDateMode(.none), animation: .default),
+                .send(.createOrUpdateRequest)
+            ])
+            
+        case .createOrUpdateRequest:
+            fileClient.createOrUpdateFile(state.file)
+            return .none
             
         case let .setEditDateMode(mode):
             state.editDateMode = mode

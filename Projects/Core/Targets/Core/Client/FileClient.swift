@@ -12,19 +12,22 @@ import Utils
 import ComposableArchitecture
 
 public struct FileClient {
-    public var fetchFiles: () -> [File]
+    public var fetchFiles: (String?) -> [File]
     public var fetchCalendarFiles: (Date) -> [CalendarFile]
+    public var createOrUpdateFile: (File) -> ()
 }
 
 extension FileClient: TestDependencyKey {
     public static let previewValue = Self(
-        fetchFiles: { File.mocks },
-        fetchCalendarFiles: { _ in return CalendarFile.mocks }
+        fetchFiles: { _ in return File.mocks },
+        fetchCalendarFiles: { _ in return CalendarFile.mocks },
+        createOrUpdateFile: { _ in }
     )
     
     public static let testValue = Self(
         fetchFiles: unimplemented("\(Self.self).fetchFiles"),
-        fetchCalendarFiles: unimplemented("\(Self.self).fetchCalendarFiles")
+        fetchCalendarFiles: unimplemented("\(Self.self).fetchCalendarFiles"),
+        createOrUpdateFile: unimplemented("\(Self.self).fetchCalendarFiles")
     )
 }
 
@@ -37,8 +40,12 @@ extension DependencyValues {
 
 extension FileClient: DependencyKey {
     public static let liveValue = FileClient(
-        fetchFiles: {
-            return File.fetch()
+        fetchFiles: { id in
+            if let id = id {
+                return File.fetch(directoryID: id)
+            } else {
+                return File.fetch()
+            }
         },
         fetchCalendarFiles: { date in
             let calendar = Calendar.current
@@ -56,6 +63,9 @@ extension FileClient: DependencyKey {
             })
             
             return calendarFiles
+        },
+        createOrUpdateFile: { file in
+            File.createOrUpdate(file: file)
         }
     )
 }

@@ -23,7 +23,19 @@ public struct File: Equatable, Identifiable, Hashable {
     public var calendarStyle: CalendarStyle
     public var toDoStyle: ToDoStyle
     
-    public init(id: String = UUID().uuidString, directory: Directory? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
+    public init(
+        id: String = UUID().uuidString,
+        directory: Directory? = nil,
+        colorPalette: ColorPalette = .default,
+        title: String = "",
+        content: String = "",
+        createDate: Date = Date(),
+        editDate: Date = Date(),
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        calendarStyle: CalendarStyle = .hidden,
+        toDoStyle: ToDoStyle = .hidden
+    ) {
         self.id = id
         self.directory = directory
         self.colorPalette = colorPalette
@@ -37,23 +49,23 @@ public struct File: Equatable, Identifiable, Hashable {
         self.toDoStyle = toDoStyle
     }
     
-    public init() {
-        self.id = UUID().uuidString
-        self.colorPalette = .default
-        self.title = ""
-        self.content = ""
-        self.createDate = Date()
-        self.editDate = Date()
-        self.calendarStyle = .hidden
-        self.toDoStyle = .hidden
+    public static func fetch(directoryID: String? = nil) -> [File] {
+        let realm = try! Realm()
+        
+        if let id = directoryID {
+            return Array(realm.objects(FileRealm.self).map({ $0.toDomain() }).filter({ $0.directory?.id == id }))
+        } else {
+            return Array(realm.objects(FileRealm.self).map({ $0.toDomain() }))
+        }
     }
     
-    public static func fetch() -> [File] {
+    public static func createOrUpdate(file: File) {
         let realm = try! Realm()
-        let files = realm.objects(FileRealm.self).map({ $0.toDomain() })
+        let fileRealm = file.toRealm()
         
-        return File.mocks
-        return Array(files)
+        try! realm.write {
+            realm.add(fileRealm, update: .modified)
+        }
     }
     
     private func toRealm() -> FileRealm {

@@ -43,7 +43,7 @@ struct MemoListView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             List(viewStore.fileList) { file in
-                NavigationLink(destination: MemoEditView(file: file)) {
+                NavigationLink(destination: EditMemoView(file: file)) {
                     FileItemView(file: file)
                 }
             }
@@ -53,7 +53,7 @@ struct MemoListView: View {
             .navigationTitle(viewStore.directory.title)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: MemoEditView(file: .init()), label: {
+                    NavigationLink(destination: EditMemoView(file: .init(directory: viewStore.directory)), label: {
                         Label("", systemImage: "square.and.pencil")
                     })
                 }

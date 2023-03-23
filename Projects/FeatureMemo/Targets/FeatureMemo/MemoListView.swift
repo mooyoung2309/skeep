@@ -11,24 +11,6 @@ import Core
 
 import ComposableArchitecture
 
-private struct FileItemView: View {
-    let file: File
-    
-    init(file: File) {
-        self.file = file
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(file.title)
-                .font(.headline)
-            Text(file.content)
-                .foregroundColor(.gray)
-                .font(.callout)
-        }
-    }
-}
-
 struct MemoListView: View {
     let store: StoreOf<MemoList>
     @State private var searchText = ""

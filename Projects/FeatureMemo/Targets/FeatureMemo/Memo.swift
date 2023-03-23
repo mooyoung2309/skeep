@@ -32,6 +32,7 @@ public struct Memo: ReducerProtocol {
         case fetchFileListResponse([File])
         case directoryNameChanged(String)
         case tapAddButton
+        case createOrUpdateDirectory(Directory)
         case setAlert(isPresented: Bool)
     }
     
@@ -43,6 +44,7 @@ public struct Memo: ReducerProtocol {
         case .refresh:
             return .concatenate([
                 .send(.fetchDirectoryListRequest),
+                .send(.fetchFileListReqeust)
             ])
             
         case .fetchDirectoryListRequest:
@@ -66,8 +68,13 @@ public struct Memo: ReducerProtocol {
         case .tapAddButton:
             if !state.directoryName.isEmpty {
                 let dirctory = Directory(title: state.directoryName)
-                directoryClient.createOrUpdateDirectory(dirctory)
+                return .send(.createOrUpdateDirectory(dirctory))
+            } else {
+                return .none
             }
+            
+        case let .createOrUpdateDirectory(directory):
+            directoryClient.createOrUpdateDirectory(directory)
             return .send(.refresh)
             
         case let .setAlert(isPresented):

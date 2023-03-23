@@ -61,9 +61,25 @@ public struct MemoView: View {
                             }
                         }
                     })
+                Section(
+                    header: HStack {
+                        Text("Memo")
+                        Spacer()
+                        
+                        NavigationLink(destination: EditMemoView(file: .init()), label: {
+                            Image(systemName: "square.and.pencil")
+                        })
+                    },
+                    content: {
+                        ForEach(viewStore.fileList) { file in
+                            NavigationLink(destination: EditMemoView(file: file)) {
+                                FileItemView(file: file)
+                            }
+                        }
+                    })
             }
             .task {
-                viewStore.send(.fetchDirectoryListRequest)
+                viewStore.send(.refresh)
             }
         }
     }

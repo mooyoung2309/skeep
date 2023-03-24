@@ -33,7 +33,7 @@ struct FileItemView: View {
             
             Divider()
                 .frame(width: 5)
-                .overlay(.green)
+                .overlay(file.colorPalette.color)
                 .cornerRadius(2, corners: .allCorners)
             
             Text(file.title)

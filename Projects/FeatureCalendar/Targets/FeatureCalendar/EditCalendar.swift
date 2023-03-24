@@ -28,6 +28,8 @@ struct EditCalendar: ReducerProtocol {
         case refresh
         case createOrUpdateRequest
         
+        case titleChanged(String)
+        
         case selectColorPalette(ColorPalette)
         case selectStartDate
         case selectEndDate
@@ -47,9 +49,13 @@ struct EditCalendar: ReducerProtocol {
             fileClient.createOrUpdateFile(state.file)
             return .none
             
+        case let .titleChanged(title):
+            state.file.title = title
+            return .send(.createOrUpdateRequest)
+            
         case let .selectColorPalette(colorPalette):
             state.file.colorPalette = colorPalette
-            return .none
+            return .send(.createOrUpdateRequest)
             
         case .selectStartDate:
             state.editDateMode = .start

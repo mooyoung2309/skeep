@@ -18,7 +18,7 @@ public struct Calendar: ReducerProtocol {
         var date: Date = Date()
         var calendarFiles: [CalendarFile] = []
         var calendarFile: CalendarFile?
-        var file: File?
+        var file: File = .init()
         var isSheetPresented: Bool = false
         
         public init() {}
@@ -45,17 +45,14 @@ public struct Calendar: ReducerProtocol {
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .refresh:
-            return .concatenate([
-                .send(.fetchCalendarFilesRequest),
-                .send(.setCalendarFile(state.calendarFiles.first(where: { $0.date.isDate(inSameDayAs: state.date) })))
-            ])
+            return .send(.fetchCalendarFilesRequest)
             
         case .fetchCalendarFilesRequest:
             return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
             
         case let .fetchCalendarFilesResponse(calendarFiles):
             state.calendarFiles = calendarFiles
-            return .none
+            return .send(.setCalendarFile(state.calendarFiles.first(where: { $0.date.isDate(inSameDayAs: state.date) })))
             
         case .tapLeftButton:
             return .send(.setDate(state.date.addMonth(value: -1)))
@@ -84,7 +81,7 @@ public struct Calendar: ReducerProtocol {
             
         case let .setSheet(isPresented):
             state.isSheetPresented = isPresented
-            return .none
+            return .send(.refresh)
         }
     }
 }

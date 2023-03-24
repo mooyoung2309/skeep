@@ -175,7 +175,7 @@ public struct CalendarView: View {
                 }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
-                EditCalendarView(file: .init())
+                EditCalendarView(file: viewStore.file)
                     .presentationDetents([.medium])
             }
             .task {

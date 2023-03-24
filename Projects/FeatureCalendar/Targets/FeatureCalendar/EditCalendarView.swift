@@ -25,6 +25,20 @@ public struct EditCalendarView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 HStack {
+                    Divider()
+                        .frame(width: 5)
+                        .overlay(viewStore.file.colorPalette.color)
+                    
+                    TextField(
+                        "Title",
+                        text: viewStore.binding(get: \.file.title, send: EditCalendar.Action.titleChanged)
+                    )
+                    .font(.title)
+                    .bold()
+                }
+                .padding()
+                
+                HStack {
                     Label("", systemImage: "paintpalette")
                     
                     ScrollView(.horizontal) {
@@ -49,11 +63,11 @@ public struct EditCalendarView: View {
                     Label("", systemImage: "clock")
                     
                     VStack(alignment: .leading) {
-                        Text("03-18 (Tue)")
+                        Text("\(viewStore.file.startDate.toString(format: "MM-dd (E)"))")
                             .font(.subheadline)
                             .fontWeight(.light)
                         
-                        Text("5:00 PM")
+                        Text("\(viewStore.file.startDate.toString(format: "HH:mm a"))")
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -64,11 +78,11 @@ public struct EditCalendarView: View {
                     Image(systemName: "chevron.right")
                     
                     VStack(alignment: .leading) {
-                        Text("03-18 (Tue)")
+                        Text("\(viewStore.file.endDate.toString(format: "MM-dd (E)"))")
                             .font(.subheadline)
                             .fontWeight(.light)
                         
-                        Text("5:00 PM")
+                        Text("\(viewStore.file.endDate.toString(format: "HH:mm a"))")
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -119,14 +133,6 @@ public struct EditCalendarView: View {
                     } label: {
                         Label("None", systemImage: "hourglass.badge.plus")
                     }
-                }
-                .padding()
-                
-                HStack {
-                    Label("", systemImage: "calendar")
-                    
-                    Toggle("Calendar", isOn: $someBinding)
-                        .toggleStyle(.switch)
                 }
                 .padding()
                 

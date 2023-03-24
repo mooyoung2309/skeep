@@ -20,6 +20,7 @@ public struct File: Equatable, Identifiable, Hashable {
     public var editDate: Date
     public var startDate: Date
     public var endDate: Date
+    public var notificationDate: Date?
     public var calendarStyle: CalendarStyle
     public var toDoStyle: ToDoStyle
     
@@ -33,6 +34,7 @@ public struct File: Equatable, Identifiable, Hashable {
         editDate: Date = Date(),
         startDate: Date = Date(),
         endDate: Date = Date(),
+        notificationDate: Date? = nil,
         calendarStyle: CalendarStyle = .hidden,
         toDoStyle: ToDoStyle = .hidden
     ) {
@@ -45,6 +47,7 @@ public struct File: Equatable, Identifiable, Hashable {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
+        self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
         self.toDoStyle = toDoStyle
     }
@@ -95,10 +98,24 @@ public class FileRealm: Object {
     @Persisted var editDate: Date
     @Persisted var startDate: Date
     @Persisted var endDate: Date
+    @Persisted var notificationDate: Date?
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var toDoStyle: ToDoStyle
     
-    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date = Date(), endDate: Date = Date(), calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
+    convenience init(
+        id: String,
+        directory: DirectoryRealm? = nil,
+        colorPalette: ColorPalette,
+        title: String,
+        content: String,
+        createDate: Date,
+        editDate: Date,
+        startDate: Date = Date(),
+        endDate: Date = Date(),
+        notificationDate: Date? = nil,
+        calendarStyle: CalendarStyle,
+        toDoStyle: ToDoStyle
+    ) {
         self.init()
         
         self.id = id
@@ -110,6 +127,7 @@ public class FileRealm: Object {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
+        self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
         self.toDoStyle = toDoStyle
     }

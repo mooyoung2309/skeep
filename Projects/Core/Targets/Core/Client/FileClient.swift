@@ -48,7 +48,6 @@ extension FileClient: DependencyKey {
             }
         },
         fetchCalendarFiles: { date in
-            let calendar = Calendar.current
             let dates = date.calendarDates()
             let files = File.fetch().filter({ $0.calendarStyle != .hidden })
             let calendarFiles = dates.map({ date in

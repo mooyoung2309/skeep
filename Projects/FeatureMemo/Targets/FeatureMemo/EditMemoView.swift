@@ -70,11 +70,11 @@ struct EditMemoView: View {
                         Label("", systemImage: "clock")
                         
                         VStack(alignment: .leading) {
-                            Text("03-18 (Tue)")
+                            Text("\(viewStore.file.startDate.toString(format: "MM-dd (E)"))")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                             
-                            Text("5:00 PM")
+                            Text("\(viewStore.file.startDate.toString(format: "HH:mm a"))")
                                 .font(.title2)
                                 .fontWeight(.bold)
                         }
@@ -85,11 +85,11 @@ struct EditMemoView: View {
                         Image(systemName: "chevron.right")
                         
                         VStack(alignment: .leading) {
-                            Text("03-18 (Tue)")
+                            Text("\(viewStore.file.endDate.toString(format: "MM-dd (E)"))")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                             
-                            Text("5:00 PM")
+                            Text("\(viewStore.file.endDate.toString(format: "HH:mm a"))")
                                 .font(.title2)
                                 .fontWeight(.bold)
                         }
@@ -146,7 +146,7 @@ struct EditMemoView: View {
                     HStack {
                         Label("", systemImage: "calendar")
                         
-                        Toggle("Calendar", isOn: $someBinding)
+                        Toggle("Calendar", isOn: viewStore.binding(get: \.file.calendarStyle.isShow, send: EditMemo.Action.calendarToggleChanged))
                             .toggleStyle(.switch)
                     }
                     .padding()

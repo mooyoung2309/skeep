@@ -54,11 +54,11 @@ struct FileLabelView: View {
         HStack(spacing: .zero) {
             Divider()
                 .frame(width: 2, height: 10)
-                .overlay(.green)
+                .overlay(file.colorPalette.color)
                 .cornerRadius(2, corners: .allCorners)
                 .padding(.trailing, 3)
             
-            Text("dd")
+            Text(file.title)
                 .font(.caption2)
                 .fontWeight(.light)
             

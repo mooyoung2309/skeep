@@ -28,6 +28,7 @@ struct EditMemo: ReducerProtocol {
     enum Action: Equatable {
         case titleChanged(String)
         case contentChanged(String)
+        case calendarToggleChanged(Bool)
         case selectColorPalette(ColorPalette)
         case selectStartDate
         case selectEndDate
@@ -47,6 +48,10 @@ struct EditMemo: ReducerProtocol {
             
         case let .contentChanged(content):
             state.file.content = content
+            return .send(.createOrUpdateRequest)
+            
+        case let .calendarToggleChanged(isCalendar):
+            state.file.calendarStyle = isCalendar ? .default : .hidden
             return .send(.createOrUpdateRequest)
             
         case let .selectColorPalette(colorPalette):

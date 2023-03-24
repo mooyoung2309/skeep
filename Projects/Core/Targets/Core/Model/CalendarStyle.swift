@@ -13,4 +13,13 @@ import RealmSwift
 public enum CalendarStyle: Int, PersistableEnum {
     case `default`
     case hidden
+    
+    public var isShow: Bool {
+        switch self {
+        case .default:
+            return true
+        case .hidden:
+            return false
+        }
+    }
 }

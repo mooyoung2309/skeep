@@ -125,7 +125,7 @@ public struct CalendarView: View {
                         Spacer()
                         
                         Button {
-                            viewStore.send(.setSheet(isPresented: true))
+                            viewStore.send(.tapMemoButton)
                         } label: {
                             Image(systemName: "square.and.pencil")
                                 .font(.title3)
@@ -135,9 +135,13 @@ public struct CalendarView: View {
                     if let calendarFile = viewStore.calendarFile {
                         ForEach(calendarFile.files) { file in
                             FileItemView(file: file)
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(10, corners: .allCorners)
+                                .padding()
+                                .onTapGesture {
+                                    viewStore.send(.tapFileLabel(file))
+                                }
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10, corners: .allCorners)
+                            
                         }
                     }
                     
@@ -171,7 +175,7 @@ public struct CalendarView: View {
                 }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
-                EditCalendarView()
+                EditCalendarView(file: .init())
                     .presentationDetents([.medium])
             }
             .task {

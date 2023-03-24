@@ -19,18 +19,21 @@ struct EditCalendar: ReducerProtocol {
     }
     
     struct State: Equatable {
-        var date: Date = Date()
-        var calendarFiles: [CalendarFile] = []
-        var tmpFiles: [File] = []
+        var file: File
         var editDateMode: EditDateMode = .none
+        var date: Date = Date()
     }
     
     enum Action: Equatable {
         case refresh
+        case createOrUpdateRequest
+        
         case selectColorPalette(ColorPalette)
         case selectStartDate
         case selectEndDate
         case selectDate(Date)
+        
+        case setEditDateMode(EditDateMode)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -39,11 +42,38 @@ struct EditCalendar: ReducerProtocol {
         switch action {
         case .refresh:
             return .none
+            
+        case .createOrUpdateRequest:
+            fileClient.createOrUpdateFile(state.file)
+            return .none
+            
         case let .selectColorPalette(colorPalette):
+            state.file.colorPalette = colorPalette
             return .none
-        case .selectStartDate, .selectEndDate:
+            
+        case .selectStartDate:
+            state.editDateMode = .start
             return .none
+            
+        case .selectEndDate:
+            state.editDateMode = .end
+            return .none
+            
         case let .selectDate(date):
+            switch state.editDateMode {
+            case .start: state.file.startDate = date
+            case .end: state.file.endDate = date
+            case .none: break
+            }
+            state.date = date
+            
+            return .concatenate([
+                .send(.setEditDateMode(.none), animation: .default),
+                .send(.createOrUpdateRequest)
+            ])
+            
+        case let .setEditDateMode(mode):
+            state.editDateMode = mode
             return .none
         }
     }

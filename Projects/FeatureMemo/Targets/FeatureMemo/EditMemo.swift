@@ -26,14 +26,17 @@ struct EditMemo: ReducerProtocol {
     }
     
     enum Action: Equatable {
+        case createOrUpdateRequest
+        
         case titleChanged(String)
         case contentChanged(String)
         case calendarToggleChanged(Bool)
+        
         case selectColorPalette(ColorPalette)
         case selectStartDate
         case selectEndDate
         case selectDate(Date)
-        case createOrUpdateRequest
+        
         case setEditDateMode(EditDateMode)
         case setSheet(isPresented: Bool)
     }
@@ -42,6 +45,10 @@ struct EditMemo: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case .createOrUpdateRequest:
+            fileClient.createOrUpdateFile(state.file)
+            return .none
+            
         case let .titleChanged(title):
             state.file.title = title
             return .send(.createOrUpdateRequest)
@@ -78,10 +85,6 @@ struct EditMemo: ReducerProtocol {
                 .send(.setEditDateMode(.none), animation: .default),
                 .send(.createOrUpdateRequest)
             ])
-            
-        case .createOrUpdateRequest:
-            fileClient.createOrUpdateFile(state.file)
-            return .none
             
         case let .setEditDateMode(mode):
             state.editDateMode = mode

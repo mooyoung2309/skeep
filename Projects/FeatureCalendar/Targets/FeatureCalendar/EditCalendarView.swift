@@ -17,8 +17,8 @@ public struct EditCalendarView: View {
     @State var animate = false
     let store: StoreOf<EditCalendar>
     
-    public init() {
-        self.store = .init(initialState: .init(), reducer: EditCalendar()._printChanges())
+    public init(file: File) {
+        self.store = .init(initialState: .init(file: file), reducer: EditCalendar()._printChanges())
     }
     
     public var body: some View {

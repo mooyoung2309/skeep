@@ -18,6 +18,7 @@ public struct Calendar: ReducerProtocol {
         var date: Date = Date()
         var calendarFiles: [CalendarFile] = []
         var calendarFile: CalendarFile?
+        var file: File?
         var isSheetPresented: Bool = false
         
         public init() {}
@@ -30,6 +31,8 @@ public struct Calendar: ReducerProtocol {
         
         case tapLeftButton
         case tapRightButton
+        case tapMemoButton
+        case tapFileLabel(File)
         case selectCalendarCell(Date)
         
         case setDate(Date)
@@ -59,6 +62,14 @@ public struct Calendar: ReducerProtocol {
             
         case .tapRightButton:
             return .send(.setDate(state.date.addMonth(value: 1)))
+            
+        case .tapMemoButton:
+            state.file = .init(calendarStyle: .default)
+            return .send(.setSheet(isPresented: true))
+            
+        case let .tapFileLabel(file):
+            state.file = file
+            return .send(.setSheet(isPresented: true))
             
         case let .selectCalendarCell(date):
             return .send(.setDate(date))

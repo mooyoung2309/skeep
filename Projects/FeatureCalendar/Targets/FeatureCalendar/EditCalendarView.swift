@@ -26,17 +26,17 @@ public struct EditCalendarView: View {
             ScrollView {
                 HStack {
                     Divider()
-                        .frame(width: 5)
+                        .frame(width: 4)
                         .overlay(viewStore.file.colorPalette.color)
                     
                     TextField(
                         "Title",
                         text: viewStore.binding(get: \.file.title, send: EditCalendar.Action.titleChanged)
                     )
-                    .font(.title)
+                    .font(.title3)
                     .bold()
                 }
-                .padding()
+                .padding([.top, .horizontal])
                 
                 HStack {
                     Label("", systemImage: "paintpalette")
@@ -143,6 +143,25 @@ public struct EditCalendarView: View {
                         .toggleStyle(.switch)
                 }
                 .padding()
+                
+                /*TODO: 메모 기능 추가
+                HStack {
+                    Label("", systemImage: "doc.plaintext")
+                    
+                    Text("Memo")
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
+                TextEditor(
+                    text: viewStore.binding(get: \.file.content, send: EditCalendar.Action.contentChanged)
+                )
+                .foregroundColor(.gray)
+                .frame(minHeight: 50)
+                .padding([.bottom, .horizontal])
+                 
+                 */
             }
         }
     }

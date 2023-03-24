@@ -39,7 +39,8 @@ public struct ToDoView: View {
                         ForEach(0..<7, id: \.self) { value in
                             VStack(spacing: 15) {
                                 Text(weeks[value])
-                                Text(String(format: "%x", value))
+                                    .font(.caption2)
+                                    .fontWeight(.light)
                             }
                         }
                     }

@@ -18,8 +18,8 @@ public struct File: Equatable, Identifiable, Hashable {
     public var content: String
     public var createDate: Date
     public var editDate: Date
-    public var startDate: Date?
-    public var endDate: Date?
+    public var startDate: Date
+    public var endDate: Date
     public var calendarStyle: CalendarStyle
     public var toDoStyle: ToDoStyle
     
@@ -31,8 +31,8 @@ public struct File: Equatable, Identifiable, Hashable {
         content: String = "",
         createDate: Date = Date(),
         editDate: Date = Date(),
-        startDate: Date? = nil,
-        endDate: Date? = nil,
+        startDate: Date = Date(),
+        endDate: Date = Date(),
         calendarStyle: CalendarStyle = .hidden,
         toDoStyle: ToDoStyle = .hidden
     ) {
@@ -93,12 +93,12 @@ public class FileRealm: Object {
     @Persisted var content: String
     @Persisted var createDate: Date
     @Persisted var editDate: Date
-    @Persisted var startDate: Date?
-    @Persisted var endDate: Date?
+    @Persisted var startDate: Date
+    @Persisted var endDate: Date
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var toDoStyle: ToDoStyle
     
-    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date? = nil, endDate: Date? = nil, calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
+    convenience init(id: String, directory: DirectoryRealm? = nil, colorPalette: ColorPalette, title: String, content: String, createDate: Date, editDate: Date, startDate: Date = Date(), endDate: Date = Date(), calendarStyle: CalendarStyle, toDoStyle: ToDoStyle) {
         self.init()
         
         self.id = id

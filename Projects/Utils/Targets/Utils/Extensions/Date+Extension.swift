@@ -25,6 +25,18 @@ extension Date {
         return Calendar.current.component(.weekday, from: self)
     }
     
+    public func isDate(inSameDayAs date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: date)
+    }
+    
+    public func toString(format: String = "yyyy.MM.dd (E)") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: self)
+    }
+    
     public func calendarDates() -> [Date] {
         let calendar = Calendar.current
         

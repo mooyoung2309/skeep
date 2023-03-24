@@ -52,13 +52,7 @@ extension FileClient: DependencyKey {
             let dates = date.calendarDates()
             let files = File.fetch().filter({ $0.calendarStyle != .hidden })
             let calendarFiles = dates.map({ date in
-                let filterdFiles = files.filter({ file in
-                    if let startDate = file.startDate, calendar.isDate(date, inSameDayAs: startDate) {
-                        return true
-                    } else {
-                        return false
-                    }
-                })
+                let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
                 return CalendarFile(id: UUID().uuidString, date: date, files: filterdFiles)
             })
             

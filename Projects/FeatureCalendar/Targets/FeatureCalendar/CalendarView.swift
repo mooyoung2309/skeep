@@ -7,9 +7,65 @@
 //
 
 import SwiftUI
+import Core
 import Utils
 
 import ComposableArchitecture
+
+struct FileItemView: View {
+    let file: File
+    
+    init(file: File) {
+        self.file = file
+    }
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("\(file.startDate.toString(format: "HH:mm a"))")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Text("\(file.endDate.toString(format: "HH:mm a"))")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            Divider()
+                .frame(width: 5)
+                .overlay(.green)
+                .cornerRadius(2, corners: .allCorners)
+            
+            Text(file.title)
+            
+            Spacer()
+        }
+    }
+}
+
+struct FileLabelView: View {
+    let file: File
+    
+    init(file: File) {
+        self.file = file
+    }
+    
+    var body: some View {
+        HStack(spacing: .zero) {
+            Divider()
+                .frame(width: 2, height: 10)
+                .overlay(.green)
+                .cornerRadius(2, corners: .allCorners)
+                .padding(.trailing, 3)
+            
+            Text("dd")
+                .font(.caption2)
+                .fontWeight(.light)
+            
+            Spacer()
+        }
+    }
+}
 
 public struct CalendarView: View {
     let store: StoreOf<Calendar>
@@ -23,7 +79,7 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 7)) {
+                LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
                     ForEach(weeks, id: \.self) { week in
                         VStack {
                             Text(week)
@@ -33,7 +89,7 @@ public struct CalendarView: View {
                     }
                     
                     ForEach(viewStore.calendarFiles) { calendarFile in
-                        VStack {
+                        VStack(spacing: .zero) {
                             HStack(spacing: .zero) {
                                 Spacer()
                                 Text("\(calendarFile.date.day)")
@@ -46,19 +102,11 @@ public struct CalendarView: View {
                                 Spacer()
                             }
                             
-                            HStack(spacing: .zero) {
-                                Divider()
-                                    .frame(width: 2, height: 10)
-                                    .overlay(.green)
-                                    .cornerRadius(2, corners: .allCorners)
-                                    .padding(.trailing, 3)
-                                
-                                Text("dd")
-                                    .font(.caption2)
-                                    .fontWeight(.light)
-                                
-                                Spacer()
+                            ForEach(calendarFile.files) { file in
+                                FileLabelView(file: file)
                             }
+                            
+                            Spacer()
                         }
                         .onTapGesture {
                             viewStore.send(.selectCalendarCell(calendarFile.date), animation: .default)
@@ -79,35 +127,18 @@ public struct CalendarView: View {
                         Button {
                             viewStore.send(.setSheet(isPresented: true))
                         } label: {
-                            Image(systemName: "plus.circle")
+                            Image(systemName: "square.and.pencil")
                                 .font(.title3)
                         }
                     }
                     
-                    ForEach(1..<3) { _ in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("12:00 PM")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                
-                                Text("1:00 PM")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            Divider()
-                                .frame(width: 5)
-                                .overlay(.green)
-                                .cornerRadius(2, corners: .allCorners)
-                            
-                            Text("나의 할일")
-                            
-                            Spacer()
+                    if let calendarFile = viewStore.calendarFile {
+                        ForEach(calendarFile.files) { file in
+                            FileItemView(file: file)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10, corners: .allCorners)
                         }
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10, corners: .allCorners)
                     }
                     
                     Spacer()

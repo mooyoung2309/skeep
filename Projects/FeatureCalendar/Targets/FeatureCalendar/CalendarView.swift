@@ -141,7 +141,6 @@ public struct CalendarView: View {
                                 }
                                 .background(Color(.systemGray6))
                                 .cornerRadius(10, corners: .allCorners)
-                            
                         }
                     }
                     

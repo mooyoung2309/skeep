@@ -14,6 +14,7 @@ import ComposableArchitecture
 struct ToDo: ReducerProtocol {
     struct State: Equatable {
         var date: Date = Date()
+        var toDoFile: ToDoFile?
         var toDoFiles: [ToDoFile] = []
         var isSheetPresented: Bool = false
     }
@@ -21,8 +22,13 @@ struct ToDo: ReducerProtocol {
     enum Action: Equatable {
         case refresh
         case fetchToDoFilesRequest(Date)
-        case fetchToDoFilesResponse([ToDoFile])
-        case selectDate(Date)
+        case fetchToDoFilesResponse(Date, [ToDoFile])
+
+        case tapLeftButton
+        case tapRightButton
+        
+        case setDate(Date)
+        case setToDoFile(ToDoFile?)
         case setSheet(isPresented: Bool)
     }
     
@@ -31,17 +37,27 @@ struct ToDo: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .refresh:
-            return .concatenate([.send(.fetchToDoFilesRequest(state.date))])
+            return .send(.fetchToDoFilesRequest(state.date))
             
         case let .fetchToDoFilesRequest(date):
-            return .send(.fetchToDoFilesResponse(fileClient.fetchToDoFiles(date)))
+            return .send(.fetchToDoFilesResponse(date, fileClient.fetchToDoFiles(date)))
             
-        case let .fetchToDoFilesResponse(toDoFiles):
+        case let .fetchToDoFilesResponse(date, toDoFiles):
             state.toDoFiles = toDoFiles
-            return .none
+            return .send(.setToDoFile(state.toDoFiles.first(where: { $0.date.isDate(inSameDayAs: date) })))
             
-        case let .selectDate(date):
+        case let .setDate(date):
             state.date = date
+            return .send(.refresh, animation: .default)
+            
+        case .tapLeftButton:
+            return .send(.setDate(state.date.addDay(value: -7)))
+            
+        case .tapRightButton:
+            return .send(.setDate(state.date.addDay(value: 7)))
+            
+        case let .setToDoFile(toDoFile):
+            state.toDoFile = toDoFile
             return .none
             
         case let .setSheet(isPresented):

@@ -7,8 +7,41 @@
 //
 
 import SwiftUI
+import Core
 
 import ComposableArchitecture
+
+struct FileItemView: View {
+    let file: File
+    
+    init(file: File) {
+        self.file = file
+    }
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("\(file.startDate.toString(format: "HH:mm a"))")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Text("\(file.endDate.toString(format: "HH:mm a"))")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            Divider()
+                .frame(width: 5)
+                .overlay(file.colorPalette.color)
+                .cornerRadius(2, corners: .allCorners)
+            
+            Text(file.title)
+            
+            Spacer()
+        }
+    }
+}
+
 
 public struct ToDoView: View {
     let store: StoreOf<ToDo>
@@ -23,16 +56,33 @@ public struct ToDoView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                DatePicker(
-                    "",
-                    selection: viewStore.binding(get: \.date, send: ToDo.Action.selectDate),
-                    displayedComponents: [.date]
-                )
-                .id(calendarId)
-                .onChange(of: viewStore.date, perform: { _ in
-                    calendarId = UUID()
-                })
-                .padding(.horizontal)
+                HStack {
+                    DatePicker(
+                        "",
+                        selection: viewStore.binding(get: \.date, send: ToDo.Action.setDate),
+                        displayedComponents: [.date]
+                    )
+                    .id(calendarId)
+                    .onChange(of: viewStore.date, perform: { _ in
+                        calendarId = UUID()
+                    })
+                    .padding(.horizontal)
+                    
+                    Button(action: {
+                        viewStore.send(.tapLeftButton, animation: .default)
+                    }, label: {
+                        Image(systemName: "chevron.left")
+                            .fontWeight(.bold)
+                    })
+                    
+                    Button(action: {
+                        viewStore.send(.tapRightButton, animation: .default)
+                    }, label: {
+                        Image(systemName: "chevron.right")
+                            .fontWeight(.bold)
+                    })
+                }
+                .padding([.horizontal, .bottom])
                 
                 LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
                     ForEach(viewStore.toDoFiles) { toDoFile in
@@ -44,33 +94,25 @@ public struct ToDoView: View {
                             Text(toDoFile.date.toString(format: "d"))
                                 .font(.body)
                         }
+                        .onTapGesture {
+                            viewStore.send(.setDate(toDoFile.date), animation: .default)
+                        }
                     }
                 }
                 .padding([.horizontal, .bottom])
                 
-                ForEach(0..<10) { i in
-                    HStack {
-                        Button(action: {
-                            
-                        }, label: {
-                            Image(systemName: "face.dashed")
-                                .font(.title3)
-                        })
-                        
-                        Divider()
-                            .frame(width: 5)
-                            .overlay(.green)
-                            .cornerRadius(2, corners: .allCorners)
-                        
-                        Text("나의 할일")
-                        
-                        Spacer()
+                if let files = viewStore.toDoFile?.files {
+                    ForEach(files) { file in
+                        FileItemView(file: file)
+                            .padding()
+                            .onTapGesture {
+//                                viewStore.send(.tapFileLabel(file))
+                            }
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10, corners: .allCorners)
                     }
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10, corners: .allCorners)
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("To-Do")

@@ -13,7 +13,7 @@ import RealmSwift
 public struct File: Equatable, Identifiable, Hashable {
     public var id: String
     public var directory: Directory?
-    public var colorPalette: ColorPalette
+    public var rgb: Int
     public var title: String
     public var content: String
     public var createDate: Date
@@ -22,12 +22,12 @@ public struct File: Equatable, Identifiable, Hashable {
     public var endDate: Date
     public var notificationDate: Date?
     public var calendarStyle: CalendarStyle
-    public var toDoStyle: ToDoStyle
+    public var todoStyle: TodoStyle
     
     public init(
         id: String = UUID().uuidString,
         directory: Directory? = nil,
-        colorPalette: ColorPalette = .default,
+        rgb: Int = ColorPalette.default.color.rgb(),
         title: String = "",
         content: String = "",
         createDate: Date = Date(),
@@ -36,11 +36,11 @@ public struct File: Equatable, Identifiable, Hashable {
         endDate: Date = Date(),
         notificationDate: Date? = nil,
         calendarStyle: CalendarStyle = .hidden,
-        toDoStyle: ToDoStyle = .hidden
+        toDoStyle: TodoStyle = .hidden
     ) {
         self.id = id
         self.directory = directory
-        self.colorPalette = colorPalette
+        self.rgb = rgb
         self.title = title
         self.content = content
         self.createDate = createDate
@@ -49,7 +49,13 @@ public struct File: Equatable, Identifiable, Hashable {
         self.endDate = endDate
         self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
-        self.toDoStyle = toDoStyle
+        self.todoStyle = toDoStyle
+    }
+    
+    public static func fetch(id: String) -> File? {
+        let realm = try! Realm()
+        
+        return realm.objects(FileRealm.self).map({ $0.toDomain() }).first(where: { $0.id == id })
     }
     
     public static func fetch(directoryID: String? = nil) -> [File] {
@@ -75,7 +81,7 @@ public struct File: Equatable, Identifiable, Hashable {
         return .init(
             id: id,
             directory: directory?.toRealm(),
-            colorPalette: colorPalette,
+            rgb: rgb,
             title: title,
             content: content,
             createDate: createDate,
@@ -83,7 +89,7 @@ public struct File: Equatable, Identifiable, Hashable {
             startDate: startDate,
             endDate: endDate,
             calendarStyle: calendarStyle,
-            toDoStyle: toDoStyle
+            toDoStyle: todoStyle
         )
     }
 }
@@ -91,7 +97,7 @@ public struct File: Equatable, Identifiable, Hashable {
 public class FileRealm: Object {
     @Persisted(primaryKey: true) var id: String
     @Persisted var directory: DirectoryRealm?
-    @Persisted var colorPalette: ColorPalette
+    @Persisted var rgb: Int
     @Persisted var title: String
     @Persisted var content: String
     @Persisted var createDate: Date
@@ -100,12 +106,12 @@ public class FileRealm: Object {
     @Persisted var endDate: Date
     @Persisted var notificationDate: Date?
     @Persisted var calendarStyle: CalendarStyle
-    @Persisted var toDoStyle: ToDoStyle
+    @Persisted var todoStyle: TodoStyle
     
     convenience init(
         id: String,
         directory: DirectoryRealm? = nil,
-        colorPalette: ColorPalette,
+        rgb: Int,
         title: String,
         content: String,
         createDate: Date,
@@ -114,13 +120,13 @@ public class FileRealm: Object {
         endDate: Date = Date(),
         notificationDate: Date? = nil,
         calendarStyle: CalendarStyle,
-        toDoStyle: ToDoStyle
+        toDoStyle: TodoStyle
     ) {
         self.init()
         
         self.id = id
         self.directory = directory
-        self.colorPalette = colorPalette
+        self.rgb = rgb
         self.title = title
         self.content = content
         self.createDate = createDate
@@ -129,14 +135,14 @@ public class FileRealm: Object {
         self.endDate = endDate
         self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
-        self.toDoStyle = toDoStyle
+        self.todoStyle = toDoStyle
     }
     
     func toDomain() -> File {
         return .init(
             id: id,
             directory: directory?.toDomain(),
-            colorPalette: colorPalette,
+            rgb: rgb,
             title: title,
             content: content,
             createDate: createDate,
@@ -144,7 +150,7 @@ public class FileRealm: Object {
             startDate: startDate,
             endDate: endDate,
             calendarStyle: calendarStyle,
-            toDoStyle: toDoStyle
+            toDoStyle: todoStyle
         )
     }
 }
@@ -153,7 +159,7 @@ public class FileRealm: Object {
 extension File {
     public static let mock = File(
         id: UUID().uuidString,
-        colorPalette: .purple,
+        rgb: ColorPalette.purple.color.rgb(),
         title: "테스트 1",
         content: "컨텐츠 1",
         createDate: Date(),
@@ -165,7 +171,7 @@ extension File {
     public static let mocks = [
         File(
             id: UUID().uuidString,
-            colorPalette: .yellow,
+            rgb: ColorPalette.yellow.color.rgb(),
             title: "파일 1",
             content: "컨텐츠 1",
             createDate: Date(),
@@ -175,7 +181,7 @@ extension File {
         ),
         File(
             id: UUID().uuidString,
-            colorPalette: .red,
+            rgb: ColorPalette.red.color.rgb(),
             title: "파일 2",
             content: "컨텐츠 1",
             createDate: Date(),
@@ -185,7 +191,7 @@ extension File {
         ),
         File(
             id: UUID().uuidString,
-            colorPalette: .blue,
+            rgb: ColorPalette.blue.color.rgb(),
             title: "파일 3",
             content: "컨텐츠 1",
             createDate: Date(),

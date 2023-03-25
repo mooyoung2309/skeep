@@ -37,7 +37,23 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    public func calendarDates() -> [Date] {
+    public func weekDates() -> [Date] {
+        var calendar = Calendar.autoupdatingCurrent
+        calendar.firstWeekday = 1 // Start on Monday (or 1 for Sunday)
+        let today = calendar.startOfDay(for: self)
+        var week: [Date] = []
+        if let weekInterval = calendar.dateInterval(of: .weekOfYear, for: today) {
+            for i in 0...6 {
+                if let day = calendar.date(byAdding: .day, value: i, to: weekInterval.start) {
+                    week += [day]
+                }
+            }
+        }
+        
+        return week
+    }
+    
+    public func monthDates() -> [Date] {
         let calendar = Calendar.current
         
         let startOfMonthDate = self.startOfMonth()

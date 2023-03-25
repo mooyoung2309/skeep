@@ -8,13 +8,12 @@
 import ProjectDescriptionHelpers
 
 let factory: ProjectFactory = .init(
-    project: .init(name: Module.featureToDo.rawValue),
+    project: .init(name: Module.featureTodo.rawValue),
     targets: [
         .init(
-            name: Module.featureToDo.rawValue,
+            name: Module.featureTodo.rawValue,
             dependencies: [
-                .project(target: Module.core.rawValue, path: Module.core.path),
-                .project(target: Module.ui.rawValue, path: Module.ui.path)
+                .project(target: Module.featureCommon.rawValue, path: Module.featureCommon.path),
             ]
         )
     ]

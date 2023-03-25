@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ToDoFile: Equatable, Identifiable {
+public struct TodoFile: Equatable, Identifiable {
     public var id: String
     public var date: Date
     public var files: [File]
@@ -20,24 +20,23 @@ public struct ToDoFile: Equatable, Identifiable {
     }
 }
 
-extension ToDoFile {
-    public static let mock = CalendarFile(
+extension TodoFile {
+    public static let mock = TodoFile(
         id: UUID().uuidString,
         date: Date(),
         files: File.mocks
     )
     
     public static let mocks = [
-        CalendarFile(
+        TodoFile(
             id: UUID().uuidString,
             date: Date(),
             files: File.mocks
         ),
-        CalendarFile(
+        TodoFile(
             id: UUID().uuidString,
             date: Date(),
             files: File.mocks
         )
     ]
 }
-

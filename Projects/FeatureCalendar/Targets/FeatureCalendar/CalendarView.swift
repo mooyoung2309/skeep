@@ -33,7 +33,7 @@ struct FileItemView: View {
             
             Divider()
                 .frame(width: 5)
-                .overlay(file.colorPalette.color)
+                .overlay(Color(rgb: file.rgb))
                 .cornerRadius(2, corners: .allCorners)
             
             Text(file.title)
@@ -54,7 +54,7 @@ struct FileLabelView: View {
         HStack(spacing: .zero) {
             Divider()
                 .frame(width: 2, height: 10)
-                .overlay(file.colorPalette.color)
+                .overlay(Color(rgb: file.rgb))
                 .cornerRadius(2, corners: .allCorners)
                 .padding(.trailing, 3)
             
@@ -127,7 +127,7 @@ public struct CalendarView: View {
                         Button {
                             viewStore.send(.tapMemoButton)
                         } label: {
-                            Image(systemName: "square.and.pencil")
+                            Image(systemName: "calendar.badge.plus")
                                 .font(.title3)
                         }
                     }
@@ -141,7 +141,6 @@ public struct CalendarView: View {
                                 }
                                 .background(Color(.systemGray6))
                                 .cornerRadius(10, corners: .allCorners)
-                            
                         }
                     }
                     

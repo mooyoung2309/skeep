@@ -1,8 +1,8 @@
 //
-//  CalendarEditView.swift
-//  FeatureCalendar
+//  EditFileView.swift
+//  FeatureCommon
 //
-//  Created by 송영모 on 2023/03/20.
+//  Created by 송영모 on 2023/03/25.
 //  Copyright © 2023 Copynote. All rights reserved.
 //
 
@@ -12,31 +12,32 @@ import Utils
 
 import ComposableArchitecture
 
-public struct EditCalendarView: View {
-    @State private var someBinding = true
-    @State var animate = false
-    let store: StoreOf<EditCalendar>
+public struct EditFileView: View {
+    let store: StoreOf<EditFile>
+    @State private var animate = false
     
-    public init(file: File) {
-        self.store = .init(initialState: .init(file: file), reducer: EditCalendar()._printChanges())
+    public init(store: StoreOf<EditFile>) {
+        self.store = store
     }
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                HStack {
-                    Divider()
-                        .frame(width: 4)
-                        .overlay(Color(rgb: viewStore.file.rgb))
-                    
-                    TextField(
-                        "Title",
-                        text: viewStore.binding(get: \.file.title, send: EditCalendar.Action.titleChanged)
-                    )
-                    .font(.title3)
-                    .bold()
+                if viewStore.tab == .calendar || viewStore.tab == .todo {
+                    HStack {
+                        Divider()
+                            .frame(width: 4)
+                            .overlay(Color(rgb: viewStore.file.rgb))
+                        
+                        TextField(
+                            "Title",
+                            text: viewStore.binding(get: \.file.title, send: EditFile.Action.titleChanged)
+                        )
+                        .font(.title3)
+                        .bold()
+                    }
+                    .padding([.top, .horizontal])
                 }
-                .padding([.top, .horizontal])
                 
                 HStack {
                     Label("", systemImage: "paintpalette")
@@ -45,7 +46,7 @@ public struct EditCalendarView: View {
                         HStack(alignment: .center) {
                             ForEach(ColorPalette.allCases, id: \.rawValue) { colorPalette in
                                 Button {
-                                    viewStore.send(.selectColorPalette(colorPalette))
+                                    viewStore.send(.colorChanged(colorPalette.color))
                                 } label: {
                                     Image(systemName: "circle.fill")
                                         .resizable()
@@ -72,7 +73,7 @@ public struct EditCalendarView: View {
                             .fontWeight(.bold)
                     }
                     .onTapGesture {
-                        viewStore.send(.selectStartDate, animation: .default)
+                        viewStore.send(.tapStartDateView, animation: .default)
                     }
                     
                     Image(systemName: "chevron.right")
@@ -90,12 +91,12 @@ public struct EditCalendarView: View {
                         withAnimation {
                             self.animate.toggle()
                         }
-                        viewStore.send(.selectEndDate, animation: .default)
+                        viewStore.send(.tapEndDateView, animation: .default)
                     }
                     
                     Spacer()
                     
-                    Toggle("All Day", isOn: $someBinding)
+                    Toggle("All Day", isOn: viewStore.binding(get: \.file.calendarStyle.isAllDay, send: EditFile.Action.allDayToggleChanged))
                         .toggleStyle(.button)
                 }
                 .padding()
@@ -103,14 +104,15 @@ public struct EditCalendarView: View {
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditCalendar.Action.selectDate))
+                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditFile.Action.dateChanged))
                         .datePickerStyle(.wheel)
                     
                     Spacer()
                 }
-                .frame(height: viewStore.editDateMode == .none ? 0 : 200)
-                .opacity(viewStore.editDateMode == .none ? 0 : 1)
+                .frame(height: viewStore.mode == .none ? 0 : 200)
+                .opacity(viewStore.mode == .none ? 0 : 1)
                 
+                /*TODO: 노티피케이션 기능 추가
                 HStack {
                     Label("", systemImage: "bell")
                     
@@ -135,33 +137,16 @@ public struct EditCalendarView: View {
                     }
                 }
                 .padding()
+                 
+                 */
                 
                 HStack {
                     Label("", systemImage: "face.dashed")
                     
-                    Toggle("To-Do", isOn: $someBinding)
+                    Toggle("To-Do", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
                         .toggleStyle(.switch)
                 }
                 .padding()
-                
-                /*TODO: 메모 기능 추가
-                HStack {
-                    Label("", systemImage: "doc.plaintext")
-                    
-                    Text("Memo")
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
-                
-                TextEditor(
-                    text: viewStore.binding(get: \.file.content, send: EditCalendar.Action.contentChanged)
-                )
-                .foregroundColor(.gray)
-                .frame(minHeight: 50)
-                .padding([.bottom, .horizontal])
-                 
-                 */
             }
         }
     }

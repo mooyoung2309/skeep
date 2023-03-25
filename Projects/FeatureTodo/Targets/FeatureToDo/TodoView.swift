@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import FeatureCommon
 import Core
 
 import ComposableArchitecture
@@ -59,11 +60,11 @@ public struct TodoView: View {
                 HStack {
                     DatePicker(
                         "",
-                        selection: viewStore.binding(get: \.date, send: Todo.Action.setDate),
+                        selection: viewStore.binding(get: \.selectedDate, send: Todo.Action.selectDate),
                         displayedComponents: [.date]
                     )
                     .id(calendarId)
-                    .onChange(of: viewStore.date, perform: { _ in
+                    .onChange(of: viewStore.selectedDate, perform: { _ in
                         calendarId = UUID()
                     })
                     .padding(.horizontal)
@@ -85,37 +86,37 @@ public struct TodoView: View {
                 .padding([.horizontal, .bottom])
                 
                 LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
-                    ForEach(viewStore.toDoFiles) { toDoFile in
+                    ForEach(viewStore.todoFiles) { todoFile in
                         VStack(spacing: .zero) {
-                            Text(toDoFile.date.toString(format: "E"))
+                            Text(todoFile.date.toString(format: "E"))
                                 .font(.caption2)
                                 .fontWeight(.light)
                                 .padding(.bottom, 10)
                             
-                            Text(toDoFile.date.toString(format: "d"))
+                            Text(todoFile.date.toString(format: "d"))
                                 .font(.body)
                                 .padding(.bottom, 5)
                             
-                            Text(toDoFile.files.count == 0 ? "" : "\(toDoFile.files.count)")
+                            Text(todoFile.files.count == 0 ? "" : "\(todoFile.files.count)")
                                 .font(.caption2)
                                 .fontWeight(.semibold)
                         }
                         .onTapGesture {
-                            viewStore.send(.setDate(toDoFile.date), animation: .default)
+                            viewStore.send(.selectDate(todoFile.date), animation: .default)
                         }
                     }
                 }
                 .padding([.horizontal])
                 
                 HStack {
-                    Text(Date.toString(date: viewStore.date))
+                    Text(Date.toString(date: viewStore.selectedDate))
                         .font(.title3)
                         .fontWeight(.bold)
                     
                     Spacer()
                     
                     Button {
-                        viewStore.send(.tapToDoButton)
+                        viewStore.send(.tapTodoButton)
                     } label: {
                         Image(systemName: "square.and.pencil")
                             .font(.title3)
@@ -123,7 +124,7 @@ public struct TodoView: View {
                 }
                 .padding(.horizontal)
                 
-                if let files = viewStore.toDoFile?.files {
+                if let files = viewStore.todoFiles.first(where: { $0.date.isDate(inSameDayAs: viewStore.selectedDate) })?.files {
                     ForEach(files) { file in
                         FileItemView(file: file)
                             .padding()
@@ -135,12 +136,11 @@ public struct TodoView: View {
                     }
                     .padding(.horizontal)
                 }
-                
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("To-Do")
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Todo.Action.setSheet(isPresented:))) {
-                EditTodoView(file: viewStore.file)
+                EditFileView(store: self.store.scope(state: \.editFile, action: Todo.Action.editFile))
                     .presentationDetents([.medium])
             }
             .task {

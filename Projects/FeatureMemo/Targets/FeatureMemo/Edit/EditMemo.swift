@@ -13,21 +13,13 @@ import Core
 import ComposableArchitecture
 
 struct EditMemo: ReducerProtocol {
-    enum EditDateMode {
-        case none
-        case start
-        case end
-    }
-    
     struct State: Equatable {
         var editFile: EditFile.State
         
         var isSheetPresented: Bool = false
-        var editDateMode: EditDateMode = .none
-        var date: Date = Date()
         
         init(file: File) {
-            self.editFile = .init(style: .memo, file: file)
+            self.editFile = .init(tab: .memo, file: file)
         }
     }
     

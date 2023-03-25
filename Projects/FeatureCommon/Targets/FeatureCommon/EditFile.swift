@@ -14,21 +14,19 @@ import ComposableArchitecture
 public struct EditFile: ReducerProtocol {
     public init() {}
     
-    public enum EditDateMode {
-        case none
-        case start
-        case end
-    }
+    public enum Tab { case memo, calendar, todo }
+    
+    public enum Mode { case none, start, end }
     
     public struct State: Equatable {
-        public let style: EditFileStyle
+        public let tab: Tab
         public var file: File
         
-        var editDateMode: EditDateMode = .none
+        var mode: Mode = .none
         var date: Date = Date()
         
-        public init(style: EditFileStyle, file: File) {
-            self.style = style
+        public init(tab: Tab, file: File) {
+            self.tab = tab
             self.file = file
         }
     }
@@ -49,7 +47,7 @@ public struct EditFile: ReducerProtocol {
         case tapStartDateView
         case tapEndDateView
         
-        case setEditDateMode(EditDateMode)
+        case setMode(Mode)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -76,7 +74,7 @@ public struct EditFile: ReducerProtocol {
             return .send(.createOrUpdateRequest)
             
         case let .dateChanged(date):
-            switch state.editDateMode {
+            switch state.mode {
             case .start: state.file.startDate = date
             case .end: state.file.endDate = date
             case .none: break
@@ -84,7 +82,7 @@ public struct EditFile: ReducerProtocol {
             state.date = date
             
             return .concatenate([
-                .send(.setEditDateMode(.none), animation: .default),
+                .send(.setMode(.none), animation: .default),
                 .send(.createOrUpdateRequest)
             ])
             
@@ -101,15 +99,15 @@ public struct EditFile: ReducerProtocol {
             return .send(.createOrUpdateRequest)
             
         case .tapStartDateView:
-            state.editDateMode = .start
+            state.mode = .start
             return .none
             
         case .tapEndDateView:
-            state.editDateMode = .end
+            state.mode = .end
             return .none
             
-        case let .setEditDateMode(mode):
-            state.editDateMode = mode
+        case let .setMode(mode):
+            state.mode = mode
             return .none
         }
     }

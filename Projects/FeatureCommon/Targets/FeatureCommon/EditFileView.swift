@@ -23,7 +23,7 @@ public struct EditFileView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                if viewStore.style == .calendar || viewStore.style == .todo {
+                if viewStore.tab == .calendar || viewStore.tab == .todo {
                     HStack {
                         Divider()
                             .frame(width: 4)
@@ -109,8 +109,8 @@ public struct EditFileView: View {
                     
                     Spacer()
                 }
-                .frame(height: viewStore.editDateMode == .none ? 0 : 200)
-                .opacity(viewStore.editDateMode == .none ? 0 : 1)
+                .frame(height: viewStore.mode == .none ? 0 : 200)
+                .opacity(viewStore.mode == .none ? 0 : 1)
                 
                 /*TODO: 노티피케이션 기능 추가
                 HStack {

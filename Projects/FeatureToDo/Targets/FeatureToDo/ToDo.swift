@@ -14,8 +14,11 @@ import ComposableArchitecture
 struct ToDo: ReducerProtocol {
     struct State: Equatable {
         var date: Date = Date()
-        var toDoFile: ToDoFile?
         var toDoFiles: [ToDoFile] = []
+        
+        var toDoFile: ToDoFile?
+        var file: File = .init()
+        
         var isSheetPresented: Bool = false
     }
     
@@ -26,6 +29,8 @@ struct ToDo: ReducerProtocol {
 
         case tapLeftButton
         case tapRightButton
+        case tapFileItemView(File)
+        case tapToDoButton
         
         case setDate(Date)
         case setToDoFile(ToDoFile?)
@@ -55,6 +60,14 @@ struct ToDo: ReducerProtocol {
             
         case .tapRightButton:
             return .send(.setDate(state.date.addDay(value: 7)))
+            
+        case let .tapFileItemView(file):
+            state.file = file
+            return .send(.setSheet(isPresented: true))
+            
+        case .tapToDoButton:
+            state.file = .init(toDoStyle: .default)
+            return .send(.setSheet(isPresented: true))
             
         case let .setToDoFile(toDoFile):
             state.toDoFile = toDoFile

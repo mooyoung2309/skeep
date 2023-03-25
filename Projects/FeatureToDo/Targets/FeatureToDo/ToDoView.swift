@@ -105,23 +105,44 @@ public struct ToDoView: View {
                         }
                     }
                 }
-                .padding([.horizontal, .bottom])
+                .padding([.horizontal])
+                
+                HStack {
+                    Text(Date.toString(date: viewStore.date))
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    
+                    Spacer()
+                    
+                    Button {
+                        viewStore.send(.tapToDoButton)
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                            .font(.title3)
+                    }
+                }
+                .padding(.horizontal)
                 
                 if let files = viewStore.toDoFile?.files {
                     ForEach(files) { file in
                         FileItemView(file: file)
                             .padding()
                             .onTapGesture {
-//                                viewStore.send(.tapFileLabel(file))
+                                viewStore.send(.tapFileItemView(file))
                             }
                             .background(Color(.systemGray6))
                             .cornerRadius(10, corners: .allCorners)
                     }
                     .padding(.horizontal)
                 }
+                
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("To-Do")
+            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: ToDo.Action.setSheet(isPresented:))) {
+                EditToDoView(file: viewStore.file)
+                    .presentationDetents([.medium])
+            }
             .task {
                 viewStore.send(.refresh)
             }

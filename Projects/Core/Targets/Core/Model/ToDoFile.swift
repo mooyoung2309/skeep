@@ -21,19 +21,19 @@ public struct ToDoFile: Equatable, Identifiable {
 }
 
 extension ToDoFile {
-    public static let mock = CalendarFile(
+    public static let mock = ToDoFile(
         id: UUID().uuidString,
         date: Date(),
         files: File.mocks
     )
     
     public static let mocks = [
-        CalendarFile(
+        ToDoFile(
             id: UUID().uuidString,
             date: Date(),
             files: File.mocks
         ),
-        CalendarFile(
+        ToDoFile(
             id: UUID().uuidString,
             date: Date(),
             files: File.mocks

@@ -14,15 +14,14 @@ import ComposableArchitecture
 struct ToDo: ReducerProtocol {
     struct State: Equatable {
         var date: Date = Date()
-        var calendarFilesList: [[CalendarFile]] = []
-        var tmpFiles: [File] = []
+        var toDoFiles: [ToDoFile] = []
         var isSheetPresented: Bool = false
     }
     
     enum Action: Equatable {
         case refresh
-        case fetchCalendarFilesRequest
-        case fetchCalendarFilesResponse([[CalendarFile]])
+        case fetchToDoFilesRequest(Date)
+        case fetchToDoFilesResponse([ToDoFile])
         case selectDate(Date)
         case setSheet(isPresented: Bool)
     }
@@ -32,16 +31,19 @@ struct ToDo: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .refresh:
-            return .concatenate([.send(.fetchCalendarFilesRequest)])
-        case .fetchCalendarFilesRequest:
-//            return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
+            return .concatenate([.send(.fetchToDoFilesRequest(state.date))])
+            
+        case let .fetchToDoFilesRequest(date):
+            return .send(.fetchToDoFilesResponse(fileClient.fetchToDoFiles(date)))
+            
+        case let .fetchToDoFilesResponse(toDoFiles):
+            state.toDoFiles = toDoFiles
             return .none
-        case let .fetchCalendarFilesResponse(calendarFilesList):
-            state.calendarFilesList = calendarFilesList
-            return .none
+            
         case let .selectDate(date):
             state.date = date
             return .none
+            
         case let .setSheet(isPresented):
             state.isSheetPresented = isPresented
             return .none

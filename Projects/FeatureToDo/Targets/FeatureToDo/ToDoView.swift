@@ -34,39 +34,19 @@ public struct ToDoView: View {
                 })
                 .padding(.horizontal)
                 
-                TabView {
-                    LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
-                        ForEach(0..<7, id: \.self) { value in
-                            VStack(spacing: 15) {
-                                Text(weeks[value])
-                                    .font(.caption2)
-                                    .fontWeight(.light)
-                            }
-                        }
-                    }
-                    
-                    LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
-                        ForEach(0..<7, id: \.self) { value in
-                            HStack {
-                                Spacer()
-                                Text(String(format: "%x", value))
-                                Spacer()
-                            }
-                        }
-                    }
-                    
-                    LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
-                        ForEach(0..<7, id: \.self) { value in
-                            HStack {
-                                Spacer()
-                                Text(String(format: "%x", value))
-                                Spacer()
-                            }
+                LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
+                    ForEach(viewStore.toDoFiles) { toDoFile in
+                        VStack(spacing: 10) {
+                            Text(toDoFile.date.toString(format: "E"))
+                                .font(.caption2)
+                                .fontWeight(.light)
+                            
+                            Text(toDoFile.date.toString(format: "d"))
+                                .font(.body)
                         }
                     }
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 100, minHeight: 80)
+                .padding([.horizontal, .bottom])
                 
                 ForEach(0..<10) { i in
                     HStack {
@@ -94,6 +74,9 @@ public struct ToDoView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("To-Do")
+            .task {
+                viewStore.send(.refresh)
+            }
         }
     }
 }

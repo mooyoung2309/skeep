@@ -14,6 +14,7 @@ import ComposableArchitecture
 public struct FileClient {
     public var fetchFiles: (String?) -> [File]
     public var fetchCalendarFiles: (Date) -> [CalendarFile]
+    public var fetchToDoFiles: (Date) -> [ToDoFile]
     public var createOrUpdateFile: (File) -> ()
 }
 
@@ -21,12 +22,14 @@ extension FileClient: TestDependencyKey {
     public static let previewValue = Self(
         fetchFiles: { _ in return File.mocks },
         fetchCalendarFiles: { _ in return CalendarFile.mocks },
+        fetchToDoFiles: { _ in return ToDoFile.mocks },
         createOrUpdateFile: { _ in }
     )
     
     public static let testValue = Self(
         fetchFiles: unimplemented("\(Self.self).fetchFiles"),
         fetchCalendarFiles: unimplemented("\(Self.self).fetchCalendarFiles"),
+        fetchToDoFiles: unimplemented("\(Self.self).fetchToDoFiles"),
         createOrUpdateFile: unimplemented("\(Self.self).fetchCalendarFiles")
     )
 }
@@ -48,7 +51,7 @@ extension FileClient: DependencyKey {
             }
         },
         fetchCalendarFiles: { date in
-            let dates = date.calendarDates()
+            let dates = date.monthDates()
             let files = File.fetch().filter({ $0.calendarStyle != .hidden })
             let calendarFiles = dates.map({ date in
                 let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
@@ -56,6 +59,15 @@ extension FileClient: DependencyKey {
             })
             
             return calendarFiles
+        },
+        fetchToDoFiles: { date in
+            let dates = date.weekDates()
+            let files = File.fetch().filter({ $0.toDoStyle != .hidden })
+            let toDoFiles = dates.map({ date in
+                let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
+                return ToDoFile(id: UUID().uuidString, date: date, files: filterdFiles)
+            })
+            return toDoFiles
         },
         createOrUpdateFile: { file in
             File.createOrUpdate(file: file)

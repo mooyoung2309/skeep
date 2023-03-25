@@ -12,38 +12,6 @@ import Core
 
 import ComposableArchitecture
 
-struct FileItemView: View {
-    let file: File
-    
-    init(file: File) {
-        self.file = file
-    }
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("\(file.startDate.toString(format: "HH:mm a"))")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                
-                Text("\(file.endDate.toString(format: "HH:mm a"))")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            
-            Divider()
-                .frame(width: 5)
-                .overlay(Color(rgb: file.rgb))
-                .cornerRadius(2, corners: .allCorners)
-            
-            Text(file.title)
-            
-            Spacer()
-        }
-    }
-}
-
-
 public struct TodoView: View {
     let store: StoreOf<Todo>
     
@@ -118,27 +86,43 @@ public struct TodoView: View {
                     Button {
                         viewStore.send(.tapTodoButton)
                     } label: {
-                        Image(systemName: "square.and.pencil")
+                        Image(systemName: "checkmark.square.fill")
                             .font(.title3)
                     }
                 }
                 .padding(.horizontal)
                 
-                if let files = viewStore.todoFiles.first(where: { $0.date.isDate(inSameDayAs: viewStore.selectedDate) })?.files {
-                    ForEach(files) { file in
-                        FileItemView(file: file)
-                            .padding()
-                            .onTapGesture {
-                                viewStore.send(.tapFileItemView(file))
-                            }
-                            .background(Color(.systemGray6))
-                            .cornerRadius(10, corners: .allCorners)
+                ForEach(viewStore.selectedFiles) { file in
+                    HStack {
+                        Button(action: {
+                            viewStore.send(.doneToggleChanged(file))
+                        }, label: {
+                            Image(systemName: file.todoStyle == .done ? "checkmark.square" : "square")
+                        })
+                        .foregroundColor(file.todoStyle == .done ? .gray : .black)
+                        
+                        Divider()
+                            .frame(width: 5)
+                            .overlay(Color(rgb: file.rgb))
+                            .cornerRadius(2, corners: .allCorners)
+                        
+                        Text(file.title)
+                            .foregroundColor(file.todoStyle == .done ? .gray : .black)
+                            .strikethrough(file.todoStyle == .done)
+                        
+                        Spacer()
                     }
+                    .padding()
+                    .onTapGesture {
+                        viewStore.send(.tapFileItemView(file))
+                    }
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10, corners: .allCorners)
                     .padding(.horizontal)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .navigationTitle("To-Do")
+            .navigationTitle("Todos")
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Todo.Action.setSheet(isPresented:))) {
                 EditFileView(store: self.store.scope(state: \.editFile, action: Todo.Action.editFile))
                     .presentationDetents([.medium])

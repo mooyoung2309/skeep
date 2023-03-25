@@ -35,8 +35,8 @@ public struct ContentView: View {
                 TodoView()
             }
             .tabItem {
-                Image(systemName: "face.dashed")
-                Text("To-Do")
+                Image(systemName: "checkmark.square.fill")
+                Text("Todos")
             }
         }
     }

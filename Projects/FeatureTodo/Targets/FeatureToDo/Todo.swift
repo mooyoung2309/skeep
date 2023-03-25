@@ -18,6 +18,7 @@ struct Todo: ReducerProtocol {
 
         var todoFiles: [TodoFile] = []
         var selectedDate: Date = Date()
+        var selectedFiles: [File] = []
         
         var isSheetPresented: Bool = false
         
@@ -33,10 +34,13 @@ struct Todo: ReducerProtocol {
         case fetchTodoFilesRequest(Date)
         case fetchTodoFilesResponse([TodoFile])
 
+        case doneToggleChanged(File)
+        
         case tapLeftButton
         case tapRightButton
         case tapFileItemView(File)
         case tapTodoButton
+        
         case selectDate(Date)
         
         case setSheet(isPresented: Bool)
@@ -52,7 +56,7 @@ struct Todo: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .editFile:
-                return .none
+                return .send(.refresh)
                 
             case .refresh:
                 return .send(.fetchTodoFilesRequest(state.selectedDate))
@@ -62,7 +66,13 @@ struct Todo: ReducerProtocol {
                 
             case let .fetchTodoFilesResponse(todoFiles):
                 state.todoFiles = todoFiles
+                state.selectedFiles = todoFiles.first(where: { $0.date.isDate(inSameDayAs: state.selectedDate) })?.files ?? []
                 return .none
+                
+            case var .doneToggleChanged(file):
+                file.todoStyle = file.todoStyle == .done ? .default : .done
+                fileClient.createOrUpdateFile(file)
+                return .send(.refresh)
                 
             case .tapLeftButton:
                 state.selectedDate = state.selectedDate.addDay(value: -7)
@@ -90,45 +100,5 @@ struct Todo: ReducerProtocol {
             }
         }
     }
-    
-//
-//    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-//
-//        switch action {
-//        case .refresh:
-//            return .send(.fetchTodoFilesRequest(state.selectedDate))
-//
-//        case let .fetchTodoFilesRequest(date):
-//            return .send(.fetchTodoFilesResponse(fileClient.fetchTodoFiles(date)))
-//
-//        case let .fetchTodoFilesResponse(todoFiles):
-//            state.todoFiles = todoFiles
-//            return .none
-//
-//        case .tapLeftButton:
-//            state.selectedDate = state.selectedDate.addDay(value: -7)
-//            return .send(.refresh)
-//
-//        case .tapRightButton:
-//            state.selectedDate = state.selectedDate.addDay(value: 7)
-//            return .send(.refresh)
-//
-//        case let .tapFileItemView(file):
-//            state.editFile.file = file
-//            return .send(.setSheet(isPresented: true))
-//
-//        case .tapTodoButton:
-//            state.editFile.file = .init(toDoStyle: .default)
-//            return .send(.setSheet(isPresented: true))
-//
-//        case let .selectDate(date):
-//            state.selectedDate = date
-//            return .send(.refresh)
-//
-//        case let .setSheet(isPresented):
-//            state.isSheetPresented = isPresented
-//            return .none
-//        }
-//    }
 }
 

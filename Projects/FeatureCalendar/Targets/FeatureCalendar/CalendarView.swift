@@ -127,7 +127,7 @@ public struct CalendarView: View {
                         Button {
                             viewStore.send(.tapMemoButton)
                         } label: {
-                            Image(systemName: "square.and.pencil")
+                            Image(systemName: "calendar.badge.plus")
                                 .font(.title3)
                         }
                     }

@@ -13,8 +13,6 @@ import FeatureCommon
 import ComposableArchitecture
 
 struct EditMemoView: View {
-    @State private var someBinding = true
-    @State var animate = false
     let store: StoreOf<EditMemo>
     
     init(file: File) {

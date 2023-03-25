@@ -31,6 +31,7 @@ struct EditMemo: ReducerProtocol {
         case titleChanged(String)
         case contentChanged(String)
         case calendarToggleChanged(Bool)
+        case toDoToggleChanged(Bool)
         
         case selectColorPalette(ColorPalette)
         case selectStartDate
@@ -59,6 +60,10 @@ struct EditMemo: ReducerProtocol {
             
         case let .calendarToggleChanged(isCalendar):
             state.file.calendarStyle = isCalendar ? .default : .hidden
+            return .send(.createOrUpdateRequest)
+            
+        case let .toDoToggleChanged(isToDo):
+            state.file.toDoStyle = isToDo ? .default : .hidden
             return .send(.createOrUpdateRequest)
             
         case let .selectColorPalette(colorPalette):

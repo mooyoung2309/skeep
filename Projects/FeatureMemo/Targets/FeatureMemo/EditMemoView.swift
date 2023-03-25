@@ -154,7 +154,7 @@ struct EditMemoView: View {
                     HStack {
                         Label("", systemImage: "face.dashed")
                         
-                        Toggle("To-Do", isOn: $someBinding)
+                        Toggle("To-Do", isOn: viewStore.binding(get: \.file.toDoStyle.isShow, send: EditMemo.Action.toDoToggleChanged))
                             .toggleStyle(.switch)
                     }
                     .padding()

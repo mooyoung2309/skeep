@@ -13,5 +13,13 @@ import RealmSwift
 public enum ToDoStyle: Int, PersistableEnum {
     case `default`
     case hidden
-    case week
+    
+    public var isShow: Bool {
+        switch self {
+        case .default:
+            return true
+        case .hidden:
+            return false
+        }
+    }
 }

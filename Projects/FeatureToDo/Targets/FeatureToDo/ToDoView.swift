@@ -86,13 +86,19 @@ public struct ToDoView: View {
                 
                 LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
                     ForEach(viewStore.toDoFiles) { toDoFile in
-                        VStack(spacing: 10) {
+                        VStack(spacing: .zero) {
                             Text(toDoFile.date.toString(format: "E"))
                                 .font(.caption2)
                                 .fontWeight(.light)
+                                .padding(.bottom, 10)
                             
                             Text(toDoFile.date.toString(format: "d"))
                                 .font(.body)
+                                .padding(.bottom, 5)
+                            
+                            Text(toDoFile.files.count == 0 ? "" : "\(toDoFile.files.count)")
+                                .font(.caption2)
+                                .fontWeight(.semibold)
                         }
                         .onTapGesture {
                             viewStore.send(.setDate(toDoFile.date), animation: .default)

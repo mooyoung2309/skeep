@@ -10,16 +10,16 @@ import Foundation
 
 import RealmSwift
 
-public enum ToDoStyle: Int, PersistableEnum {
+public enum TodoStyle: Int, PersistableEnum {
     case `default`
     case hidden
+    case done
     
     public var isShow: Bool {
-        switch self {
-        case .default:
-            return true
-        case .hidden:
+        if self == .hidden {
             return false
+        } else {
+            return true
         }
     }
 }

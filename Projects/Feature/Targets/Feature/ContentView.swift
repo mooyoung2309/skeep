@@ -9,7 +9,7 @@
 import SwiftUI
 import FeatureMemo
 import FeatureCalendar
-import FeatureToDo
+import FeatureTodo
 
 public struct ContentView: View {
     public var body: some View {
@@ -32,7 +32,7 @@ public struct ContentView: View {
                 Text("Calendar")
             }
             NavigationStack {
-                ToDoView()
+                TodoView()
             }
             .tabItem {
                 Image(systemName: "face.dashed")

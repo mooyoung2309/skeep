@@ -11,12 +11,12 @@ import Core
 
 import ComposableArchitecture
 
-struct ToDo: ReducerProtocol {
+struct Todo: ReducerProtocol {
     struct State: Equatable {
         var date: Date = Date()
-        var toDoFiles: [ToDoFile] = []
+        var toDoFiles: [TodoFile] = []
         
-        var toDoFile: ToDoFile?
+        var toDoFile: TodoFile?
         var file: File = .init()
         
         var isSheetPresented: Bool = false
@@ -25,7 +25,7 @@ struct ToDo: ReducerProtocol {
     enum Action: Equatable {
         case refresh
         case fetchToDoFilesRequest(Date)
-        case fetchToDoFilesResponse(Date, [ToDoFile])
+        case fetchToDoFilesResponse(Date, [TodoFile])
 
         case tapLeftButton
         case tapRightButton
@@ -33,7 +33,7 @@ struct ToDo: ReducerProtocol {
         case tapToDoButton
         
         case setDate(Date)
-        case setToDoFile(ToDoFile?)
+        case setToDoFile(TodoFile?)
         case setSheet(isPresented: Bool)
     }
     
@@ -45,7 +45,7 @@ struct ToDo: ReducerProtocol {
             return .send(.fetchToDoFilesRequest(state.date))
             
         case let .fetchToDoFilesRequest(date):
-            return .send(.fetchToDoFilesResponse(date, fileClient.fetchToDoFiles(date)))
+            return .send(.fetchToDoFilesResponse(date, fileClient.fetchTodoFiles(date)))
             
         case let .fetchToDoFilesResponse(date, toDoFiles):
             state.toDoFiles = toDoFiles

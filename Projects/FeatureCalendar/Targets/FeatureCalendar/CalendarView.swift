@@ -33,7 +33,7 @@ struct FileItemView: View {
             
             Divider()
                 .frame(width: 5)
-                .overlay(file.colorPalette.color)
+                .overlay(Color(rgb: file.rgb))
                 .cornerRadius(2, corners: .allCorners)
             
             Text(file.title)
@@ -54,7 +54,7 @@ struct FileLabelView: View {
         HStack(spacing: .zero) {
             Divider()
                 .frame(width: 2, height: 10)
-                .overlay(file.colorPalette.color)
+                .overlay(Color(rgb: file.rgb))
                 .cornerRadius(2, corners: .allCorners)
                 .padding(.trailing, 3)
             

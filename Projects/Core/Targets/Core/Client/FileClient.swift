@@ -12,24 +12,27 @@ import Utils
 import ComposableArchitecture
 
 public struct FileClient {
+    public var fetchFile: (String) -> File?
     public var fetchFiles: (String?) -> [File]
     public var fetchCalendarFiles: (Date) -> [CalendarFile]
-    public var fetchToDoFiles: (Date) -> [ToDoFile]
+    public var fetchTodoFiles: (Date) -> [TodoFile]
     public var createOrUpdateFile: (File) -> ()
 }
 
 extension FileClient: TestDependencyKey {
     public static let previewValue = Self(
+        fetchFile: { _ in return File.mock },
         fetchFiles: { _ in return File.mocks },
         fetchCalendarFiles: { _ in return CalendarFile.mocks },
-        fetchToDoFiles: { _ in return ToDoFile.mocks },
+        fetchTodoFiles: { _ in return TodoFile.mocks },
         createOrUpdateFile: { _ in }
     )
     
     public static let testValue = Self(
+        fetchFile: unimplemented("\(Self.self).fethFile"),
         fetchFiles: unimplemented("\(Self.self).fetchFiles"),
         fetchCalendarFiles: unimplemented("\(Self.self).fetchCalendarFiles"),
-        fetchToDoFiles: unimplemented("\(Self.self).fetchToDoFiles"),
+        fetchTodoFiles: unimplemented("\(Self.self).fetchTodoFiles"),
         createOrUpdateFile: unimplemented("\(Self.self).fetchCalendarFiles")
     )
 }
@@ -43,6 +46,9 @@ extension DependencyValues {
 
 extension FileClient: DependencyKey {
     public static let liveValue = FileClient(
+        fetchFile: { id in
+            return File.fetch(id: id)
+        },
         fetchFiles: { id in
             if let id = id {
                 return File.fetch(directoryID: id)
@@ -60,14 +66,14 @@ extension FileClient: DependencyKey {
             
             return calendarFiles
         },
-        fetchToDoFiles: { date in
+        fetchTodoFiles: { date in
             let dates = date.weekDates()
-            let files = File.fetch().filter({ $0.toDoStyle.isShow })
-            let toDoFiles = dates.map({ date in
+            let files = File.fetch().filter({ $0.todoStyle.isShow })
+            let todoFiles = dates.map({ date in
                 let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
-                return ToDoFile(id: UUID().uuidString, date: date, files: filterdFiles)
+                return TodoFile(id: UUID().uuidString, date: date, files: filterdFiles)
             })
-            return toDoFiles
+            return todoFiles
         },
         createOrUpdateFile: { file in
             File.createOrUpdate(file: file)

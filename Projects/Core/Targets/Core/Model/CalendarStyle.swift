@@ -13,12 +13,20 @@ import RealmSwift
 public enum CalendarStyle: Int, PersistableEnum {
     case `default`
     case hidden
+    case allDay
     
     public var isShow: Bool {
-        switch self {
-        case .default:
+        if self == .hidden {
+            return false
+        } else {
             return true
-        case .hidden:
+        }
+    }
+    
+    public var isAllDay: Bool {
+        if self == .allDay {
+            return true
+        } else {
             return false
         }
     }

@@ -32,7 +32,7 @@ struct FileItemView: View {
             
             Divider()
                 .frame(width: 5)
-                .overlay(file.colorPalette.color)
+                .overlay(Color(rgb: file.rgb))
                 .cornerRadius(2, corners: .allCorners)
             
             Text(file.title)
@@ -43,14 +43,14 @@ struct FileItemView: View {
 }
 
 
-public struct ToDoView: View {
-    let store: StoreOf<ToDo>
+public struct TodoView: View {
+    let store: StoreOf<Todo>
     
     private let weeks: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     @State private var calendarId: UUID = UUID()
     
     public init() {
-        self.store = .init(initialState: .init(), reducer: ToDo()._printChanges())
+        self.store = .init(initialState: .init(), reducer: Todo()._printChanges())
     }
     
     public var body: some View {
@@ -59,7 +59,7 @@ public struct ToDoView: View {
                 HStack {
                     DatePicker(
                         "",
-                        selection: viewStore.binding(get: \.date, send: ToDo.Action.setDate),
+                        selection: viewStore.binding(get: \.date, send: Todo.Action.setDate),
                         displayedComponents: [.date]
                     )
                     .id(calendarId)
@@ -139,19 +139,13 @@ public struct ToDoView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("To-Do")
-            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: ToDo.Action.setSheet(isPresented:))) {
-                EditToDoView(file: viewStore.file)
+            .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Todo.Action.setSheet(isPresented:))) {
+                EditTodoView(file: viewStore.file)
                     .presentationDetents([.medium])
             }
             .task {
                 viewStore.send(.refresh)
             }
         }
-    }
-}
-
-public struct ToDoView_Previews: PreviewProvider {
-    public static var previews: some View {
-        ToDoView()
     }
 }

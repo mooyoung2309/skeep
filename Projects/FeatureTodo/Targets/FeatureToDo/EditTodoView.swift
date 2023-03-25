@@ -1,8 +1,8 @@
 //
-//  CalendarEditView.swift
-//  FeatureCalendar
+//  EditToDoView.swift
+//  FeatureToDo
 //
-//  Created by 송영모 on 2023/03/20.
+//  Created by 송영모 on 2023/03/25.
 //  Copyright © 2023 Copynote. All rights reserved.
 //
 
@@ -12,13 +12,13 @@ import Utils
 
 import ComposableArchitecture
 
-public struct EditCalendarView: View {
+public struct EditTodoView: View {
     @State private var someBinding = true
     @State var animate = false
-    let store: StoreOf<EditCalendar>
+    let store: StoreOf<EditTodo>
     
     public init(file: File) {
-        self.store = .init(initialState: .init(file: file), reducer: EditCalendar()._printChanges())
+        self.store = .init(initialState: .init(file: file), reducer: EditTodo()._printChanges())
     }
     
     public var body: some View {
@@ -31,7 +31,7 @@ public struct EditCalendarView: View {
                     
                     TextField(
                         "Title",
-                        text: viewStore.binding(get: \.file.title, send: EditCalendar.Action.titleChanged)
+                        text: viewStore.binding(get: \.file.title, send: EditTodo.Action.titleChanged)
                     )
                     .font(.title3)
                     .bold()
@@ -103,7 +103,7 @@ public struct EditCalendarView: View {
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditCalendar.Action.selectDate))
+                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditTodo.Action.selectDate))
                         .datePickerStyle(.wheel)
                     
                     Spacer()
@@ -143,25 +143,6 @@ public struct EditCalendarView: View {
                         .toggleStyle(.switch)
                 }
                 .padding()
-                
-                /*TODO: 메모 기능 추가
-                HStack {
-                    Label("", systemImage: "doc.plaintext")
-                    
-                    Text("Memo")
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
-                
-                TextEditor(
-                    text: viewStore.binding(get: \.file.content, send: EditCalendar.Action.contentChanged)
-                )
-                .foregroundColor(.gray)
-                .frame(minHeight: 50)
-                .padding([.bottom, .horizontal])
-                 
-                 */
             }
         }
     }

@@ -59,7 +59,7 @@ struct EditCalendar: ReducerProtocol {
             return .send(.createOrUpdateRequest)
             
         case let .selectColorPalette(colorPalette):
-            state.file.colorPalette = colorPalette
+            state.file.rgb = colorPalette.color.rgb()
             return .send(.createOrUpdateRequest)
             
         case .selectStartDate:

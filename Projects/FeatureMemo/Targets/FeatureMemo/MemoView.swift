@@ -41,7 +41,7 @@ public struct MemoView: View {
                         Button(action: {
                             viewStore.send(.setAlert(isPresented: true))
                         }, label: {
-                            Image(systemName: "plus.circle")
+                            Image(systemName: "folder.badge.plus")
                         })
                         .alert("folder", isPresented: viewStore.binding(get: \.isAlertPresented, send: Memo.Action.setAlert(isPresented:)), actions: {
                             TextField("name", text: viewStore.binding(get: \.directoryName, send: Memo.Action.directoryNameChanged))
@@ -63,7 +63,7 @@ public struct MemoView: View {
                     })
                 Section(
                     header: HStack {
-                        Text("Memo")
+                        Text("quick Memo")
                         Spacer()
                         
                         NavigationLink(destination: EditMemoView(file: .init()), label: {

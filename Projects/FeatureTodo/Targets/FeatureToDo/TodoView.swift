@@ -86,7 +86,7 @@ public struct TodoView: View {
                     Button {
                         viewStore.send(.tapTodoButton)
                     } label: {
-                        Image(systemName: "checkmark.square.fill")
+                        Image(systemName: "plus.app.fill")
                             .font(.title3)
                     }
                 }

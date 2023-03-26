@@ -96,8 +96,16 @@ public struct EditFileView: View {
                     
                     Spacer()
                     
-                    Toggle("All Day", isOn: viewStore.binding(get: \.file.calendarStyle.isAllDay, send: EditFile.Action.allDayToggleChanged))
-                        .toggleStyle(.button)
+                    Button {
+                        viewStore.send(.calendarStyleChanged(.allday))
+                    } label: {
+                        Text("All day")
+                            .font(.caption)
+                            .foregroundColor(viewStore.file.calendarStyle == .allday ? .black : .gray)
+                            .padding(10)
+                            .background(viewStore.file.calendarStyle == .allday ? Color(.systemGray4) : Color(.systemGray6))
+                            .cornerRadius(10, corners: .allCorners)
+                    }
                 }
                 .padding()
                 
@@ -115,16 +123,18 @@ public struct EditFileView: View {
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
                     
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack(alignment: .center) {
-                            ForEach(Array(Calendar.current.shortWeekdaySymbols.enumerated()), id: \.offset) { index, week in
+                            ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
                                 Button {
-                                    viewStore.send(.weekdayChanged(index))
+                                    viewStore.send(.repeatStyleChanged(repeatStyle))
                                 } label: {
-                                    Text(week)
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(viewStore.file.weekdays.contains(index) ? .black : .gray)
+                                    Text(repeatStyle.title)
+                                        .font(.caption)
+                                        .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
+                                        .padding(10)
+                                        .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
+                                        .cornerRadius(10, corners: .allCorners)
                                 }
                             }
                             Spacer()

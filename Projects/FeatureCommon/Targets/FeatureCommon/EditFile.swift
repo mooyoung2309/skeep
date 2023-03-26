@@ -39,9 +39,9 @@ public struct EditFile: ReducerProtocol {
         case contentChanged(String)
         case colorChanged(Color)
         case dateChanged(Date)
-        case weekdayChanged(Int)
+        case repeatStyleChanged(RepeatStyle)
+        case calendarStyleChanged(CalendarStyle)
         case calendarToggleChanged(Bool)
-        case allDayToggleChanged(Bool)
         case toDoToggleChanged(Bool)
         
         
@@ -87,24 +87,24 @@ public struct EditFile: ReducerProtocol {
                 .send(.createOrUpdateRequest)
             ])
             
-        case let .weekdayChanged(weekday):
-            if let i = state.file.weekdays.firstIndex(of: weekday) {
-                state.file.weekdays.remove(at: i)
+        case let .repeatStyleChanged(repeatStyle):
+            state.file.repeatStyle = repeatStyle
+            return .send(.createOrUpdateRequest)
+            
+        case let .calendarStyleChanged(calendarStyle):
+            if state.file.calendarStyle == calendarStyle {
+                state.file.calendarStyle = .default
             } else {
-                state.file.weekdays.append(weekday)
+                state.file.calendarStyle = calendarStyle
             }
             return .send(.createOrUpdateRequest)
             
         case let .calendarToggleChanged(isCalendar):
-            state.file.calendarStyle = isCalendar ? .default : .hidden
-            return .send(.createOrUpdateRequest)
-            
-        case let .allDayToggleChanged(isAllDay):
-            state.file.calendarStyle = isAllDay ? .allDay : .default
+            state.file.calendarStyle = isCalendar ? .default : .none
             return .send(.createOrUpdateRequest)
             
         case let .toDoToggleChanged(isTodo):
-            state.file.todoStyle = isTodo ? .default : .hidden
+            state.file.todoStyle = isTodo ? .default : .none
             return .send(.createOrUpdateRequest)
             
         case .tapStartDateView:

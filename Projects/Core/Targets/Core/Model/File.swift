@@ -21,7 +21,7 @@ public struct File: Equatable, Identifiable, Hashable {
     public var startDate: Date
     public var endDate: Date
     public var notificationDate: Date?
-    public var weekdays: [Int]
+    public var repeatStyle: RepeatStyle
     public var calendarStyle: CalendarStyle
     public var todoStyle: TodoStyle
     public var habitStyle: HabitStyle
@@ -37,10 +37,10 @@ public struct File: Equatable, Identifiable, Hashable {
         startDate: Date = Date(),
         endDate: Date = Date(),
         notificationDate: Date? = nil,
-        weekdays: [Int] = [],
-        calendarStyle: CalendarStyle = .hidden,
-        toDoStyle: TodoStyle = .hidden,
-        habitStyle: HabitStyle = .hidden
+        repeatStyle: RepeatStyle = .none,
+        calendarStyle: CalendarStyle = .none,
+        todoStyle: TodoStyle = .none,
+        habitStyle: HabitStyle = .none
     ) {
         self.id = id
         self.directory = directory
@@ -51,10 +51,10 @@ public struct File: Equatable, Identifiable, Hashable {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
-        self.weekdays = weekdays
+        self.repeatStyle = repeatStyle
         self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
-        self.todoStyle = toDoStyle
+        self.todoStyle = todoStyle
         self.habitStyle = habitStyle
     }
     
@@ -84,9 +84,6 @@ public struct File: Equatable, Identifiable, Hashable {
     }
     
     private func toRealm() -> FileRealm {
-        let weekdayList = List<Int>()
-        weekdayList.append(objectsIn: weekdays)
-        
         return .init(
             id: id,
             directory: directory?.toRealm(),
@@ -98,7 +95,7 @@ public struct File: Equatable, Identifiable, Hashable {
             startDate: startDate,
             endDate: endDate,
             notificationDate: notificationDate,
-            weekdays: weekdayList,
+            repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
             toDoStyle: todoStyle,
             habitStyle: habitStyle
@@ -117,23 +114,23 @@ public class FileRealm: Object {
     @Persisted var startDate: Date
     @Persisted var endDate: Date
     @Persisted var notificationDate: Date?
-    @Persisted var weekdays: List<Int>
+    @Persisted var repeatStyle: RepeatStyle
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var todoStyle: TodoStyle
     @Persisted var habitStyle: HabitStyle
     
     convenience init(
         id: String,
-        directory: DirectoryRealm? = nil,
+        directory: DirectoryRealm?,
         rgb: Int,
         title: String,
         content: String,
         createDate: Date,
         editDate: Date,
-        startDate: Date = Date(),
-        endDate: Date = Date(),
-        notificationDate: Date? = nil,
-        weekdays: List<Int> = .init(),
+        startDate: Date,
+        endDate: Date,
+        notificationDate: Date?,
+        repeatStyle: RepeatStyle,
         calendarStyle: CalendarStyle,
         toDoStyle: TodoStyle,
         habitStyle: HabitStyle
@@ -150,7 +147,7 @@ public class FileRealm: Object {
         self.startDate = startDate
         self.endDate = endDate
         self.notificationDate = notificationDate
-        self.weekdays = weekdays
+        self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
         self.habitStyle = habitStyle
@@ -168,9 +165,9 @@ public class FileRealm: Object {
             startDate: startDate,
             endDate: endDate,
             notificationDate: notificationDate,
-            weekdays: weekdays.map { $0 },
+            repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
-            toDoStyle: todoStyle,
+            todoStyle: todoStyle,
             habitStyle: habitStyle
         )
     }
@@ -186,7 +183,7 @@ extension File {
         createDate: Date(),
         editDate: Date(),
         calendarStyle: .default,
-        toDoStyle: .default,
+        todoStyle: .default,
         habitStyle: .default
     )
     
@@ -199,7 +196,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default,
+            todoStyle: .default,
             habitStyle: .default
         ),
         File(
@@ -210,7 +207,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default,
+            todoStyle: .default,
             habitStyle: .default
         ),
         File(
@@ -221,7 +218,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default,
+            todoStyle: .default,
             habitStyle: .default
         )
     ]

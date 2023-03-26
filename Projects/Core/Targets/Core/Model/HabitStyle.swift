@@ -12,10 +12,10 @@ import RealmSwift
 
 public enum HabitStyle: Int, PersistableEnum {
     case `default`
-    case hidden
+    case none
     
     public var isShow: Bool {
-        if self == .hidden {
+        if self == .none {
             return false
         } else {
             return true

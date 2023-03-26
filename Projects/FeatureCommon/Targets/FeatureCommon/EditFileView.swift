@@ -22,7 +22,7 @@ public struct EditFileView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 if viewStore.tab == .calendar || viewStore.tab == .todo {
                     HStack {
                         Divider()
@@ -123,23 +123,62 @@ public struct EditFileView: View {
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(alignment: .center) {
-                            ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
-                                Button {
-                                    viewStore.send(.repeatStyleChanged(repeatStyle))
-                                } label: {
-                                    Text(repeatStyle.title)
-                                        .font(.caption)
-                                        .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
-                                        .padding(10)
-                                        .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
-                                        .cornerRadius(10, corners: .allCorners)
+                    VStack {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .center) {
+                                ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
+                                    Button {
+                                        viewStore.send(.repeatStyleChanged(repeatStyle), animation: .default)
+                                    } label: {
+                                        Text(repeatStyle.title)
+                                            .font(.caption)
+                                            .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
+                                            .padding(10)
+                                            .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
+                                            .cornerRadius(10, corners: .allCorners)
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                        if viewStore.file.repeatStyle == .daily {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(alignment: .center) {
+                                    ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
+                                        Button {
+    //                                        viewStore.send(.repeatStyleChanged(repeatStyle))
+                                        } label: {
+                                            Text(week)
+                                                .font(.caption2)
+                                                .foregroundColor(true ? .black : .gray)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 5)
+                                                .background(true ? Color(.systemGray4) : Color(.systemGray6))
+                                                .cornerRadius(7, corners: .allCorners)
+                                        }
+                                    }
+                                    Spacer()
                                 }
                             }
-                            Spacer()
                         }
                     }
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        HStack(alignment: .center) {
+//                            ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
+//                                Button {
+//                                    viewStore.send(.repeatStyleChanged(repeatStyle))
+//                                } label: {
+//                                    Text(repeatStyle.title)
+//                                        .font(.caption)
+//                                        .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
+//                                        .padding(10)
+//                                        .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
+//                                        .cornerRadius(10, corners: .allCorners)
+//                                }
+//                            }
+//                            Spacer()
+//                        }
+//                    }
                 }
                 .padding()
 

@@ -40,6 +40,7 @@ public struct EditFile: ReducerProtocol {
         case colorChanged(Color)
         case dateChanged(Date)
         case repeatStyleChanged(RepeatStyle)
+        case weekdayChanged(Int)
         case calendarStyleChanged(CalendarStyle)
         case calendarToggleChanged(Bool)
         case toDoToggleChanged(Bool)
@@ -90,6 +91,10 @@ public struct EditFile: ReducerProtocol {
         case let .repeatStyleChanged(repeatStyle):
             state.file.repeatStyle = repeatStyle
             return .send(.createOrUpdateRequest)
+            
+        case let .weekdayChanged(weekday):
+            let origin = UInt8(state.file.weekdays)
+            
             
         case let .calendarStyleChanged(calendarStyle):
             if state.file.calendarStyle == calendarStyle {

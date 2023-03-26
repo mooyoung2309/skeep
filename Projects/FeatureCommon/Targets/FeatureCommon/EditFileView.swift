@@ -112,38 +112,29 @@ public struct EditFileView: View {
                 .frame(height: viewStore.mode == .none ? 0 : 200)
                 .opacity(viewStore.mode == .none ? 0 : 1)
                 
-                /*TODO: 노티피케이션 기능 추가
                 HStack {
-                    Label("", systemImage: "bell")
+                    Label("", systemImage: "arrow.2.squarepath")
                     
-                    Text("Notification")
-                    
-                    Spacer()
-                    
-                    Menu {
-                        Button("None", action: {})
-                        
-                        Button("10m", action: {})
-                        
-                        Button("30m", action: {})
-                        
-                        Button("1h", action: {})
-                        
-                        Button("12h", action: {})
-                        
-                        Button("24h", action: {})
-                    } label: {
-                        Label("None", systemImage: "hourglass.badge.plus")
+                    ScrollView(.horizontal) {
+                        HStack(alignment: .center) {
+                            ForEach(Array(Calendar.current.shortWeekdaySymbols.enumerated()), id: \.offset) { index, week in
+                                Button {
+                                    viewStore.send(.weekdayChanged(index))
+                                } label: {
+                                    Text(week)
+                                        .foregroundColor(viewStore.file.weekdays.contains(index) ? .black : .gray)
+                                }
+                            }
+                            Spacer()
+                        }
                     }
                 }
                 .padding()
-                 
-                 */
                 
                 HStack {
                     Label("", systemImage: "face.dashed")
                     
-                    Toggle("To-Do", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
+                    Toggle("Todo", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
                         .toggleStyle(.switch)
                 }
                 .padding()

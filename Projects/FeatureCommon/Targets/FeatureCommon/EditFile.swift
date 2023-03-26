@@ -39,6 +39,7 @@ public struct EditFile: ReducerProtocol {
         case contentChanged(String)
         case colorChanged(Color)
         case dateChanged(Date)
+        case weekdayChanged(Int)
         case calendarToggleChanged(Bool)
         case allDayToggleChanged(Bool)
         case toDoToggleChanged(Bool)
@@ -85,6 +86,14 @@ public struct EditFile: ReducerProtocol {
                 .send(.setMode(.none), animation: .default),
                 .send(.createOrUpdateRequest)
             ])
+            
+        case let .weekdayChanged(weekday):
+            if let i = state.file.weekdays.firstIndex(of: weekday) {
+                state.file.weekdays.remove(at: i)
+            } else {
+                state.file.weekdays.append(weekday)
+            }
+            return .send(.createOrUpdateRequest)
             
         case let .calendarToggleChanged(isCalendar):
             state.file.calendarStyle = isCalendar ? .default : .hidden

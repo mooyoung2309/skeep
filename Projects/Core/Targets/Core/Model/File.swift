@@ -21,8 +21,10 @@ public struct File: Equatable, Identifiable, Hashable {
     public var startDate: Date
     public var endDate: Date
     public var notificationDate: Date?
+    public var weekdays: [Int]
     public var calendarStyle: CalendarStyle
     public var todoStyle: TodoStyle
+    public var habitStyle: HabitStyle
     
     public init(
         id: String = UUID().uuidString,
@@ -35,8 +37,10 @@ public struct File: Equatable, Identifiable, Hashable {
         startDate: Date = Date(),
         endDate: Date = Date(),
         notificationDate: Date? = nil,
+        weekdays: [Int] = [],
         calendarStyle: CalendarStyle = .hidden,
-        toDoStyle: TodoStyle = .hidden
+        toDoStyle: TodoStyle = .hidden,
+        habitStyle: HabitStyle = .hidden
     ) {
         self.id = id
         self.directory = directory
@@ -47,9 +51,11 @@ public struct File: Equatable, Identifiable, Hashable {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
+        self.weekdays = weekdays
         self.notificationDate = notificationDate
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
+        self.habitStyle = habitStyle
     }
     
     public static func fetch(id: String) -> File? {
@@ -78,6 +84,9 @@ public struct File: Equatable, Identifiable, Hashable {
     }
     
     private func toRealm() -> FileRealm {
+        let weekdayList = List<Int>()
+        weekdayList.append(objectsIn: weekdays)
+        
         return .init(
             id: id,
             directory: directory?.toRealm(),
@@ -88,8 +97,11 @@ public struct File: Equatable, Identifiable, Hashable {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
+            notificationDate: notificationDate,
+            weekdays: weekdayList,
             calendarStyle: calendarStyle,
-            toDoStyle: todoStyle
+            toDoStyle: todoStyle,
+            habitStyle: habitStyle
         )
     }
 }
@@ -105,8 +117,10 @@ public class FileRealm: Object {
     @Persisted var startDate: Date
     @Persisted var endDate: Date
     @Persisted var notificationDate: Date?
+    @Persisted var weekdays: List<Int>
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var todoStyle: TodoStyle
+    @Persisted var habitStyle: HabitStyle
     
     convenience init(
         id: String,
@@ -119,8 +133,10 @@ public class FileRealm: Object {
         startDate: Date = Date(),
         endDate: Date = Date(),
         notificationDate: Date? = nil,
+        weekdays: List<Int> = .init(),
         calendarStyle: CalendarStyle,
-        toDoStyle: TodoStyle
+        toDoStyle: TodoStyle,
+        habitStyle: HabitStyle
     ) {
         self.init()
         
@@ -134,8 +150,10 @@ public class FileRealm: Object {
         self.startDate = startDate
         self.endDate = endDate
         self.notificationDate = notificationDate
+        self.weekdays = weekdays
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
+        self.habitStyle = habitStyle
     }
     
     func toDomain() -> File {
@@ -149,8 +167,11 @@ public class FileRealm: Object {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
+            notificationDate: notificationDate,
+            weekdays: weekdays.map { $0 },
             calendarStyle: calendarStyle,
-            toDoStyle: todoStyle
+            toDoStyle: todoStyle,
+            habitStyle: habitStyle
         )
     }
 }
@@ -165,7 +186,8 @@ extension File {
         createDate: Date(),
         editDate: Date(),
         calendarStyle: .default,
-        toDoStyle: .default
+        toDoStyle: .default,
+        habitStyle: .default
     )
     
     public static let mocks = [
@@ -177,7 +199,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default
+            toDoStyle: .default,
+            habitStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -187,7 +210,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default
+            toDoStyle: .default,
+            habitStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -197,7 +221,8 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            toDoStyle: .default
+            toDoStyle: .default,
+            habitStyle: .default
         )
     ]
 }

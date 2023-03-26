@@ -122,6 +122,8 @@ public struct EditFileView: View {
                                     viewStore.send(.weekdayChanged(index))
                                 } label: {
                                     Text(week)
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                         .foregroundColor(viewStore.file.weekdays.contains(index) ? .black : .gray)
                                 }
                             }
@@ -130,11 +132,27 @@ public struct EditFileView: View {
                     }
                 }
                 .padding()
+
+                HStack {
+                    Label("", systemImage: "calendar")
+                    
+                    Toggle("Calendar", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
+                        .toggleStyle(.switch)
+                }
+                .padding()
+                
+                HStack {
+                    Label("", systemImage: "checkmark.square.fill")
+                    
+                    Toggle("Todo", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
+                        .toggleStyle(.switch)
+                }
+                .padding()
                 
                 HStack {
                     Label("", systemImage: "face.dashed")
                     
-                    Toggle("Todo", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
+                    Toggle("Habit", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
                         .toggleStyle(.switch)
                 }
                 .padding()

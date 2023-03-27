@@ -162,47 +162,50 @@ public struct EditFileView: View {
                             }
                         }
                     }
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        HStack(alignment: .center) {
-//                            ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
-//                                Button {
-//                                    viewStore.send(.repeatStyleChanged(repeatStyle))
-//                                } label: {
-//                                    Text(repeatStyle.title)
-//                                        .font(.caption)
-//                                        .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
-//                                        .padding(10)
-//                                        .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
-//                                        .cornerRadius(10, corners: .allCorners)
-//                                }
-//                            }
-//                            Spacer()
-//                        }
-//                    }
-                }
-                .padding()
-
-                HStack {
-                    Label("", systemImage: "calendar")
-                    
-                    Toggle("Calendar", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
-                        .toggleStyle(.switch)
                 }
                 .padding()
                 
                 HStack {
-                    Label("", systemImage: "checkmark.square.fill")
+                    Label("", systemImage: "archivebox")
                     
-                    Toggle("Todo", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
-                        .toggleStyle(.switch)
-                }
-                .padding()
-                
-                HStack {
-                    Label("", systemImage: "face.dashed")
-                    
-                    Toggle("Habit", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
-                        .toggleStyle(.switch)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            Button(action: {
+                                viewStore.send(.calendarToggleChanged)
+                            }, label: {
+                                Label("Calendar", systemImage: "calendar")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.calendarStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.calendarStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Button(action: {
+                                viewStore.send(.todoToggleChanged)
+                            }, label: {
+                                Label("Todo", systemImage: "checkmark.square.fill")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.todoStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.todoStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Button(action: {
+                                viewStore.send(.habitToggleChanged)
+                            }, label: {
+                                Label("Habit", systemImage: "face.dashed")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.habitStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.habitStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Spacer()
+                        }
+                    }
                 }
                 .padding()
             }

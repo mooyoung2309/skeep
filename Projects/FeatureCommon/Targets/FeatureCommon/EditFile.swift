@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Core
+import Utils
 
 import ComposableArchitecture
 
@@ -42,9 +43,9 @@ public struct EditFile: ReducerProtocol {
         case repeatStyleChanged(RepeatStyle)
         case weekdayChanged(Int)
         case calendarStyleChanged(CalendarStyle)
-        case calendarToggleChanged(Bool)
-        case toDoToggleChanged(Bool)
-        
+        case calendarToggleChanged
+        case todoToggleChanged
+        case habitToggleChanged
         
         case tapStartDateView
         case tapEndDateView
@@ -93,8 +94,8 @@ public struct EditFile: ReducerProtocol {
             return .send(.createOrUpdateRequest)
             
         case let .weekdayChanged(weekday):
-            let origin = UInt8(state.file.weekdays)
-            
+//            WeekdayManager.convert(from: state.file.weekdays, for: <#T##Int#>)
+            return .none
             
         case let .calendarStyleChanged(calendarStyle):
             if state.file.calendarStyle == calendarStyle {
@@ -104,12 +105,16 @@ public struct EditFile: ReducerProtocol {
             }
             return .send(.createOrUpdateRequest)
             
-        case let .calendarToggleChanged(isCalendar):
-            state.file.calendarStyle = isCalendar ? .default : .none
+        case .calendarToggleChanged:
+            state.file.calendarStyle = state.file.calendarStyle == .none ? .default : .none
             return .send(.createOrUpdateRequest)
             
-        case let .toDoToggleChanged(isTodo):
-            state.file.todoStyle = isTodo ? .default : .none
+        case .todoToggleChanged:
+            state.file.todoStyle = state.file.todoStyle == .none ? .default : .none
+            return .send(.createOrUpdateRequest)
+            
+        case .habitToggleChanged:
+            state.file.habitStyle = state.file.habitStyle == .none ? .default : .none
             return .send(.createOrUpdateRequest)
             
         case .tapStartDateView:

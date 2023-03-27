@@ -9,10 +9,20 @@
 import Foundation
 
 public class WeekdayManager {
-    static func convert(from arg1: Int, for arg2: Int) -> Int {
-        let arg1 = UInt8(arg1)
-        let arg2 = UInt8(arg2)
-        
-        return 0
+    public static func toUInt8(weekday: Int) -> UInt8 {
+        switch weekday {
+        case 1: return 0b00000001
+        case 2: return 0b00000010
+        case 3: return 0b00000100
+        case 4: return 0b00001000
+        case 5: return 0b00010000
+        case 6: return 0b00100000
+        case 7: return 0b01000000
+        default: return 0b00000000
+        }
+    }
+    
+    public static func toWeekdays(weekdays: UInt8) -> [Int] {
+        return [0]
     }
 }

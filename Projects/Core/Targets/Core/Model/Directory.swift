@@ -13,14 +13,16 @@ import RealmSwift
 public struct Directory: Equatable, Identifiable, Hashable {
     public var id: String
     public var title: String
+    public var order: Int
     
-    public init(id: String = UUID().uuidString, title: String) {
+    public init(id: String = UUID().uuidString, title: String, order: Int) {
         self.id = id
         self.title = title
+        self.order = order
     }
     
     public func toRealm() -> DirectoryRealm {
-        return .init(id: self.id, title: self.title)
+        return .init(id: self.id, title: self.title, order: self.order)
     }
     
     public static func fetch() -> [Directory] {
@@ -43,16 +45,18 @@ public struct Directory: Equatable, Identifiable, Hashable {
 public class DirectoryRealm: Object {
     @Persisted(primaryKey: true) var id: String
     @Persisted var title: String
+    @Persisted var order: Int
     
-    convenience init(id: String, title: String) {
+    convenience init(id: String, title: String, order: Int) {
         self.init()
         
         self.id = id
         self.title = title
+        self.order = order
     }
     
     public func toDomain() -> Directory {
-        return .init(id: self.id, title: self.title)
+        return .init(id: self.id, title: self.title, order: self.order)
     }
 }
 // MARK: - Mock data
@@ -60,21 +64,25 @@ public class DirectoryRealm: Object {
 extension Directory {
     public static let mock = Self(
         id: UUID().uuidString,
-        title: "테스트1"
+        title: "테스트1",
+        order: 1
     )
     
     public static let mocks = [
         Self(
             id: UUID().uuidString,
-            title: "테스트2"
+            title: "테스트2",
+            order: 1
         ),
         Self(
             id: UUID().uuidString,
-            title: "테스트3"
+            title: "테스트3",
+            order: 1
         ),
         Self(
             id: UUID().uuidString,
-            title: "테스트4"
+            title: "테스트4",
+            order: 1
         ),
     ]
 }

@@ -16,10 +16,19 @@ public struct HabitView: View {
         ScrollView {
             LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
                 ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
-                    Text(week)
-                        .font(.subheadline)
+                    VStack {
+                        Text("12")
+                            .font(.caption2)
+                            .fontWeight(.light)
+                            .padding(.bottom, 10)
+                        
+                        Text(week)
+                            .font(.body)
+                            .padding(.bottom, 5)
+                    }
                 }
             }
+            .padding()
             
             Spacer()
         }

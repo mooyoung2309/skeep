@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import FeatureCommon
 import Core
 import Utils
 
@@ -174,7 +175,7 @@ public struct CalendarView: View {
                 }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
-                EditCalendarView(file: viewStore.file)
+                EditFileView(store: self.store.scope(state: \.editFile, action: Calendar.Action.editFile))
                     .presentationDetents([.medium])
             }
             .task {

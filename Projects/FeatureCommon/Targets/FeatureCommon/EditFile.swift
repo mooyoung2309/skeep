@@ -94,7 +94,8 @@ public struct EditFile: ReducerProtocol {
             return .send(.createOrUpdateRequest)
             
         case let .weekdayChanged(weekday):
-//            WeekdayManager.convert(from: state.file.weekdays, for: <#T##Int#>)
+//            WeekdayManager.toWeekdays(weekdays: )
+//            WeekdayManager.convert(from: state.file.weekdays, for: 0)
             return .none
             
         case let .calendarStyleChanged(calendarStyle):

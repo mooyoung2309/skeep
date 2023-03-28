@@ -178,14 +178,8 @@ public struct CalendarView: View {
                     .presentationDetents([.medium])
             }
             .task {
-                viewStore.send(.refresh)
+                viewStore.send(.refresh, animation: .default)
             }
         }
-    }
-}
-
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView()
     }
 }

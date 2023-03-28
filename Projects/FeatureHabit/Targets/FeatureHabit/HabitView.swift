@@ -7,17 +7,22 @@
 //
 
 import SwiftUI
+import Utils
 
 public struct HabitView: View {
     public init() {}
     
     public var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct HabitView_Previews: PreviewProvider {
-    static var previews: some View {
-        HabitView()
+        ScrollView {
+            LazyVGrid(columns: .init(repeating: .init(), count: 7)) {
+                ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
+                    Text(week)
+                        .font(.subheadline)
+                }
+            }
+            
+            Spacer()
+        }
+        .navigationTitle("Habit")
     }
 }

@@ -41,14 +41,6 @@ public struct ContentView: View {
                 Image(systemName: "checkmark.square.fill")
                 Text("Todo")
             }
-            
-            NavigationStack {
-                HabitView()
-            }
-            .tabItem {
-                Image(systemName: "face.dashed")
-                Text("Habit")
-            }
         }
     }
     

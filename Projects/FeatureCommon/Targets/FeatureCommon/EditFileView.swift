@@ -146,7 +146,7 @@ public struct EditFileView: View {
                                 HStack(alignment: .center) {
                                     ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
                                         Button {
-    //                                        viewStore.send(.repeatStyleChanged(repeatStyle))
+//                                            viewStore.send(.repeatStyleChanged(repeatStyle))
                                         } label: {
                                             Text(week)
                                                 .font(.caption2)
@@ -157,6 +157,7 @@ public struct EditFileView: View {
                                                 .cornerRadius(7, corners: .allCorners)
                                         }
                                     }
+                                    
                                     Spacer()
                                 }
                             }
@@ -202,7 +203,7 @@ public struct EditFileView: View {
                                     .background(viewStore.file.habitStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
                                     .cornerRadius(10, corners: .allCorners)
                             })
-                            
+
                             Spacer()
                         }
                     }

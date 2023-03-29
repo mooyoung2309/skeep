@@ -109,6 +109,7 @@ public struct TodoView: View {
                         Text(file.title)
                             .foregroundColor(file.todoStyle == .done ? .gray : .black)
                             .strikethrough(file.todoStyle == .done)
+                            .lineLimit(1)
                         
                         Spacer()
                     }

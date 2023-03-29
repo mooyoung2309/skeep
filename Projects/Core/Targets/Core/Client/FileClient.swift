@@ -60,7 +60,7 @@ extension FileClient: DependencyKey {
             let dates = date.monthDates()
             let files = File.fetch().filter({ $0.calendarStyle.isShow })
             let calendarFiles = dates.map({ date in
-                let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
+                let filterdFiles = files.filter({ date.isDate(start: $0.startDate, end: $0.endDate) })
                 return CalendarFile(id: UUID().uuidString, date: date, files: filterdFiles)
             })
             
@@ -70,7 +70,7 @@ extension FileClient: DependencyKey {
             let dates = date.weekDates()
             let files = File.fetch().filter({ $0.todoStyle.isShow })
             let todoFiles = dates.map({ date in
-                let filterdFiles = files.filter({ date.isDate(inSameDayAs: $0.startDate) })
+                let filterdFiles = files.filter({ date.isDate(start: $0.startDate, end: $0.endDate) })
                 return TodoFile(id: UUID().uuidString, date: date, files: filterdFiles)
             })
             return todoFiles

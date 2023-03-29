@@ -27,13 +27,14 @@ struct FileItemView: View {
                     .cornerRadius(2, corners: .allCorners)
                 
                 Text(file.title)
-                    .font(.headline)
+                    .font(.body)
+                    .fontWeight(.bold)
                     .lineLimit(1)
             }
             
             Text(file.content)
                 .foregroundColor(.gray)
-                .font(.callout)
+                .font(.caption)
                 .lineLimit(3)
         }
     }

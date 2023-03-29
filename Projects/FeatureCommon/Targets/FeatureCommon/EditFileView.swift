@@ -143,6 +143,7 @@ public struct EditFileView: View {
                 .frame(height: viewStore.mode != .end ? 0 : 200)
                 .opacity(viewStore.mode != .end ? 0 : 1)
                 
+                /*TODO: 우선 출시를 위한 반복 기능 주석 처리
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
                     
@@ -190,6 +191,7 @@ public struct EditFileView: View {
                     }
                 }
                 .padding()
+                 */
                 
                 HStack {
                     Label("", systemImage: "archivebox")

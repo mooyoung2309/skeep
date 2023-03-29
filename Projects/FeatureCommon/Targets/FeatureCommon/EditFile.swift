@@ -41,7 +41,6 @@ public struct EditFile: ReducerProtocol {
         case colorChanged(Color)
         case startDateChanged(Date)
         case endDateChanged(Date)
-//        case dateChanged(Date)
         case repeatStyleChanged(RepeatStyle)
         case weekdayChanged(Int)
         case calendarStyleChanged(CalendarStyle)
@@ -50,8 +49,6 @@ public struct EditFile: ReducerProtocol {
         
         case tapStartDateView
         case tapEndDateView
-        
-//        case setMode(Mode)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -92,19 +89,6 @@ public struct EditFile: ReducerProtocol {
             }
             return .send(.createOrUpdateRequest)
             
-//        case let .dateChanged(date):
-//            switch state.mode {
-//            case .start: state.file.startDate = date
-//            case .end: state.file.endDate = date
-//            case .none: break
-//            }
-//            state.date = date
-//
-//            return .concatenate([
-//                .send(.setMode(.none), animation: .default),
-//                .send(.createOrUpdateRequest)
-//            ])
-            
         case let .repeatStyleChanged(repeatStyle):
             state.file.repeatStyle = repeatStyle
             return .send(.createOrUpdateRequest)
@@ -143,10 +127,6 @@ public struct EditFile: ReducerProtocol {
         case .tapEndDateView:
             state.mode = .end
             return .none
-            
-//        case let .setMode(mode):
-//            state.mode = mode
-//            return .none
         }
     }
 }

@@ -23,6 +23,7 @@ public struct File: Equatable, Identifiable, Hashable {
     public var notificationDate: Date?
     public var weekdays: Int
     public var dates: [Date]
+    public var tags: [Tag]
     public var repeatStyle: RepeatStyle
     public var calendarStyle: CalendarStyle
     public var todoStyle: TodoStyle
@@ -40,6 +41,7 @@ public struct File: Equatable, Identifiable, Hashable {
         notificationDate: Date? = nil,
         weekdays: Int = 0,
         dates: [Date] = [],
+        tags: [Tag] = [],
         repeatStyle: RepeatStyle = .none,
         calendarStyle: CalendarStyle = .none,
         todoStyle: TodoStyle = .none
@@ -56,6 +58,7 @@ public struct File: Equatable, Identifiable, Hashable {
         self.notificationDate = notificationDate
         self.weekdays = weekdays
         self.dates = dates
+        self.tags = tags
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = todoStyle
@@ -88,7 +91,10 @@ public struct File: Equatable, Identifiable, Hashable {
     
     private func toRealm() -> FileRealm {
         let dateList = List<Date>()
+        let tagList = List<TagRealm>()
+        
         dateList.append(objectsIn: dates)
+        tagList.append(objectsIn: tags.map { $0.toRealm() })
 
         return .init(
             id: id,
@@ -103,6 +109,7 @@ public struct File: Equatable, Identifiable, Hashable {
             notificationDate: notificationDate,
             weekdays: weekdays,
             dates: dateList,
+            tags: tagList,
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
             toDoStyle: todoStyle
@@ -123,6 +130,7 @@ public class FileRealm: Object {
     @Persisted var notificationDate: Date?
     @Persisted var weekdays: Int
     @Persisted var dates: List<Date>
+    @Persisted var tags: List<TagRealm>
     @Persisted var repeatStyle: RepeatStyle
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var todoStyle: TodoStyle
@@ -140,6 +148,7 @@ public class FileRealm: Object {
         notificationDate: Date?,
         weekdays: Int,
         dates: List<Date>,
+        tags: List<TagRealm>,
         repeatStyle: RepeatStyle,
         calendarStyle: CalendarStyle,
         toDoStyle: TodoStyle
@@ -158,6 +167,7 @@ public class FileRealm: Object {
         self.notificationDate = notificationDate
         self.weekdays = weekdays
         self.dates = dates
+        self.tags = tags
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
@@ -177,6 +187,7 @@ public class FileRealm: Object {
             notificationDate: notificationDate,
             weekdays: weekdays,
             dates: Array(dates),
+            tags: tags.map { $0.toDomain() },
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
             todoStyle: todoStyle

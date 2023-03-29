@@ -11,7 +11,6 @@ import Core
 
 import ComposableArchitecture
 
-
 struct FileItemView: View {
     let file: File
     
@@ -21,11 +20,21 @@ struct FileItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(file.title)
-                .font(.headline)
+            HStack {
+                Circle()
+                    .frame(width: 5)
+                    .overlay(Color(rgb: file.rgb))
+                    .cornerRadius(2, corners: .allCorners)
+                
+                Text(file.title)
+                    .font(.headline)
+                    .lineLimit(1)
+            }
+            
             Text(file.content)
                 .foregroundColor(.gray)
                 .font(.callout)
+                .lineLimit(3)
         }
     }
 }

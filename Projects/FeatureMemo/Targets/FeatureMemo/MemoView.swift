@@ -49,6 +49,7 @@ public struct MemoView: View {
                             Button("ADD", action: {
                                 viewStore.send(.tapAddButton)
                             })
+                            
                             Button("Cancel", role: .cancel, action: {})
                         }, message: {
                             

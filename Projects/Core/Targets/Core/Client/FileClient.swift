@@ -75,7 +75,9 @@ extension FileClient: DependencyKey {
             })
             return todoFiles
         },
-        createOrUpdateFile: { file in
+        createOrUpdateFile: { _file in
+            var file = _file
+            file.editDate = Date()
             File.createOrUpdate(file: file)
         }
     )

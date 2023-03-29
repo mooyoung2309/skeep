@@ -58,7 +58,7 @@ public struct Memo: ReducerProtocol {
             return .none
             
         case let .fetchFileListResponse(fileList):
-            state.fileList = fileList
+            state.fileList = fileList.sorted(by: { $0.editDate > $1.editDate })
             return .none
             
         case let .directoryNameChanged(directoryName):

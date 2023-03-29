@@ -87,7 +87,7 @@ struct Todo: ReducerProtocol {
                 return .send(.setSheet(isPresented: true))
                 
             case .tapTodoButton:
-                state.editFile.file = .init(todoStyle: .default)
+                state.editFile.file = .init(startDate: state.selectedDate, endDate: state.selectedDate.add(byAdding: .hour, value: 1), todoStyle: .default)
                 return .send(.setSheet(isPresented: true))
                 
             case let .selectDate(date):

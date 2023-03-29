@@ -21,7 +21,6 @@ public struct Calendar: ReducerProtocol {
         var date: Date = Date()
         var calendarFiles: [CalendarFile] = []
         var calendarFile: CalendarFile?
-//        var file: File = .init()
         var isSheetPresented: Bool = false
         
         public init() {
@@ -76,7 +75,7 @@ public struct Calendar: ReducerProtocol {
                 return .send(.setDate(state.date.addMonth(value: 1)))
                 
             case .tapMemoButton:
-                state.editFile.file = .init(calendarStyle: .default)
+                state.editFile.file = .init(startDate: state.date, endDate: state.date.add(byAdding: .hour, value: 1), calendarStyle: .default)
                 return .send(.setSheet(isPresented: true))
                 
             case let .tapFileLabel(file):
@@ -99,52 +98,5 @@ public struct Calendar: ReducerProtocol {
                 return .send(.refresh)
             }
         }
-    }
-    
-//    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-//        Scope(state: \.editFile, action: /Action.editFile) {
-//            EditFile()
-//        }
-//
-//        switch action {
-//        case .refresh:
-//            return .send(.fetchCalendarFilesRequest)
-//
-//        case .fetchCalendarFilesRequest:
-//            return .send(.fetchCalendarFilesResponse(self.fileClient.fetchCalendarFiles(state.date)))
-//
-//        case let .fetchCalendarFilesResponse(calendarFiles):
-//            state.calendarFiles = calendarFiles
-//            return .send(.setCalendarFile(state.calendarFiles.first(where: { $0.date.isDate(inSameDayAs: state.date) })))
-//
-//        case .tapLeftButton:
-//            return .send(.setDate(state.date.addMonth(value: -1)))
-//
-//        case .tapRightButton:
-//            return .send(.setDate(state.date.addMonth(value: 1)))
-//
-//        case .tapMemoButton:
-//            state.file = .init(calendarStyle: .default)
-//            return .send(.setSheet(isPresented: true))
-//
-//        case let .tapFileLabel(file):
-//            state.file = file
-//            return .send(.setSheet(isPresented: true))
-//
-//        case let .selectCalendarCell(date):
-//            return .send(.setDate(date))
-//
-//        case let .setDate(date):
-//            state.date = date
-//            return .send(.refresh)
-//
-//        case let .setCalendarFile(calendarFile):
-//            state.calendarFile = calendarFile
-//            return .none
-//
-//        case let .setSheet(isPresented):
-//            state.isSheetPresented = isPresented
-//            return .send(.refresh)
-//        }
-//    }
+    }    
 }

@@ -25,7 +25,6 @@ public struct File: Equatable, Identifiable, Hashable {
     public var repeatStyle: RepeatStyle
     public var calendarStyle: CalendarStyle
     public var todoStyle: TodoStyle
-    public var habitStyle: HabitStyle
     
     public init(
         id: String = UUID().uuidString,
@@ -41,8 +40,7 @@ public struct File: Equatable, Identifiable, Hashable {
         weekdays: Int = 0,
         repeatStyle: RepeatStyle = .none,
         calendarStyle: CalendarStyle = .none,
-        todoStyle: TodoStyle = .none,
-        habitStyle: HabitStyle = .none
+        todoStyle: TodoStyle = .none
     ) {
         self.id = id
         self.directory = directory
@@ -58,7 +56,6 @@ public struct File: Equatable, Identifiable, Hashable {
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = todoStyle
-        self.habitStyle = habitStyle
     }
     
     public static func fetch(id: String) -> File? {
@@ -101,8 +98,7 @@ public struct File: Equatable, Identifiable, Hashable {
             weekdays: weekdays,
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
-            toDoStyle: todoStyle,
-            habitStyle: habitStyle
+            toDoStyle: todoStyle
         )
     }
 }
@@ -122,7 +118,6 @@ public class FileRealm: Object {
     @Persisted var repeatStyle: RepeatStyle
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var todoStyle: TodoStyle
-    @Persisted var habitStyle: HabitStyle
     
     convenience init(
         id: String,
@@ -138,8 +133,7 @@ public class FileRealm: Object {
         weekdays: Int,
         repeatStyle: RepeatStyle,
         calendarStyle: CalendarStyle,
-        toDoStyle: TodoStyle,
-        habitStyle: HabitStyle
+        toDoStyle: TodoStyle
     ) {
         self.init()
         
@@ -157,7 +151,6 @@ public class FileRealm: Object {
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
-        self.habitStyle = habitStyle
     }
     
     func toDomain() -> File {
@@ -175,8 +168,7 @@ public class FileRealm: Object {
             weekdays: weekdays,
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
-            todoStyle: todoStyle,
-            habitStyle: habitStyle
+            todoStyle: todoStyle
         )
     }
 }
@@ -191,8 +183,7 @@ extension File {
         createDate: Date(),
         editDate: Date(),
         calendarStyle: .default,
-        todoStyle: .default,
-        habitStyle: .default
+        todoStyle: .default
     )
     
     public static let mocks = [
@@ -204,8 +195,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            todoStyle: .default,
-            habitStyle: .default
+            todoStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -215,8 +205,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            todoStyle: .default,
-            habitStyle: .default
+            todoStyle: .default
         ),
         File(
             id: UUID().uuidString,
@@ -226,8 +215,7 @@ extension File {
             createDate: Date(),
             editDate: Date(),
             calendarStyle: .default,
-            todoStyle: .default,
-            habitStyle: .default
+            todoStyle: .default
         )
     ]
 }

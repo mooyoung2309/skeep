@@ -9,6 +9,18 @@
 import Foundation
 
 extension Date {
+    public static func dates(from fromDate: Date, to toDate: Date) -> [Date] {
+        var dates: [Date] = []
+        var date = fromDate
+        
+        while date <= toDate {
+            dates.append(date)
+            guard let newDate = Calendar.current.date(byAdding: .day, value: 1, to: date) else { break }
+            date = newDate
+        }
+        return dates
+    }
+    
     public var year: Int {
         return Calendar.current.component(.year, from: self)
     }
@@ -28,6 +40,10 @@ extension Date {
     public func isDate(inSameDayAs date: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.isDate(self, inSameDayAs: date)
+    }
+    
+    public func isDate(start date1: Date, end date2: Date) -> Bool {
+        return Date.dates(from: min(date1, date2), to: max(date1, date2)).contains(where: { $0.isDate(inSameDayAs: self) })
     }
     
     public func toString(format: String = "yyyy.MM.dd (E)") -> String {
@@ -103,6 +119,13 @@ extension Date {
     public func addDay(value: Int) -> Date {
         let cal = Calendar.current
         let date = cal.date(byAdding: .day, value: value, to: self)!
+        
+        return date
+    }
+    
+    public func add(byAdding component: Calendar.Component, value: Int) -> Date {
+        let cal = Calendar.current
+        let date = cal.date(byAdding: component, value: value, to: self)!
         
         return date
     }

@@ -107,18 +107,41 @@ public struct EditFileView: View {
                             .cornerRadius(10, corners: .allCorners)
                     }
                 }
-                .padding()
+                .padding([.top, .horizontal])
                 
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditFile.Action.dateChanged))
-                        .datePickerStyle(.wheel)
+                    DatePicker(
+                        "",
+                        selection: viewStore.binding(get: \.file.startDate, send: EditFile.Action.startDateChanged)
+                    )
+                    .datePickerStyle(.wheel)
+                    .onAppear {
+                        UIDatePicker.appearance().minuteInterval = 10
+                    }
                     
                     Spacer()
                 }
-                .frame(height: viewStore.mode == .none ? 0 : 200)
-                .opacity(viewStore.mode == .none ? 0 : 1)
+                .frame(height: viewStore.mode != .start ? 0 : 200)
+                .opacity(viewStore.mode != .start ? 0 : 1)
+                
+                HStack {
+                    Spacer()
+                    
+                    DatePicker(
+                        "",
+                        selection: viewStore.binding(get: \.file.endDate, send: EditFile.Action.endDateChanged)
+                    )
+                    .datePickerStyle(.wheel)
+                    .onAppear {
+                        UIDatePicker.appearance().minuteInterval = 10
+                    }
+                    
+                    Spacer()
+                }
+                .frame(height: viewStore.mode != .end ? 0 : 200)
+                .opacity(viewStore.mode != .end ? 0 : 1)
                 
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
@@ -144,19 +167,22 @@ public struct EditFileView: View {
                         if viewStore.file.repeatStyle == .daily {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(alignment: .center) {
-                                    ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
+                                    ForEach(Array(Calendar.current.shortStandaloneWeekdaySymbols.enumerated()), id: \.offset) { index, week in
                                         Button {
-    //                                        viewStore.send(.repeatStyleChanged(repeatStyle))
+                                            viewStore.send(.weekdayChanged(Int(index) + 1))
                                         } label: {
+                                            let weekdays = WeekdayManager.toWeekdays(uint8: UInt8(viewStore.state.file.weekdays))
+                                            
                                             Text(week)
                                                 .font(.caption2)
-                                                .foregroundColor(true ? .black : .gray)
+                                                .foregroundColor(weekdays.contains(index + 1) ? .black : .gray)
                                                 .padding(.horizontal, 10)
                                                 .padding(.vertical, 5)
-                                                .background(true ? Color(.systemGray4) : Color(.systemGray6))
+                                                .background(weekdays.contains(index + 1) ? Color(.systemGray4) : Color(.systemGray6))
                                                 .cornerRadius(7, corners: .allCorners)
                                         }
                                     }
+                                    
                                     Spacer()
                                 }
                             }
@@ -191,18 +217,7 @@ public struct EditFileView: View {
                                     .background(viewStore.file.todoStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
                                     .cornerRadius(10, corners: .allCorners)
                             })
-                            
-                            Button(action: {
-                                viewStore.send(.habitToggleChanged)
-                            }, label: {
-                                Label("Habit", systemImage: "face.dashed")
-                                    .font(.caption)
-                                    .foregroundColor(viewStore.file.habitStyle == .none ? .gray : .black)
-                                    .padding(10)
-                                    .background(viewStore.file.habitStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
-                                    .cornerRadius(10, corners: .allCorners)
-                            })
-                            
+
                             Spacer()
                         }
                     }

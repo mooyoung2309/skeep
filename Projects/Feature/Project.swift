@@ -16,7 +16,6 @@ let factory: ProjectFactory = .init(
                 .project(target: Module.featureMemo.rawValue, path: Module.featureMemo.path),
                 .project(target: Module.featureCalendar.rawValue, path: Module.featureCalendar.path),
                 .project(target: Module.featureTodo.rawValue, path: Module.featureTodo.path),
-                .project(target: Module.featureHabit.rawValue, path: Module.featureHabit.path),
                 .project(target: Module.featureAccount.rawValue, path: Module.featureAccount.path)
             ]
         )

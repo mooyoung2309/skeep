@@ -75,7 +75,7 @@ public struct Calendar: ReducerProtocol {
                 return .send(.setDate(state.date.addMonth(value: 1)))
                 
             case .tapMemoButton:
-                state.editFile.file = .init(calendarStyle: .default)
+                state.editFile.file = .init(startDate: state.date, endDate: state.date.add(byAdding: .hour, value: 1), calendarStyle: .default)
                 return .send(.setSheet(isPresented: true))
                 
             case let .tapFileLabel(file):

@@ -107,7 +107,7 @@ public struct CalendarView: View {
                                 Spacer()
                             }
                             
-                            ForEach(calendarFile.files) { file in
+                            ForEach(calendarFile.files.prefix(3)) { file in
                                 FileLabelView(file: file)
                             }
                             

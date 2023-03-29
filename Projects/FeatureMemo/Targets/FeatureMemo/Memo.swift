@@ -67,7 +67,7 @@ public struct Memo: ReducerProtocol {
             
         case .tapAddButton:
             if !state.directoryName.isEmpty {
-                let dirctory = Directory(title: state.directoryName)
+                let dirctory = Directory(title: state.directoryName, order: directoryClient.fetchDirectories().count + 1)
                 return .send(.createOrUpdateDirectory(dirctory))
             } else {
                 return .none

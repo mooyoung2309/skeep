@@ -22,7 +22,7 @@ public struct EditFileView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 if viewStore.tab == .calendar || viewStore.tab == .todo {
                     HStack {
                         Divider()
@@ -96,8 +96,16 @@ public struct EditFileView: View {
                     
                     Spacer()
                     
-                    Toggle("All Day", isOn: viewStore.binding(get: \.file.calendarStyle.isAllDay, send: EditFile.Action.allDayToggleChanged))
-                        .toggleStyle(.button)
+                    Button {
+                        viewStore.send(.calendarStyleChanged(.allday))
+                    } label: {
+                        Text("All day")
+                            .font(.caption)
+                            .foregroundColor(viewStore.file.calendarStyle == .allday ? .black : .gray)
+                            .padding(10)
+                            .background(viewStore.file.calendarStyle == .allday ? Color(.systemGray4) : Color(.systemGray6))
+                            .cornerRadius(10, corners: .allCorners)
+                    }
                 }
                 .padding()
                 
@@ -112,39 +120,92 @@ public struct EditFileView: View {
                 .frame(height: viewStore.mode == .none ? 0 : 200)
                 .opacity(viewStore.mode == .none ? 0 : 1)
                 
-                /*TODO: 노티피케이션 기능 추가
                 HStack {
-                    Label("", systemImage: "bell")
+                    Label("", systemImage: "arrow.2.squarepath")
                     
-                    Text("Notification")
-                    
-                    Spacer()
-                    
-                    Menu {
-                        Button("None", action: {})
-                        
-                        Button("10m", action: {})
-                        
-                        Button("30m", action: {})
-                        
-                        Button("1h", action: {})
-                        
-                        Button("12h", action: {})
-                        
-                        Button("24h", action: {})
-                    } label: {
-                        Label("None", systemImage: "hourglass.badge.plus")
+                    VStack {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .center) {
+                                ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
+                                    Button {
+                                        viewStore.send(.repeatStyleChanged(repeatStyle), animation: .default)
+                                    } label: {
+                                        Text(repeatStyle.title)
+                                            .font(.caption)
+                                            .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
+                                            .padding(10)
+                                            .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
+                                            .cornerRadius(10, corners: .allCorners)
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                        if viewStore.file.repeatStyle == .daily {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(alignment: .center) {
+                                    ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
+                                        Button {
+    //                                        viewStore.send(.repeatStyleChanged(repeatStyle))
+                                        } label: {
+                                            Text(week)
+                                                .font(.caption2)
+                                                .foregroundColor(true ? .black : .gray)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 5)
+                                                .background(true ? Color(.systemGray4) : Color(.systemGray6))
+                                                .cornerRadius(7, corners: .allCorners)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
                     }
                 }
                 .padding()
-                 
-                 */
                 
                 HStack {
-                    Label("", systemImage: "face.dashed")
+                    Label("", systemImage: "archivebox")
                     
-                    Toggle("To-Do", isOn: viewStore.binding(get: \.file.todoStyle.isShow, send: EditFile.Action.toDoToggleChanged))
-                        .toggleStyle(.switch)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            Button(action: {
+                                viewStore.send(.calendarToggleChanged)
+                            }, label: {
+                                Label("Calendar", systemImage: "calendar")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.calendarStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.calendarStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Button(action: {
+                                viewStore.send(.todoToggleChanged)
+                            }, label: {
+                                Label("Todo", systemImage: "checkmark.square.fill")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.todoStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.todoStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Button(action: {
+                                viewStore.send(.habitToggleChanged)
+                            }, label: {
+                                Label("Habit", systemImage: "face.dashed")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.habitStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.habitStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                            
+                            Spacer()
+                        }
+                    }
                 }
                 .padding()
             }

@@ -12,11 +12,11 @@ import RealmSwift
 
 public enum TodoStyle: Int, PersistableEnum {
     case `default`
-    case hidden
+    case none
     case done
     
     public var isShow: Bool {
-        if self == .hidden {
+        if self == .none {
             return false
         } else {
             return true

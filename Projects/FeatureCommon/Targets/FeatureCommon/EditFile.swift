@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Core
+import Utils
 
 import ComposableArchitecture
 
@@ -39,10 +40,12 @@ public struct EditFile: ReducerProtocol {
         case contentChanged(String)
         case colorChanged(Color)
         case dateChanged(Date)
-        case calendarToggleChanged(Bool)
-        case allDayToggleChanged(Bool)
-        case toDoToggleChanged(Bool)
-        
+        case repeatStyleChanged(RepeatStyle)
+        case weekdayChanged(Int)
+        case calendarStyleChanged(CalendarStyle)
+        case calendarToggleChanged
+        case todoToggleChanged
+        case habitToggleChanged
         
         case tapStartDateView
         case tapEndDateView
@@ -86,16 +89,33 @@ public struct EditFile: ReducerProtocol {
                 .send(.createOrUpdateRequest)
             ])
             
-        case let .calendarToggleChanged(isCalendar):
-            state.file.calendarStyle = isCalendar ? .default : .hidden
+        case let .repeatStyleChanged(repeatStyle):
+            state.file.repeatStyle = repeatStyle
             return .send(.createOrUpdateRequest)
             
-        case let .allDayToggleChanged(isAllDay):
-            state.file.calendarStyle = isAllDay ? .allDay : .default
+        case let .weekdayChanged(weekday):
+//            WeekdayManager.toWeekdays(weekdays: )
+//            WeekdayManager.convert(from: state.file.weekdays, for: 0)
+            return .none
+            
+        case let .calendarStyleChanged(calendarStyle):
+            if state.file.calendarStyle == calendarStyle {
+                state.file.calendarStyle = .default
+            } else {
+                state.file.calendarStyle = calendarStyle
+            }
             return .send(.createOrUpdateRequest)
             
-        case let .toDoToggleChanged(isTodo):
-            state.file.todoStyle = isTodo ? .default : .hidden
+        case .calendarToggleChanged:
+            state.file.calendarStyle = state.file.calendarStyle == .none ? .default : .none
+            return .send(.createOrUpdateRequest)
+            
+        case .todoToggleChanged:
+            state.file.todoStyle = state.file.todoStyle == .none ? .default : .none
+            return .send(.createOrUpdateRequest)
+            
+        case .habitToggleChanged:
+            state.file.habitStyle = state.file.habitStyle == .none ? .default : .none
             return .send(.createOrUpdateRequest)
             
         case .tapStartDateView:

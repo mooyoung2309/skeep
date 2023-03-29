@@ -10,6 +10,8 @@ import SwiftUI
 import FeatureMemo
 import FeatureCalendar
 import FeatureTodo
+import FeatureHabit
+import FeatureAccount
 
 public struct ContentView: View {
     public var body: some View {
@@ -31,12 +33,21 @@ public struct ContentView: View {
                 Image(systemName: "calendar")
                 Text("Calendar")
             }
+            
             NavigationStack {
                 TodoView()
             }
             .tabItem {
                 Image(systemName: "checkmark.square.fill")
-                Text("Todos")
+                Text("Todo")
+            }
+            
+            NavigationStack {
+                HabitView()
+            }
+            .tabItem {
+                Image(systemName: "face.dashed")
+                Text("Habit")
             }
         }
     }

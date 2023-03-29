@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import FeatureCommon
 import Core
 import Utils
 
@@ -37,6 +38,7 @@ struct FileItemView: View {
                 .cornerRadius(2, corners: .allCorners)
             
             Text(file.title)
+                .lineLimit(1)
             
             Spacer()
         }
@@ -61,6 +63,7 @@ struct FileLabelView: View {
             Text(file.title)
                 .font(.caption2)
                 .fontWeight(.light)
+                .lineLimit(1)
             
             Spacer()
         }
@@ -92,6 +95,7 @@ public struct CalendarView: View {
                         VStack(spacing: .zero) {
                             HStack(spacing: .zero) {
                                 Spacer()
+                                
                                 Text("\(calendarFile.date.day)")
                                     .font(.callout)
                                     .fontWeight(.semibold)
@@ -99,6 +103,7 @@ public struct CalendarView: View {
                                         calendarFile.date.month == viewStore.date.month
                                         ? 1 : 0.4
                                     )
+                                
                                 Spacer()
                             }
                             
@@ -174,18 +179,12 @@ public struct CalendarView: View {
                 }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
-                EditCalendarView(file: viewStore.file)
+                EditFileView(store: self.store.scope(state: \.editFile, action: Calendar.Action.editFile))
                     .presentationDetents([.medium])
             }
             .task {
-                viewStore.send(.refresh)
+                viewStore.send(.refresh, animation: .default)
             }
         }
-    }
-}
-
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView()
     }
 }

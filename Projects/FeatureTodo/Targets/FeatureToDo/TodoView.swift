@@ -90,7 +90,7 @@ public struct TodoView: View {
                             .font(.title3)
                     }
                 }
-                .padding(.horizontal)
+                .padding()
                 
                 ForEach(viewStore.selectedFiles) { file in
                     HStack {
@@ -128,7 +128,7 @@ public struct TodoView: View {
                     .presentationDetents([.medium])
             }
             .task {
-                viewStore.send(.refresh)
+                viewStore.send(.refresh, animation: .default)
             }
         }
     }

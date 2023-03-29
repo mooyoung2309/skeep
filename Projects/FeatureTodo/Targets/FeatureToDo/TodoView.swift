@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FeatureCommon
+import FeatureAccount
 import Core
 
 import ComposableArchitecture
@@ -124,9 +125,22 @@ public struct TodoView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .navigationTitle("Todos")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewStore.send(.setAccountSheet(isPresented: true))
+                    }, label: {
+                        Image(systemName: "person.crop.circle")
+                            .fontWeight(.bold)
+                    })
+                }
+            }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Todo.Action.setSheet(isPresented:))) {
                 EditFileView(store: self.store.scope(state: \.editFile, action: Todo.Action.editFile))
                     .presentationDetents([.medium])
+            }
+            .sheet(isPresented: viewStore.binding(get: \.isAccountSheetPresented, send: Todo.Action.setAccountSheet(isPresented:))) {
+                AccountView()
             }
             .task {
                 viewStore.send(.refresh, animation: .default)

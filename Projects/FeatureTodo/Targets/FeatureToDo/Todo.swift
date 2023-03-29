@@ -21,6 +21,7 @@ struct Todo: ReducerProtocol {
         var selectedFiles: [File] = []
         
         var isSheetPresented: Bool = false
+        var isAccountSheetPresented: Bool = false
         
         init() {
             self.editFile = .init(tab: .todo, file: .init())
@@ -44,6 +45,7 @@ struct Todo: ReducerProtocol {
         case selectDate(Date)
         
         case setSheet(isPresented: Bool)
+        case setAccountSheet(isPresented: Bool)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -101,6 +103,10 @@ struct Todo: ReducerProtocol {
                 
             case let .setSheet(isPresented):
                 state.isSheetPresented = isPresented
+                return .none
+                
+            case let .setAccountSheet(isPresented):
+                state.isAccountSheetPresented = isPresented
                 return .none
             }
         }

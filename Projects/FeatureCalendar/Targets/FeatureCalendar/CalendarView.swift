@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FeatureCommon
+import FeatureAccount
 import Core
 import Utils
 
@@ -177,10 +178,22 @@ public struct CalendarView: View {
                             .fontWeight(.bold)
                     })
                 }
+                
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewStore.send(.setAccountSheet(isPresented: true))
+                    }, label: {
+                        Image(systemName: "person.crop.circle")
+                            .fontWeight(.bold)
+                    })
+                }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
                 EditFileView(store: self.store.scope(state: \.editFile, action: Calendar.Action.editFile))
                     .presentationDetents([.medium])
+            }
+            .sheet(isPresented: viewStore.binding(get: \.isAccountSheetPresented, send: Calendar.Action.setAccountSheet(isPresented:))) {
+                AccountView()
             }
             .task {
                 viewStore.send(.refresh, animation: .default)

@@ -45,7 +45,6 @@ public struct EditFile: ReducerProtocol {
         case calendarStyleChanged(CalendarStyle)
         case calendarToggleChanged
         case todoToggleChanged
-        case habitToggleChanged
         
         case tapStartDateView
         case tapEndDateView
@@ -112,10 +111,6 @@ public struct EditFile: ReducerProtocol {
             
         case .todoToggleChanged:
             state.file.todoStyle = state.file.todoStyle == .none ? .default : .none
-            return .send(.createOrUpdateRequest)
-            
-        case .habitToggleChanged:
-            state.file.habitStyle = state.file.habitStyle == .none ? .default : .none
             return .send(.createOrUpdateRequest)
             
         case .tapStartDateView:

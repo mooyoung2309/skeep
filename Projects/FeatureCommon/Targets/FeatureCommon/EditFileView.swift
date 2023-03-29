@@ -192,17 +192,6 @@ public struct EditFileView: View {
                                     .background(viewStore.file.todoStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
                                     .cornerRadius(10, corners: .allCorners)
                             })
-                            
-                            Button(action: {
-                                viewStore.send(.habitToggleChanged)
-                            }, label: {
-                                Label("Habit", systemImage: "face.dashed")
-                                    .font(.caption)
-                                    .foregroundColor(viewStore.file.habitStyle == .none ? .gray : .black)
-                                    .padding(10)
-                                    .background(viewStore.file.habitStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
-                                    .cornerRadius(10, corners: .allCorners)
-                            })
 
                             Spacer()
                         }

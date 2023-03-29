@@ -70,7 +70,12 @@ struct Todo: ReducerProtocol {
                 return .none
                 
             case var .doneToggleChanged(file):
-                file.todoStyle = file.todoStyle == .done ? .default : .done
+                if file.dates.contains(where: { $0.isDate(inSameDayAs: state.selectedDate) }) {
+                    file.dates.removeAll(where: { $0.isDate(inSameDayAs: state.selectedDate) })
+                } else {
+                    file.dates.append(state.selectedDate)
+                }
+                
                 fileClient.createOrUpdateFile(file)
                 return .send(.refresh)
                 

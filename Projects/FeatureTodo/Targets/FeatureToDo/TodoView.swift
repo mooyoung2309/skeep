@@ -97,9 +97,9 @@ public struct TodoView: View {
                         Button(action: {
                             viewStore.send(.doneToggleChanged(file))
                         }, label: {
-                            Image(systemName: file.todoStyle == .done ? "checkmark.square" : "square")
+                            Image(systemName: file.isDone(date: viewStore.selectedDate) ? "checkmark.square" : "square")
                         })
-                        .foregroundColor(file.todoStyle == .done ? .gray : .black)
+                        .foregroundColor(file.isDone(date: viewStore.selectedDate) ? .gray : .black)
                         
                         Divider()
                             .frame(width: 5)
@@ -107,8 +107,8 @@ public struct TodoView: View {
                             .cornerRadius(2, corners: .allCorners)
                         
                         Text(file.title)
-                            .foregroundColor(file.todoStyle == .done ? .gray : .black)
-                            .strikethrough(file.todoStyle == .done)
+                            .foregroundColor(file.isDone(date: viewStore.selectedDate) ? .gray : .black)
+                            .strikethrough(file.isDone(date: viewStore.selectedDate))
                             .lineLimit(1)
                         
                         Spacer()

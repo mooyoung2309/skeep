@@ -107,18 +107,29 @@ public struct EditFileView: View {
                             .cornerRadius(10, corners: .allCorners)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
                 
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.date, send: EditFile.Action.dateChanged))
+                    DatePicker("", selection: viewStore.binding(get: \.file.startDate, send: EditFile.Action.startDateChanged))
                         .datePickerStyle(.wheel)
                     
                     Spacer()
                 }
-                .frame(height: viewStore.mode == .none ? 0 : 200)
-                .opacity(viewStore.mode == .none ? 0 : 1)
+                .frame(height: viewStore.mode != .start ? 0 : 200)
+                .opacity(viewStore.mode != .start ? 0 : 1)
+                
+                HStack {
+                    Spacer()
+                    
+                    DatePicker("", selection: viewStore.binding(get: \.file.endDate, send: EditFile.Action.endDateChanged))
+                        .datePickerStyle(.wheel)
+                    
+                    Spacer()
+                }
+                .frame(height: viewStore.mode != .end ? 0 : 200)
+                .opacity(viewStore.mode != .end ? 0 : 1)
                 
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
@@ -144,16 +155,18 @@ public struct EditFileView: View {
                         if viewStore.file.repeatStyle == .daily {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(alignment: .center) {
-                                    ForEach(Calendar.current.shortStandaloneWeekdaySymbols, id: \.hashValue) { week in
+                                    ForEach(Array(Calendar.current.shortStandaloneWeekdaySymbols.enumerated()), id: \.offset) { index, week in
                                         Button {
-//                                            viewStore.send(.repeatStyleChanged(repeatStyle))
+                                            viewStore.send(.weekdayChanged(Int(index) + 1))
                                         } label: {
+                                            let weekdays = WeekdayManager.toWeekdays(uint8: UInt8(viewStore.state.file.weekdays))
+                                            
                                             Text(week)
                                                 .font(.caption2)
-                                                .foregroundColor(true ? .black : .gray)
+                                                .foregroundColor(weekdays.contains(index + 1) ? .black : .gray)
                                                 .padding(.horizontal, 10)
                                                 .padding(.vertical, 5)
-                                                .background(true ? Color(.systemGray4) : Color(.systemGray6))
+                                                .background(weekdays.contains(index + 1) ? Color(.systemGray4) : Color(.systemGray6))
                                                 .cornerRadius(7, corners: .allCorners)
                                         }
                                     }

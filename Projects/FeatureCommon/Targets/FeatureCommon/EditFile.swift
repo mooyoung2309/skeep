@@ -39,7 +39,9 @@ public struct EditFile: ReducerProtocol {
         case titleChanged(String)
         case contentChanged(String)
         case colorChanged(Color)
-        case dateChanged(Date)
+        case startDateChanged(Date)
+        case endDateChanged(Date)
+//        case dateChanged(Date)
         case repeatStyleChanged(RepeatStyle)
         case weekdayChanged(Int)
         case calendarStyleChanged(CalendarStyle)
@@ -49,7 +51,7 @@ public struct EditFile: ReducerProtocol {
         case tapStartDateView
         case tapEndDateView
         
-        case setMode(Mode)
+//        case setMode(Mode)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -61,6 +63,7 @@ public struct EditFile: ReducerProtocol {
             
         case .createOrUpdateRequest:
             fileClient.createOrUpdateFile(state.file)
+            state.mode = .none
             return .none
             
         case let .titleChanged(title):
@@ -75,27 +78,41 @@ public struct EditFile: ReducerProtocol {
             state.file.rgb = color.rgb()
             return .send(.createOrUpdateRequest)
             
-        case let .dateChanged(date):
-            switch state.mode {
-            case .start: state.file.startDate = date
-            case .end: state.file.endDate = date
-            case .none: break
-            }
-            state.date = date
+        case let .startDateChanged(date):
+            state.file.startDate = date
+            return .send(.createOrUpdateRequest)
             
-            return .concatenate([
-                .send(.setMode(.none), animation: .default),
-                .send(.createOrUpdateRequest)
-            ])
+        case let .endDateChanged(date):
+            state.file.endDate = date
+            return .send(.createOrUpdateRequest)
+            
+//        case let .dateChanged(date):
+//            switch state.mode {
+//            case .start: state.file.startDate = date
+//            case .end: state.file.endDate = date
+//            case .none: break
+//            }
+//            state.date = date
+//
+//            return .concatenate([
+//                .send(.setMode(.none), animation: .default),
+//                .send(.createOrUpdateRequest)
+//            ])
             
         case let .repeatStyleChanged(repeatStyle):
             state.file.repeatStyle = repeatStyle
             return .send(.createOrUpdateRequest)
             
         case let .weekdayChanged(weekday):
-//            WeekdayManager.toWeekdays(weekdays: )
-//            WeekdayManager.convert(from: state.file.weekdays, for: 0)
-            return .none
+            var weekdays: [Int] = WeekdayManager.toWeekdays(uint8: UInt8(state.file.weekdays))
+            
+            if weekdays.contains(weekday) {
+                weekdays.removeAll(where: { $0 == weekday })
+            } else {
+                weekdays.append(weekday)
+            }
+            state.file.weekdays = WeekdayManager.toInt(weekdays: weekdays)
+            return .send(.createOrUpdateRequest)
             
         case let .calendarStyleChanged(calendarStyle):
             if state.file.calendarStyle == calendarStyle {
@@ -121,9 +138,9 @@ public struct EditFile: ReducerProtocol {
             state.mode = .end
             return .none
             
-        case let .setMode(mode):
-            state.mode = mode
-            return .none
+//        case let .setMode(mode):
+//            state.mode = mode
+//            return .none
         }
     }
 }

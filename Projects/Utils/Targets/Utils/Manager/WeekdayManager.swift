@@ -22,7 +22,27 @@ public class WeekdayManager {
         }
     }
     
-    public static func toWeekdays(weekdays: UInt8) -> [Int] {
-        return [0]
+    public static func toInt(weekdays: [Int]) -> Int {
+        var bit: UInt8 = 0b00000000
+        
+        for weekday in weekdays {
+            bit = bit | self.toUInt8(weekday: weekday)
+        }
+        
+        return Int(bit)
+    }
+    
+    public static func toWeekdays(uint8: UInt8) -> [Int] {
+        var weekdays: [Int] = []
+        var bit = uint8
+        
+        for i in 1...7 {
+            if bit & 0b00000001 == 1 {
+                weekdays.append(i)
+            }
+            bit = bit >> 1
+        }
+        
+        return weekdays
     }
 }

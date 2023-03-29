@@ -10,7 +10,6 @@ import SwiftUI
 import FeatureMemo
 import FeatureCalendar
 import FeatureTodo
-import FeatureHabit
 import FeatureAccount
 
 public struct ContentView: View {

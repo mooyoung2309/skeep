@@ -107,13 +107,19 @@ public struct EditFileView: View {
                             .cornerRadius(10, corners: .allCorners)
                     }
                 }
-                .padding(.horizontal)
+                .padding([.top, .horizontal])
                 
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.file.startDate, send: EditFile.Action.startDateChanged))
-                        .datePickerStyle(.wheel)
+                    DatePicker(
+                        "",
+                        selection: viewStore.binding(get: \.file.startDate, send: EditFile.Action.startDateChanged)
+                    )
+                    .datePickerStyle(.wheel)
+                    .onAppear {
+                        UIDatePicker.appearance().minuteInterval = 10
+                    }
                     
                     Spacer()
                 }
@@ -123,8 +129,14 @@ public struct EditFileView: View {
                 HStack {
                     Spacer()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.file.endDate, send: EditFile.Action.endDateChanged))
-                        .datePickerStyle(.wheel)
+                    DatePicker(
+                        "",
+                        selection: viewStore.binding(get: \.file.endDate, send: EditFile.Action.endDateChanged)
+                    )
+                    .datePickerStyle(.wheel)
+                    .onAppear {
+                        UIDatePicker.appearance().minuteInterval = 10
+                    }
                     
                     Spacer()
                 }

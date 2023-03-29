@@ -123,6 +123,13 @@ extension Date {
         return date
     }
     
+    public func add(byAdding component: Calendar.Component, value: Int) -> Date {
+        let cal = Calendar.current
+        let date = cal.date(byAdding: component, value: value, to: self)!
+        
+        return date
+    }
+    
     public static func toString(format: String = "yyyy.MM.dd (E)", date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format

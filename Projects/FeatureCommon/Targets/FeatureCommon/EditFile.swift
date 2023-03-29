@@ -80,10 +80,16 @@ public struct EditFile: ReducerProtocol {
             
         case let .startDateChanged(date):
             state.file.startDate = date
+            if date > state.file.endDate {
+                state.file.endDate = date.add(byAdding: .hour, value: 1)
+            }
             return .send(.createOrUpdateRequest)
             
         case let .endDateChanged(date):
             state.file.endDate = date
+            if date < state.file.startDate {
+                state.file.startDate = date.add(byAdding: .hour, value: -1)
+            }
             return .send(.createOrUpdateRequest)
             
 //        case let .dateChanged(date):

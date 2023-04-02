@@ -15,6 +15,7 @@ import ComposableArchitecture
 public struct EditFileView: View {
     let store: StoreOf<EditFile>
     @State private var animate = false
+    @State var toggle1On = false
     
     public init(store: StoreOf<EditFile>) {
         self.store = store
@@ -143,7 +144,7 @@ public struct EditFileView: View {
                 .frame(height: viewStore.mode != .end ? 0 : 200)
                 .opacity(viewStore.mode != .end ? 0 : 1)
                 
-                /*TODO: 우선 출시를 위한 반복 기능 주석 처리
+                //TODO: 우선 출시를 위한 반복 기능 주석 처리
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
                     
@@ -165,7 +166,10 @@ public struct EditFileView: View {
                                 Spacer()
                             }
                         }
-                        if viewStore.file.repeatStyle == .daily {
+                        
+                        let repeatStype = viewStore.file.repeatStyle
+                        
+                        if repeatStype == .daily {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(alignment: .center) {
                                     ForEach(Array(Calendar.current.shortStandaloneWeekdaySymbols.enumerated()), id: \.offset) { index, week in
@@ -188,10 +192,33 @@ public struct EditFileView: View {
                                 }
                             }
                         }
+                        
+                        HStack {
+                            Spacer()
+
+                            DatePicker(
+                                "",
+                                selection: viewStore.binding(get: \.file.startDate, send: EditFile.Action.startDateChanged),
+                                displayedComponents: [.date]
+                            )
+
+                            Button(action: {
+                                viewStore.send(.calendarToggleChanged)
+                            }, label: {
+                                Label("Finish", systemImage: "clock.arrow.circlepath")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.calendarStyle == .none ? .gray : .black)
+                                    .padding(10)
+                                    .background(viewStore.file.calendarStyle == .none ? Color(.systemGray6) : Color(.systemGray4))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                        }
+                        .opacity(viewStore.file.repeatStyle == .none ? 0 : 1)
+                        .disabled(viewStore.file.repeatStyle == .none)
                     }
                 }
                 .padding()
-                 */
+                
                 
                 HStack {
                     Label("", systemImage: "archivebox")

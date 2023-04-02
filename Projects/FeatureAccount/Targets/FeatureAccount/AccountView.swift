@@ -13,7 +13,7 @@ public struct AccountView: View {
     
     public var body: some View {
         ScrollView {
-            
+            Text("Coming Soon")
         }
     }
 }

@@ -22,7 +22,7 @@ public struct TodoFile: Equatable, Identifiable {
 
 extension File {
     public func isDone(date: Date) -> Bool {
-        return self.dates.contains(where: { $0.isDate(inSameDayAs: date) })
+        return self.doneDates.contains(where: { $0.isDate(inSameDayAs: date) })
     }
 }
 

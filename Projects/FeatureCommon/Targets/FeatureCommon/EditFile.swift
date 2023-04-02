@@ -41,9 +41,14 @@ public struct EditFile: ReducerProtocol {
         case colorChanged(Color)
         case startDateChanged(Date)
         case endDateChanged(Date)
-        case repeatStyleChanged(RepeatStyle)
+        case repeatFinishDateChanged(Date)
         case weekdayChanged(Int)
+        
+        case repeatStyleChanged(RepeatStyle)
         case calendarStyleChanged(CalendarStyle)
+        
+        case isAlldayToggleChanged
+        case isUseFinishDateChanged
         case calendarToggleChanged
         case todoToggleChanged
         
@@ -89,6 +94,13 @@ public struct EditFile: ReducerProtocol {
             }
             return .send(.createOrUpdateRequest)
             
+        case let .repeatFinishDateChanged(date):
+            state.file.repeatFinishDate = date
+            if date < state.file.startDate {
+                state.file.repeatFinishDate = state.file.startDate.addMonth(value: 1)
+            }
+            return .send(.createOrUpdateRequest)
+            
         case let .repeatStyleChanged(repeatStyle):
             state.file.repeatStyle = repeatStyle
             return .send(.createOrUpdateRequest)
@@ -110,6 +122,14 @@ public struct EditFile: ReducerProtocol {
             } else {
                 state.file.calendarStyle = calendarStyle
             }
+            return .send(.createOrUpdateRequest)
+            
+        case .isAlldayToggleChanged:
+            state.file.isAllday.toggle()
+            return .send(.createOrUpdateRequest)
+            
+        case .isUseFinishDateChanged:
+            state.file.isUseFinishDate.toggle()
             return .send(.createOrUpdateRequest)
             
         case .calendarToggleChanged:

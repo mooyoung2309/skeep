@@ -21,6 +21,10 @@ extension Date {
         return dates
     }
     
+    public static func - (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+    
     public var year: Int {
         return Calendar.current.component(.year, from: self)
     }
@@ -35,6 +39,12 @@ extension Date {
     
     public var weekday: Int {
         return Calendar.current.component(.weekday, from: self)
+    }
+    
+    public func day(to date: Date) -> Int {
+        let numberOfDays = Calendar.current.dateComponents([.day], from: self, to: date)
+        
+        return numberOfDays.day! + 1
     }
     
     public func isDate(inSameDayAs date: Date) -> Bool {

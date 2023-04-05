@@ -83,7 +83,7 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
+                LazyVGrid(columns: Array(repeating: .init(.fixed(50), spacing: .zero), count: 7), spacing: .zero) {
                     ForEach(weeks, id: \.self) { week in
                         VStack {
                             Text(week)
@@ -108,8 +108,14 @@ public struct CalendarView: View {
                                 Spacer()
                             }
                             
-                            ForEach(calendarFile.files.prefix(3)) { file in
-                                FileLabelView(file: file)
+                            ZStack(alignment: .leading) {
+                                ForEach(Array(calendarFile.files.prefix(3).enumerated()), id: \.element) { index, file in
+                                    if file.isHead(date: calendarFile.date) {
+                                        FileLabelView(file: file)
+                                            .frame(width: file.width)
+                                            .offset(file.offset(date: calendarFile.date, index: index))
+                                    }
+                                }
                             }
                             
                             Spacer()

@@ -41,17 +41,19 @@ public struct EditFile: ReducerProtocol {
         case colorChanged(Color)
         case startDateChanged(Date)
         case endDateChanged(Date)
-//        case dateChanged(Date)
-        case repeatStyleChanged(RepeatStyle)
+        case repeatFinishDateChanged(Date)
         case weekdayChanged(Int)
+        
+        case repeatStyleChanged(RepeatStyle)
         case calendarStyleChanged(CalendarStyle)
+        
+        case isAlldayToggleChanged
+        case isUseFinishDateChanged
         case calendarToggleChanged
         case todoToggleChanged
         
         case tapStartDateView
         case tapEndDateView
-        
-//        case setMode(Mode)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -92,18 +94,12 @@ public struct EditFile: ReducerProtocol {
             }
             return .send(.createOrUpdateRequest)
             
-//        case let .dateChanged(date):
-//            switch state.mode {
-//            case .start: state.file.startDate = date
-//            case .end: state.file.endDate = date
-//            case .none: break
-//            }
-//            state.date = date
-//
-//            return .concatenate([
-//                .send(.setMode(.none), animation: .default),
-//                .send(.createOrUpdateRequest)
-//            ])
+        case let .repeatFinishDateChanged(date):
+            state.file.repeatFinishDate = date
+            if date < state.file.startDate {
+                state.file.repeatFinishDate = state.file.startDate.addMonth(value: 1)
+            }
+            return .send(.createOrUpdateRequest)
             
         case let .repeatStyleChanged(repeatStyle):
             state.file.repeatStyle = repeatStyle
@@ -128,6 +124,14 @@ public struct EditFile: ReducerProtocol {
             }
             return .send(.createOrUpdateRequest)
             
+        case .isAlldayToggleChanged:
+            state.file.isAllday.toggle()
+            return .send(.createOrUpdateRequest)
+            
+        case .isUseFinishDateChanged:
+            state.file.isUseFinishDate.toggle()
+            return .send(.createOrUpdateRequest)
+            
         case .calendarToggleChanged:
             state.file.calendarStyle = state.file.calendarStyle == .none ? .default : .none
             return .send(.createOrUpdateRequest)
@@ -143,10 +147,6 @@ public struct EditFile: ReducerProtocol {
         case .tapEndDateView:
             state.mode = .end
             return .none
-            
-//        case let .setMode(mode):
-//            state.mode = mode
-//            return .none
         }
     }
 }

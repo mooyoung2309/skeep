@@ -20,6 +20,12 @@ public struct TodoFile: Equatable, Identifiable {
     }
 }
 
+extension File {
+    public func isDone(date: Date) -> Bool {
+        return self.doneDates.contains(where: { $0.isDate(inSameDayAs: date) })
+    }
+}
+
 extension TodoFile {
     public static let mock = TodoFile(
         id: UUID().uuidString,

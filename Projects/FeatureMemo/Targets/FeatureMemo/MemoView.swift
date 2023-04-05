@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Core
+import FeatureAccount
 
 import ComposableArchitecture
 
@@ -45,7 +46,7 @@ public struct MemoView: View {
                         })
                         .alert("folder", isPresented: viewStore.binding(get: \.isAlertPresented, send: Memo.Action.setAlert(isPresented:)), actions: {
                             TextField("name", text: viewStore.binding(get: \.directoryName, send: Memo.Action.directoryNameChanged))
-
+                            
                             Button("ADD", action: {
                                 viewStore.send(.tapAddButton)
                             })
@@ -78,6 +79,19 @@ public struct MemoView: View {
                             }
                         }
                     })
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewStore.send(.setAccountSheet(isPresented: true))
+                    }, label: {
+                        Image(systemName: "person.crop.circle")
+                            .fontWeight(.bold)
+                    })
+                }
+            }
+            .sheet(isPresented: viewStore.binding(get: \.isAccountSheetPresented, send: Memo.Action.setAccountSheet(isPresented:))) {
+                AccountView()
             }
             .task {
                 viewStore.send(.refresh)

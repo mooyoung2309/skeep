@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FeatureCommon
+import FeatureAccount
 import Core
 import Utils
 
@@ -67,6 +68,7 @@ struct FileLabelView: View {
             
             Spacer()
         }
+        .background(file.term > 1 ? Color(rgb: file.rgb).opacity(0.15) : .clear)
     }
 }
 
@@ -107,8 +109,14 @@ public struct CalendarView: View {
                                 Spacer()
                             }
                             
-                            ForEach(calendarFile.files.prefix(3)) { file in
-                                FileLabelView(file: file)
+                            ZStack(alignment: .leading) {
+                                ForEach(Array(calendarFile.files.prefix(3).enumerated()), id: \.element) { index, file in
+                                    if file.isHead(date: calendarFile.date) {
+                                        FileLabelView(file: file)
+                                            .frame(width: file.width)
+                                            .offset(file.offset(date: calendarFile.date, index: index))
+                                    }
+                                }
                             }
                             
                             Spacer()
@@ -119,7 +127,7 @@ public struct CalendarView: View {
                         .frame(height: UIScreen.screenHeight * 0.08)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 10)
                 
                 VStack {
                     HStack {
@@ -177,10 +185,22 @@ public struct CalendarView: View {
                             .fontWeight(.bold)
                     })
                 }
+                
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewStore.send(.setAccountSheet(isPresented: true))
+                    }, label: {
+                        Image(systemName: "person.crop.circle")
+                            .fontWeight(.bold)
+                    })
+                }
             }
             .sheet(isPresented: viewStore.binding(get: \.isSheetPresented, send: Calendar.Action.setSheet(isPresented:))) {
                 EditFileView(store: self.store.scope(state: \.editFile, action: Calendar.Action.editFile))
                     .presentationDetents([.medium])
+            }
+            .sheet(isPresented: viewStore.binding(get: \.isAccountSheetPresented, send: Calendar.Action.setAccountSheet(isPresented:))) {
+                AccountView()
             }
             .task {
                 viewStore.send(.refresh, animation: .default)

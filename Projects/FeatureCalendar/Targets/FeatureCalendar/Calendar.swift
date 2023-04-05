@@ -22,6 +22,7 @@ public struct Calendar: ReducerProtocol {
         var calendarFiles: [CalendarFile] = []
         var calendarFile: CalendarFile?
         var isSheetPresented: Bool = false
+        var isAccountSheetPresented: Bool = false
         
         public init() {
             self.editFile = .init(tab: .calendar, file: .init())
@@ -44,6 +45,7 @@ public struct Calendar: ReducerProtocol {
         case setDate(Date)
         case setCalendarFile(CalendarFile?)
         case setSheet(isPresented: Bool)
+        case setAccountSheet(isPresented: Bool)
     }
     
     @Dependency(\.fileClient) var fileClient
@@ -96,6 +98,10 @@ public struct Calendar: ReducerProtocol {
             case let .setSheet(isPresented):
                 state.isSheetPresented = isPresented
                 return .send(.refresh)
+                
+            case let .setAccountSheet(isPresented):
+                state.isAccountSheetPresented = isPresented
+                return .none
             }
         }
     }    

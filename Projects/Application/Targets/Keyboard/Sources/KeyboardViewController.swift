@@ -12,7 +12,7 @@ class KeyboardViewController: UIInputViewController {
 
     @IBOutlet var nextKeyboardButton: UIButton!
     
-    let textfield = UITextField()
+    let tempView: UIView = .init(frame: .init(x: 0, y: 0, width: 100, height: 200))
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
@@ -37,15 +37,10 @@ class KeyboardViewController: UIInputViewController {
         self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
-        let vc = UIViewController()
-        vc.view.addSubview(textfield)
         
-        print("[D] \(textfield.textInputView)")
-        print("[D] \(textfield.inputView)")
-        print("[D] \(textfield.inputViewController)")
-        print("[D] \(textfield.inputAccessoryView)")
+        tempView.backgroundColor = .red
         
-        self.present(vc, animated: true)
+        self.view.addSubview(tempView)
         
         
 //        self.view.addSubview(textfield)

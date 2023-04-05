@@ -20,8 +20,13 @@ public struct File: Equatable, Identifiable, Hashable {
     public var editDate: Date
     public var startDate: Date
     public var endDate: Date
+    public var repeatFinishDate: Date
     public var notificationDate: Date?
     public var weekdays: Int
+    public var doneDates: [Date]
+    public var tags: [Tag]
+    public var isAllday: Bool
+    public var isUseFinishDate: Bool
     public var repeatStyle: RepeatStyle
     public var calendarStyle: CalendarStyle
     public var todoStyle: TodoStyle
@@ -36,8 +41,13 @@ public struct File: Equatable, Identifiable, Hashable {
         editDate: Date = Date(),
         startDate: Date = Date(),
         endDate: Date = Date(),
+        repeatFinishDate: Date = Date().addMonth(value: 1),
         notificationDate: Date? = nil,
         weekdays: Int = 0,
+        dates: [Date] = [],
+        tags: [Tag] = [],
+        isAllday: Bool = false,
+        isUseFinishDate: Bool = false,
         repeatStyle: RepeatStyle = .none,
         calendarStyle: CalendarStyle = .none,
         todoStyle: TodoStyle = .none
@@ -51,8 +61,13 @@ public struct File: Equatable, Identifiable, Hashable {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
+        self.repeatFinishDate = repeatFinishDate
         self.notificationDate = notificationDate
         self.weekdays = weekdays
+        self.doneDates = dates
+        self.tags = tags
+        self.isAllday = isAllday
+        self.isUseFinishDate = isUseFinishDate
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = todoStyle
@@ -84,6 +99,12 @@ public struct File: Equatable, Identifiable, Hashable {
     }
     
     private func toRealm() -> FileRealm {
+        let dateList = List<Date>()
+        let tagList = List<TagRealm>()
+        
+        dateList.append(objectsIn: doneDates)
+        tagList.append(objectsIn: tags.map { $0.toRealm() })
+
         return .init(
             id: id,
             directory: directory?.toRealm(),
@@ -94,8 +115,13 @@ public struct File: Equatable, Identifiable, Hashable {
             editDate: editDate,
             startDate: startDate,
             endDate: endDate,
+            repeatFinishDate: repeatFinishDate,
             notificationDate: notificationDate,
             weekdays: weekdays,
+            dates: dateList,
+            tags: tagList,
+            isAllday: isAllday,
+            isUseFinishDate: isUseFinishDate,
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
             toDoStyle: todoStyle
@@ -113,8 +139,13 @@ public class FileRealm: Object {
     @Persisted var editDate: Date
     @Persisted var startDate: Date
     @Persisted var endDate: Date
+    @Persisted var repeatFinishDate: Date
     @Persisted var notificationDate: Date?
     @Persisted var weekdays: Int
+    @Persisted var dates: List<Date>
+    @Persisted var tags: List<TagRealm>
+    @Persisted var isAllDay: Bool
+    @Persisted var isUseFinishDate: Bool
     @Persisted var repeatStyle: RepeatStyle
     @Persisted var calendarStyle: CalendarStyle
     @Persisted var todoStyle: TodoStyle
@@ -129,8 +160,13 @@ public class FileRealm: Object {
         editDate: Date,
         startDate: Date,
         endDate: Date,
+        repeatFinishDate: Date,
         notificationDate: Date?,
         weekdays: Int,
+        dates: List<Date>,
+        tags: List<TagRealm>,
+        isAllday: Bool,
+        isUseFinishDate: Bool,
         repeatStyle: RepeatStyle,
         calendarStyle: CalendarStyle,
         toDoStyle: TodoStyle
@@ -146,8 +182,13 @@ public class FileRealm: Object {
         self.editDate = editDate
         self.startDate = startDate
         self.endDate = endDate
+        self.repeatFinishDate = repeatFinishDate
         self.notificationDate = notificationDate
         self.weekdays = weekdays
+        self.dates = dates
+        self.tags = tags
+        self.isAllDay = isAllday
+        self.isUseFinishDate = isUseFinishDate
         self.repeatStyle = repeatStyle
         self.calendarStyle = calendarStyle
         self.todoStyle = toDoStyle
@@ -166,6 +207,10 @@ public class FileRealm: Object {
             endDate: endDate,
             notificationDate: notificationDate,
             weekdays: weekdays,
+            dates: Array(dates),
+            tags: tags.map { $0.toDomain() },
+            isAllday: isAllDay,
+            isUseFinishDate: isUseFinishDate,
             repeatStyle: repeatStyle,
             calendarStyle: calendarStyle,
             todoStyle: todoStyle

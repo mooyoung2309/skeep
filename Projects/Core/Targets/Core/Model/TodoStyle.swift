@@ -13,7 +13,6 @@ import RealmSwift
 public enum TodoStyle: Int, PersistableEnum {
     case `default`
     case none
-    case done
     
     public var isShow: Bool {
         if self == .none {

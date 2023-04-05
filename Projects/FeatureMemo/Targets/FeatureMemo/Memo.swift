@@ -18,8 +18,10 @@ public struct Memo: ReducerProtocol {
         var directoryList: [Directory] = []
         var fileList: [File] = []
         var searchQuery: String = ""
-        var isAlertPresented: Bool = false
         var directoryName: String = ""
+        
+        var isAlertPresented: Bool = false
+        var isAccountSheetPresented: Bool = false
         
         public init() {}
     }
@@ -33,7 +35,9 @@ public struct Memo: ReducerProtocol {
         case directoryNameChanged(String)
         case tapAddButton
         case createOrUpdateDirectory(Directory)
+        
         case setAlert(isPresented: Bool)
+        case setAccountSheet(isPresented: Bool)
     }
     
     @Dependency(\.directoryClient) var directoryClient
@@ -79,6 +83,10 @@ public struct Memo: ReducerProtocol {
             
         case let .setAlert(isPresented):
             state.isAlertPresented = isPresented
+            return .none
+            
+        case let .setAccountSheet(isPresented):
+            state.isAccountSheetPresented = isPresented
             return .none
         }
     }

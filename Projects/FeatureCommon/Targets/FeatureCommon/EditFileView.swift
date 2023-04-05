@@ -15,6 +15,7 @@ import ComposableArchitecture
 public struct EditFileView: View {
     let store: StoreOf<EditFile>
     @State private var animate = false
+    @State var toggle1On = false
     
     public init(store: StoreOf<EditFile>) {
         self.store = store
@@ -39,6 +40,7 @@ public struct EditFileView: View {
                     .padding([.top, .horizontal])
                 }
                 
+                //MARK: Color
                 HStack {
                     Label("", systemImage: "paintpalette")
                     
@@ -60,23 +62,32 @@ public struct EditFileView: View {
                 }
                 .padding()
                 
+                //MARK: Calendar Date
                 HStack {
                     Label("", systemImage: "clock")
                     
                     VStack(alignment: .leading) {
-                        Text("\(viewStore.file.startDate.toString(format: "MM-dd (E)"))")
-                            .font(.subheadline)
-                            .fontWeight(.light)
-                        
-                        Text("\(viewStore.file.startDate.toString(format: "HH:mm a"))")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                        if !viewStore.file.isAllday {
+                            Text("\(viewStore.file.startDate.toString(format: "MM-dd (E)"))")
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                            
+                            Text("\(viewStore.file.startDate.toString(format: "HH:mm a"))")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                        } else {
+                            Text("\(viewStore.file.startDate.toString(format: "MM-dd (E)"))")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                        }
                     }
                     .onTapGesture {
                         viewStore.send(.tapStartDateView, animation: .default)
                     }
                     
                     Image(systemName: "chevron.right")
+                        .disabled(viewStore.file.isAllday)
+                        .opacity(viewStore.file.isAllday ? 0 : 1)
                     
                     VStack(alignment: .leading) {
                         Text("\(viewStore.file.endDate.toString(format: "MM-dd (E)"))")
@@ -93,22 +104,25 @@ public struct EditFileView: View {
                         }
                         viewStore.send(.tapEndDateView, animation: .default)
                     }
+                    .disabled(viewStore.file.isAllday)
+                    .opacity(viewStore.file.isAllday ? 0 : 1)
                     
                     Spacer()
                     
                     Button {
-                        viewStore.send(.calendarStyleChanged(.allday))
+                        viewStore.send(.isAlldayToggleChanged, animation: .default)
                     } label: {
                         Text("All day")
                             .font(.caption)
-                            .foregroundColor(viewStore.file.calendarStyle == .allday ? .black : .gray)
+                            .foregroundColor(viewStore.file.isAllday ? .black : .gray)
                             .padding(10)
-                            .background(viewStore.file.calendarStyle == .allday ? Color(.systemGray4) : Color(.systemGray6))
+                            .background(viewStore.file.isAllday ? Color(.systemGray4) : Color(.systemGray6))
                             .cornerRadius(10, corners: .allCorners)
                     }
                 }
                 .padding([.top, .horizontal])
                 
+                //MARK: DatePicker
                 HStack {
                     Spacer()
                     
@@ -143,54 +157,7 @@ public struct EditFileView: View {
                 .frame(height: viewStore.mode != .end ? 0 : 200)
                 .opacity(viewStore.mode != .end ? 0 : 1)
                 
-                HStack {
-                    Label("", systemImage: "arrow.2.squarepath")
-                    
-                    VStack {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(alignment: .center) {
-                                ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
-                                    Button {
-                                        viewStore.send(.repeatStyleChanged(repeatStyle), animation: .default)
-                                    } label: {
-                                        Text(repeatStyle.title)
-                                            .font(.caption)
-                                            .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
-                                            .padding(10)
-                                            .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
-                                            .cornerRadius(10, corners: .allCorners)
-                                    }
-                                }
-                                Spacer()
-                            }
-                        }
-                        if viewStore.file.repeatStyle == .daily {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(alignment: .center) {
-                                    ForEach(Array(Calendar.current.shortStandaloneWeekdaySymbols.enumerated()), id: \.offset) { index, week in
-                                        Button {
-                                            viewStore.send(.weekdayChanged(Int(index) + 1))
-                                        } label: {
-                                            let weekdays = WeekdayManager.toWeekdays(uint8: UInt8(viewStore.state.file.weekdays))
-                                            
-                                            Text(week)
-                                                .font(.caption2)
-                                                .foregroundColor(weekdays.contains(index + 1) ? .black : .gray)
-                                                .padding(.horizontal, 10)
-                                                .padding(.vertical, 5)
-                                                .background(weekdays.contains(index + 1) ? Color(.systemGray4) : Color(.systemGray6))
-                                                .cornerRadius(7, corners: .allCorners)
-                                        }
-                                    }
-                                    
-                                    Spacer()
-                                }
-                            }
-                        }
-                    }
-                }
-                .padding()
-                
+                //MARK: Archive
                 HStack {
                     Label("", systemImage: "archivebox")
                     
@@ -220,6 +187,82 @@ public struct EditFileView: View {
 
                             Spacer()
                         }
+                    }
+                }
+                .padding()
+                
+                //MARK: 반복 기능
+                HStack {
+                    Label("", systemImage: "arrow.2.squarepath")
+                    
+                    VStack {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .center) {
+                                ForEach(RepeatStyle.allCases, id: \.rawValue) { repeatStyle in
+                                    Button {
+                                        viewStore.send(.repeatStyleChanged(repeatStyle), animation: .default)
+                                    } label: {
+                                        Text(repeatStyle.title)
+                                            .font(.caption)
+                                            .foregroundColor(viewStore.file.repeatStyle == repeatStyle ? .black : .gray)
+                                            .padding(10)
+                                            .background(viewStore.file.repeatStyle == repeatStyle ? Color(.systemGray4) : Color(.systemGray6))
+                                            .cornerRadius(10, corners: .allCorners)
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                        
+                        let repeatStype = viewStore.file.repeatStyle
+                        
+                        if repeatStype == .daily {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(alignment: .center) {
+                                    ForEach(Array(Calendar.current.shortStandaloneWeekdaySymbols.enumerated()), id: \.offset) { index, week in
+                                        Button {
+                                            viewStore.send(.weekdayChanged(Int(index) + 1))
+                                        } label: {
+                                            let weekdays = WeekdayManager.toWeekdays(uint8: UInt8(viewStore.state.file.weekdays))
+                                            
+                                            Text(week)
+                                                .font(.caption2)
+                                                .foregroundColor(weekdays.contains(index + 1) ? .black : .gray)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 5)
+                                                .background(weekdays.contains(index + 1) ? Color(.systemGray4) : Color(.systemGray6))
+                                                .cornerRadius(7, corners: .allCorners)
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                }
+                            }
+                        }
+                        
+                        HStack {
+                            Spacer()
+
+                            DatePicker(
+                                "",
+                                selection: viewStore.binding(get: \.file.repeatFinishDate, send: EditFile.Action.repeatFinishDateChanged),
+                                displayedComponents: [.date]
+                            )
+                            .foregroundColor(viewStore.file.isUseFinishDate ? .black : .gray)
+
+                            Button(action: {
+                                viewStore.send(.isUseFinishDateChanged)
+                            }, label: {
+                                Label("Finish", systemImage: "clock.arrow.circlepath")
+                                    .font(.caption)
+                                    .foregroundColor(viewStore.file.isUseFinishDate ? .black : .gray)
+                                    .padding(10)
+                                    .background(viewStore.file.isUseFinishDate ? Color(.systemGray4) : Color(.systemGray6))
+                                    .cornerRadius(10, corners: .allCorners)
+                            })
+                        }
+                        .opacity(viewStore.file.repeatStyle == .none ? 0 : 1)
+                        .disabled(viewStore.file.repeatStyle == .none)
                     }
                 }
                 .padding()

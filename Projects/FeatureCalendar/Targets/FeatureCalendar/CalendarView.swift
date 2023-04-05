@@ -68,6 +68,7 @@ struct FileLabelView: View {
             
             Spacer()
         }
+        .background(file.term > 1 ? Color(rgb: file.rgb).opacity(0.15) : .clear)
     }
 }
 
@@ -83,7 +84,7 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                LazyVGrid(columns: Array(repeating: .init(.fixed(50), spacing: .zero), count: 7), spacing: .zero) {
+                LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
                     ForEach(weeks, id: \.self) { week in
                         VStack {
                             Text(week)
@@ -126,7 +127,7 @@ public struct CalendarView: View {
                         .frame(height: UIScreen.screenHeight * 0.08)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 10)
                 
                 VStack {
                     HStack {

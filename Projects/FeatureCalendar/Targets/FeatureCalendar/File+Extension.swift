@@ -18,25 +18,17 @@ extension File {
     
     func offset(date: Date, index: Int) -> CGSize {
         if date.weekday == 1 {
-            return .init(width: UIScreen.screenWidth / 7.0, height: self.height(index: index))
+            return .init(width: (UIScreen.screenWidth - 20.0) / 7.0, height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
         } else {
-            return .init(width: 0.0, height: self.height(index: index))
+            return .init(width: 0.0, height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
         }
     }
     
-    func offset(index: Int) -> CGSize {
-        if startDate.day(to: endDate) > 1 {
-            return .init(width: UIScreen.screenWidth / 7.0, height: self.height(index: index))
-        } else {
-            return .init(width: 0.0, height: self.height(index: index))
-        }
+    var term: Int {
+        return startDate.day(to: endDate)
     }
     
     var width: CGFloat {
-        return UIScreen.screenWidth / 7.0 * CGFloat(startDate.day(to: endDate))
-    }
-    
-    func height(index: Int) -> CGFloat {
-        return UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index)
+        return (UIScreen.screenWidth - 20.0) / 7.0 * CGFloat(startDate.day(to: endDate))
     }
 }

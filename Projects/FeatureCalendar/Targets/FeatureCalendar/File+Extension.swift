@@ -17,8 +17,8 @@ extension File {
     }
     
     func offset(date: Date, index: Int) -> CGSize {
-        if date.weekday == 1 {
-            return .init(width: (UIScreen.screenWidth - 20.0) / 7.0, height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
+        if self.term > 1 {
+            return .init(width: (UIScreen.screenWidth - 20.0) / 7.0 / 2.0 * CGFloat(term - 1), height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
         } else {
             return .init(width: 0.0, height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
         }

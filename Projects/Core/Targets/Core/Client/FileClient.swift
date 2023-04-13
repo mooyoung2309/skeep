@@ -59,10 +59,21 @@ extension FileClient: DependencyKey {
         fetchCalendarFiles: { date in
             let dates = date.monthDates()
             let files = File.fetch().filter({ $0.calendarStyle.isShow })
-            let calendarFiles = dates.map({ date in
-                let filterdFiles = files.filter({ date.isDate(start: $0.startDate, end: $0.endDate) })
-                return CalendarFile(id: UUID().uuidString, date: date, files: filterdFiles)
+            var calendarFiles = dates.map({ date in
+                return CalendarFile(id: UUID().uuidString, date: date, files: [])
             })
+            
+            for (i, calendarFile) in calendarFiles.enumerated() {
+                let filteredFiles = files.filter({ calendarFile.date.isDate(start: $0.startDate, end: $0.endDate) })
+                
+                calendarFiles[safe: i]?.files = filteredFiles
+                
+                for (j, file) in filteredFiles.prefix(3).enumerated() {
+                    for k in i..<(i + file.startDate.day(to: file.endDate)) {
+                        calendarFiles[safe: k]?.appendVisiableFiles(visiableFile: file, index: j)
+                    }
+                }
+            }
             
             return calendarFiles
         },

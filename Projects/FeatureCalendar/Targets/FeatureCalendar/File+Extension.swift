@@ -13,14 +13,38 @@ import UIKit
 
 extension File {
     func isHead(date: Date) -> Bool {
-        return startDate.isDate(inSameDayAs: date)
+        return startDate.isDate(inSameDayAs: date) || date.weekday == 1
     }
     
     func offset(date: Date, index: Int) -> CGSize {
-        if self.term > 1 {
+        let term = self.term(date: date)
+        
+        print("[D] \(title) -> \(term)")
+        
+        if term > 1 {
             return .init(width: (UIScreen.screenWidth - 20.0) / 7.0 / 2.0 * CGFloat(term - 1), height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
         } else {
             return .init(width: 0.0, height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
+        }
+    }
+    
+    func term(date: Date) -> Int {
+        if startDate.weekOfMonth == endDate.weekOfMonth {
+            return self.term
+        } else if date.weekOfMonth == startDate.weekOfMonth {
+            return 8 - startDate.weekday
+        } else if date.weekOfMonth == endDate.weekOfMonth {
+            return endDate.weekday
+        } else {
+            return 7
+        }
+        
+        if date.weekOfMonth == startDate.weekOfMonth {
+            return 7 - startDate.weekday
+        } else if date.weekOfMonth == endDate.weekOfMonth {
+            return endDate.weekday
+        } else {
+            return 7
         }
     }
     
@@ -28,7 +52,7 @@ extension File {
         return startDate.day(to: endDate)
     }
     
-    var width: CGFloat {
-        return (UIScreen.screenWidth - 20.0) / 7.0 * CGFloat(startDate.day(to: endDate))
+    func width(date: Date) -> CGFloat {
+        return (UIScreen.screenWidth - 20.0) / 7.0 * CGFloat(CGFloat(term(date: date)))
     }
 }

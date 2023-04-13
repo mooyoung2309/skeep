@@ -110,12 +110,11 @@ public struct CalendarView: View {
                             }
                             
                             ZStack() {
-                                let _ = print("[D] \(calendarFile.visiableFiles)")
                                 ForEach(Array(calendarFile.visiableFiles.enumerated()), id: \.element) { index, file in
                                     if let file = file, file.isHead(date: calendarFile.date) {
                                         FileLabelView(file: file)
-                                            .frame(width: file.width)
-                                            .offset(file.offset(date: file.startDate, index: index))
+                                            .frame(width: file.width(date: calendarFile.date))
+                                            .offset(file.offset(date: calendarFile.date, index: index))
                                     }
                                 }
                             }

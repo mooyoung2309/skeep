@@ -32,7 +32,7 @@ public struct CalendarFile: Equatable, Identifiable {
             return
         }
         
-        if visiableFiles[safe: index] == nil {
+        if visiableFiles[index] == nil {
             visiableFiles[safe: index] = visiableFile
             return
         } else {

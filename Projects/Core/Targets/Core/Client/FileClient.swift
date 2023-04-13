@@ -69,8 +69,10 @@ extension FileClient: DependencyKey {
                 calendarFiles[safe: i]?.files = filteredFiles
                 
                 for (j, file) in filteredFiles.prefix(3).enumerated() {
-                    for k in i..<(i + file.startDate.day(to: file.endDate)) {
-                        calendarFiles[safe: k]?.appendVisiableFiles(visiableFile: file, index: j)
+                    if file.startDate.isDate(inSameDayAs: calendarFile.date) {
+                        for k in i..<(i + file.startDate.day(to: file.endDate)) {
+                            calendarFiles[safe: k]?.appendVisiableFiles(visiableFile: file, index: j)
+                        }
                     }
                 }
             }

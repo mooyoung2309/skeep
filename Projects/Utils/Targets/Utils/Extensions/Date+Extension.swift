@@ -41,6 +41,14 @@ extension Date {
         return Calendar.current.component(.weekday, from: self)
     }
     
+    public var weekOfYear: Int {
+        return Calendar.current.component(.weekOfYear, from: self)
+    }
+    
+    public var weekOfMonth: Int {
+        return Calendar.current.component(.weekOfMonth, from: self)
+    }
+    
     public func day(to date: Date) -> Int {
         let numberOfDays = Calendar.current.dateComponents([.day], from: self, to: date)
         

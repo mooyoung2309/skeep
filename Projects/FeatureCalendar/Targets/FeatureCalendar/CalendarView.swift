@@ -122,6 +122,7 @@ public struct CalendarView: View {
                             Spacer()
                         }
                         .onTapGesture {
+                            print("[D] \(calendarFile)")
                             viewStore.send(.selectCalendarCell(calendarFile.date), animation: .default)
                         }
                         .frame(height: UIScreen.screenHeight * 0.08)

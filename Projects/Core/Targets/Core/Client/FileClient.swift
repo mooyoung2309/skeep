@@ -66,20 +66,15 @@ extension FileClient: DependencyKey {
             for (i, calendarFile) in calendarFiles.enumerated() {
                 let filteredFiles = files.filter({
                     calendarFile.date.isDate(start: $0.startDate, end: $0.endDate) ||
-                    ($0.repeatStyle != .none && calendarFile.date < $0.repeatFinishDate && calendarFile.date > $0.startDate) && (
-                        ($0.repeatStyle == .daily && WeekdayManager.toWeekdays(uint8: .init($0.weekdays)).contains(calendarFile.date.weekday)) ||
-                        ($0.repeatStyle == .weekly && calendarFile.date.weekday == $0.startDate.weekday) ||
-                        ($0.repeatStyle == .monthly && calendarFile.date.day == $0.startDate.day) ||
-                        ($0.repeatStyle == .yearly && calendarFile.date.month == $0.startDate.month && calendarFile.date.day == $0.startDate.day)
-                    )
+                    $0.isRepeat(date: calendarFile.date)
                 })
                 
-                calendarFiles[safe: i]?.files.append(contentsOf: filteredFiles)
+                calendarFiles[i].files.append(contentsOf: filteredFiles)
                 
                 for (j, file) in filteredFiles.prefix(3).enumerated() {
-                    if file.startDate.isDate(inSameDayAs: calendarFile.date) || (file.repeatStyle != .none && calendarFile.date < file.repeatFinishDate) {
+                    if file.startDate.isDate(inSameDayAs: calendarFile.date) || file.isRepeat(date: calendarFile.date) {
                         for k in i..<(i + file.startDate.day(to: file.endDate)) {
-                            calendarFiles[safe: k]?.appendVisiableFiles(visiableFile: file, index: j)
+                            calendarFiles[k].appendVisiableFiles(visiableFile: file, index: j)
                         }
                     }
                 }

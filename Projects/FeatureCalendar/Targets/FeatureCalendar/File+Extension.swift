@@ -13,17 +13,23 @@ import UIKit
 
 extension File {
     func isHead(date: Date) -> Bool {
-        switch repeatStyle {
-        case .none:
-            return startDate.isDate(inSameDayAs: date) || date.weekday == 1
-        case .daily:
-            return WeekdayManager.toWeekdays(uint8: .init(weekdays)).contains(date.weekday)
-        case .weekly:
-            return date.weekday == startDate.weekday
-        case .monthly:
-            return date.day == startDate.day
-        case .yearly:
-            return date.month == startDate.month && date.day == startDate.day
+        if startDate.isDate(inSameDayAs: date) {
+            return true
+        } else if self.term(date: date) >= 1 && date.weekday == 1 {
+            return true
+        } else {
+            switch repeatStyle {
+            case .none:
+                return startDate.isDate(inSameDayAs: date) || date.weekday == 1
+            case .daily:
+                return WeekdayManager.toWeekdays(uint8: .init(weekdays)).contains(date.weekday)
+            case .weekly:
+                return date.weekday == startDate.weekday
+            case .monthly:
+                return date.day == startDate.day
+            case .yearly:
+                return date.month == startDate.month && date.day == startDate.day
+            }
         }
     }
     

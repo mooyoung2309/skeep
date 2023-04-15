@@ -9,6 +9,7 @@
 import Foundation
 
 import RealmSwift
+import Utils
 
 public struct File: Equatable, Identifiable, Hashable {
     public var id: String
@@ -95,6 +96,29 @@ public struct File: Equatable, Identifiable, Hashable {
         
         try! realm.write {
             realm.add(fileRealm, update: .modified)
+        }
+    }
+    
+    public func isRepeat(date: Date) -> Bool {
+        if !(date < repeatFinishDate && date > startDate) {
+            return false
+        }
+        
+        switch repeatStyle {
+        case .none:
+            return false
+            
+        case .daily:
+            return WeekdayManager.toWeekdays(uint8: .init(weekdays)).contains(date.weekday)
+            
+        case .weekly:
+            return startDate.weekday == date.weekday
+            
+        case .monthly:
+            return startDate.day == date.day
+            
+        case .yearly:
+            return startDate.month == date.month && startDate.day == date.day
         }
     }
     

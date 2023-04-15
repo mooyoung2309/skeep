@@ -13,13 +13,22 @@ import UIKit
 
 extension File {
     func isHead(date: Date) -> Bool {
-        return startDate.isDate(inSameDayAs: date) || date.weekday == 1
+        switch repeatStyle {
+        case .none:
+            return startDate.isDate(inSameDayAs: date) || date.weekday == 1
+        case .daily:
+            return WeekdayManager.toWeekdays(uint8: .init(weekdays)).contains(date.weekday)
+        case .weekly:
+            return date.weekday == startDate.weekday
+        case .monthly:
+            return date.day == startDate.day
+        case .yearly:
+            return date.month == startDate.month && date.day == startDate.day
+        }
     }
     
     func offset(date: Date, index: Int) -> CGSize {
         let term = self.term(date: date)
-        
-        print("[D] \(title) -> \(term)")
         
         if term > 1 {
             return .init(width: (UIScreen.screenWidth - 20.0) / 7.0 / 2.0 * CGFloat(term - 1), height: UIScreen.screenHeight * 0.08 / 5.0 * CGFloat(index))
@@ -33,14 +42,6 @@ extension File {
             return self.term
         } else if date.weekOfMonth == startDate.weekOfMonth {
             return 8 - startDate.weekday
-        } else if date.weekOfMonth == endDate.weekOfMonth {
-            return endDate.weekday
-        } else {
-            return 7
-        }
-        
-        if date.weekOfMonth == startDate.weekOfMonth {
-            return 7 - startDate.weekday
         } else if date.weekOfMonth == endDate.weekOfMonth {
             return endDate.weekday
         } else {

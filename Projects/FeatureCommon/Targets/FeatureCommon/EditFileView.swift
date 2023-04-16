@@ -191,7 +191,8 @@ public struct EditFileView: View {
                 }
                 .padding()
                 
-                //MARK: 반복 기능
+                //TODO: 반복 기능 v 1.0 버전에서 제거
+                /*
                 HStack {
                     Label("", systemImage: "arrow.2.squarepath")
                     
@@ -266,6 +267,7 @@ public struct EditFileView: View {
                     }
                 }
                 .padding()
+                 */
             }
         }
     }

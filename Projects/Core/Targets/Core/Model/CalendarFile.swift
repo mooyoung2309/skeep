@@ -32,9 +32,9 @@ public struct CalendarFile: Equatable, Identifiable {
             return
         }
         
-        if !files.contains(where: { $0.id == visiableFile.id }) {
-            files.append(visiableFile)
-        }
+//        if !files.contains(where: { $0.id == visiableFile.id }) {
+//            files.append(visiableFile)
+//        }
         
         if visiableFiles[index] == nil {
             visiableFiles[safe: index] = visiableFile

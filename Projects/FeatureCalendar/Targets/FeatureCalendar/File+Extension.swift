@@ -44,6 +44,15 @@ extension File {
     }
     
     func term(date: Date) -> Int {
+        var startDate = startDate
+        var endDate = endDate
+        
+        if isRepeat(date: date) {
+            let distance = date.day(to: startDate)
+            startDate = startDate.addDay(value: distance)
+            endDate = endDate.addDay(value: distance)
+        }
+        
         if startDate.weekOfMonth == endDate.weekOfMonth {
             return self.term
         } else if date.weekOfMonth == startDate.weekOfMonth {

@@ -109,11 +109,11 @@ public struct CalendarView: View {
                                 Spacer()
                             }
                             
-                            ZStack(alignment: .leading) {
-                                ForEach(Array(calendarFile.files.prefix(3).enumerated()), id: \.element) { index, file in
-                                    if file.isHead(date: calendarFile.date) {
+                            ZStack() {
+                                ForEach(Array(calendarFile.visiableFiles.enumerated()), id: \.element) { index, file in
+                                    if let file = file, file.isHead(date: calendarFile.date) {
                                         FileLabelView(file: file)
-                                            .frame(width: file.width)
+                                            .frame(width: file.width(date: calendarFile.date))
                                             .offset(file.offset(date: calendarFile.date, index: index))
                                     }
                                 }
@@ -122,6 +122,7 @@ public struct CalendarView: View {
                             Spacer()
                         }
                         .onTapGesture {
+                            print("[D] \(calendarFile)")
                             viewStore.send(.selectCalendarCell(calendarFile.date), animation: .default)
                         }
                         .frame(height: UIScreen.screenHeight * 0.08)

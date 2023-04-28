@@ -6,20 +6,21 @@
 //
 
 import ProjectDescriptionHelpers
+import ProjectDescription
+import DependencyPlugin
 
-let factory: ProjectFactory = .init(
-    project: .init(name: Module.feature.rawValue),
-    targets: [
-        .init(
-            name: Module.feature.rawValue,
+let targets: [Target] = [
+    .feature(
+        factory: .init(
             dependencies: [
-                .project(target: Module.featureMemo.rawValue, path: Module.featureMemo.path),
-                .project(target: Module.featureCalendar.rawValue, path: Module.featureCalendar.path),
-                .project(target: Module.featureTodo.rawValue, path: Module.featureTodo.path),
-                .project(target: Module.featureAccount.rawValue, path: Module.featureAccount.path)
+                .feature(implements: .MyPage),
+                .feature(implements: .Calendar),
+                .feature(implements: .Todo),
+                .feature(implements: .Memo),
+                .domain
             ]
         )
-    ]
-)
+    )
+]
 
-let project = factory.makeProject()
+let project = Project.make(name: "Feature", targets: targets)

@@ -10,13 +10,14 @@ import ProjectDescription
 import DependencyPlugin
 
 let targets: [Target] = [
-    .core(
+    .app(
+        implements: .IOS,
         factory: .init(
             dependencies: [
-                
+                .feature
             ]
         )
     )
 ]
 
-let project = Project.make(name: "Core", targets: targets)
+let project = Project.make(name: "App", targets: targets)

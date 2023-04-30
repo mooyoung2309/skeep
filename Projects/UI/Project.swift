@@ -8,12 +8,12 @@
 import ProjectDescriptionHelpers
 
 let factory: ProjectFactory = .init(
-    project: .init(name: Module.core.rawValue),
+    project: .init(name: Module.ui.rawValue),
     targets: [
         .init(
-            name: Module.core.rawValue,
+            name: Module.ui.rawValue,
             dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path),
+                .project(target: Module.utils.rawValue, path: Module.utils.path)
             ]
         )
     ]

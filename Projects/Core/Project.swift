@@ -2,21 +2,26 @@
 //  Project.swift
 //  ProjectDescriptionHelpers
 //
-//  Created by 송영모 on 2023/03/06.
+//  Created by 송영모 on 2023/04/22.
 //
 
+import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
-let factory: ProjectFactory = .init(
-    project: .init(name: Module.core.rawValue),
-    targets: [
-        .init(
-            name: Module.core.rawValue,
+let targets: [Target] = [
+    .core(
+        factory: .init(
             dependencies: [
-                .project(target: Module.utils.rawValue, path: Module.utils.path),
+                .core(implements: .Network),
+                .shared
             ]
         )
-    ]
-)
+    )
+]
 
-let project = factory.makeProject()
+
+let project: Project = .makeModule(
+    name: "Core",
+    targets: targets
+)

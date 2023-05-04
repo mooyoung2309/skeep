@@ -24,8 +24,8 @@ extension Target {
                 bundleId: "com.annapo.\(appName).\(targetName)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: infoPlist,
-                sources: havResource ? ["Targets/\(targetName)/Sources/**"] : ["Targets/\(targetName)/**"],
-                resources: havResource ? ["Targets/\(targetName)/Resources/**"] : [],
+                sources: ["Sources/**"],
+                resources: havResource ? ["Resources/**"] : [],
                 dependencies: dependencies,
                 settings: .settings(base: .init())
             )

@@ -7,19 +7,32 @@
 
 import ProjectDescriptionHelpers
 
+//let factory: ProjectFactory = .init(
+//    project: .init(name: Module.feature.rawValue),
+//    targets: [
+//        .init(
+//            name: Module.feature.rawValue,
+//            dependencies: [
+//                .project(target: Module.featureMemo.rawValue, path: Module.featureMemo.path),
+//                .project(target: Module.featureCalendar.rawValue, path: Module.featureCalendar.path),
+//                .project(target: Module.featureTodo.rawValue, path: Module.featureTodo.path),
+//                .project(target: Module.featureAccount.rawValue, path: Module.featureAccount.path)
+//            ]
+//        )
+//    ]
+//)
+
 let factory: ProjectFactory = .init(
     project: .init(name: Module.feature.rawValue),
     targets: [
         .init(
             name: Module.feature.rawValue,
             dependencies: [
-                .project(target: Module.featureMemo.rawValue, path: Module.featureMemo.path),
-                .project(target: Module.featureCalendar.rawValue, path: Module.featureCalendar.path),
-                .project(target: Module.featureTodo.rawValue, path: Module.featureTodo.path),
-                .project(target: Module.featureAccount.rawValue, path: Module.featureAccount.path)
+                .project(target: Module.domain.rawValue, path: Module.domain.path),
             ]
         )
     ]
 )
+
 
 let project = factory.makeProject()

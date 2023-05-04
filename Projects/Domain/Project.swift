@@ -2,18 +2,18 @@
 //  Project.swift
 //  ProjectDescriptionHelpers
 //
-//  Created by 송영모 on 2023/03/15.
+//  Created by 송영모 on 2023/05/04.
 //
 
 import ProjectDescriptionHelpers
 
 let factory: ProjectFactory = .init(
-    project: .init(name: Module.featureTodo.rawValue),
+    project: .init(name: Module.domain.rawValue),
     targets: [
         .init(
-            name: Module.featureTodo.rawValue,
+            name: Module.domain.rawValue,
             dependencies: [
-                .project(target: Module.featureCommon.rawValue, path: Module.featureCommon.path),
+                .project(target: Module.core.rawValue, path: Module.core.path)
             ]
         )
     ]

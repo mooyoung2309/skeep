@@ -6,5 +6,6 @@
 //
 
 import ProjectDescription
+import DependencyPlugin
 
-let workspace = Workspace(name: "Copynote", projects: ["Projects/*"])
+let workspace = Workspace(name: "Pumping", projects: ["Projects/*"])

@@ -2,21 +2,26 @@
 //  Project.swift
 //  ProjectDescriptionHelpers
 //
-//  Created by 송영모 on 2023/05/04.
+//  Created by 송영모 on 2023/04/26.
 //
 
+import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
-let factory: ProjectFactory = .init(
-    project: .init(name: Module.domain.rawValue),
-    targets: [
-        .init(
-            name: Module.domain.rawValue,
+let targets: [Target] = [
+    .domain(
+        factory: .init(
             dependencies: [
-                .project(target: Module.core.rawValue, path: Module.core.path)
+                .domain(implements: .Health),
+                .domain(implements: .Login),
+                .core
             ]
         )
-    ]
-)
+    )
+]
 
-let project = factory.makeProject()
+let project: Project = .makeModule(
+    name: "Domain",
+    targets: targets
+)

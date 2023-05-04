@@ -1,38 +1,51 @@
-//
-//  Project.swift
-//  Manifests
-//
-//  Created by 송영모 on 2023/03/06.
-//
-
+import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
-//let factory: ProjectFactory = .init(
-//    project: .init(name: Module.feature.rawValue),
-//    targets: [
-//        .init(
-//            name: Module.feature.rawValue,
-//            dependencies: [
-//                .project(target: Module.featureMemo.rawValue, path: Module.featureMemo.path),
-//                .project(target: Module.featureCalendar.rawValue, path: Module.featureCalendar.path),
-//                .project(target: Module.featureTodo.rawValue, path: Module.featureTodo.path),
-//                .project(target: Module.featureAccount.rawValue, path: Module.featureAccount.path)
-//            ]
-//        )
-//    ]
-//)
-
-let factory: ProjectFactory = .init(
-    project: .init(name: Module.feature.rawValue),
+let project = Project.makeModule(
+    name: ModulePath.Feature.name,
     targets: [
-        .init(
-            name: Module.feature.rawValue,
-            dependencies: [
-                .project(target: Module.domain.rawValue, path: Module.domain.path),
-            ]
+        .feature(
+            factory: .init(
+                dependencies: [
+                    .feature(implements: .Memo),
+                    .feature(implements: .Todo),
+                    .feature(implements: .Calendar),
+                    .feature(implements: .MyPage),
+                    .domain
+                ]
+            )
         )
     ]
 )
 
 
-let project = factory.makeProject()
+////
+////  Project.swift
+////  ProjectDescriptionHelpers
+////
+////  Created by 송영모 on 2023/04/24.
+////
+//
+//import ProjectDescription
+//import ProjectDescriptionHelpers
+//import DependencyPlugin
+//
+//let targets: [Target] = [
+//    .feature(
+//        factory: .init(
+//            dependencies: [
+//                .domain,
+//                .feature(implements: .Memo),
+//                .feature(implements: .Calendar),
+//                .feature(implements: .Todo),
+//                .feature(implements: .MyPage),
+//            ]
+//        )
+//    )
+//]
+//
+//let project: Project = .makeModule(
+//    name: "Feature",
+//    targets: targets
+//)
